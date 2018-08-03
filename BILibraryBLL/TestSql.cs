@@ -31,6 +31,7 @@ namespace BILibraryBLL
         }
 
         public Dictionary<object, Record> arrayView() {
+
             
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
             string sql = "select * from CD_TIME_DIM t WHERE rownum <= 100";
