@@ -11,29 +11,16 @@ namespace BIWebService.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        
-
-        // GET api/values/5
         public string Get()
         {
-
-            string conn = "Provider=OraOLEDB.Oracle;" +
-                          "Data Source=192.168.41.101:1521/XE;User Id=ed_target;Password=oracle";
-
-         
-
-            using (OleDbConnection connection = new OleDbConnection(conn))
-            {
-                connection.Open();
-                Console.WriteLine("ConnectionString = {0}\n", conn);
-                Console.WriteLine("State = {0}", connection.State);
-                Console.WriteLine("DataSource = {0}", connection.DataSource);
-                Console.WriteLine("ServerVersion = {0}", connection.ServerVersion);
-            }
-
-
+           
             return "";
-            //return new string[] { "value1", "value2" };
+        }
+
+        // GET api/values/5
+        public string Get(int id)
+        {
+            return "value";
         }
 
         // POST api/values
