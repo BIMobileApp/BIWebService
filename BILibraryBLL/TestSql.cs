@@ -30,6 +30,43 @@ namespace BILibraryBLL
             }
         }
 
+        public Dictionary<object, Record> arrayView() {
+            
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            string sql = "select * from CD_TIME_DIM t WHERE rownum <= 100";
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+
+            var dict = new Dictionary<object, Record>();
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    object key = reader[0];
+                    Record rec = new Record(key);
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        rec.Fields.Add(reader[i]);
+                    }
+                    dict.Add(key, rec);
+                }
+            }
+
+            return dict;
+        }
+
+        public class Record
+        {
+            public Record(object key)
+            {
+                this.Key = key;
+                Fields = new List<object>();
+            }
+            public object Key;
+            public List<object> Fields;
+        }
+
         public void callprocPost() {
 
             //  เรียก proc เพื่อ insert ข้อมูล//
@@ -78,7 +115,6 @@ namespace BILibraryBLL
             cmd.ExecuteNonQuery();
 
             conn.Close();
-
 
         }
 
