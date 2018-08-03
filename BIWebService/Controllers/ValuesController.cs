@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,10 +11,7 @@ namespace BIWebService.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        
 
         // GET api/values/5
         public string Get()
@@ -21,6 +19,8 @@ namespace BIWebService.Controllers
 
             string conn = "Provider=OraOLEDB.Oracle;" +
                           "Data Source=192.168.41.101:1521/XE;User Id=ed_target;Password=oracle";
+
+         
 
             using (OleDbConnection connection = new OleDbConnection(conn))
             {

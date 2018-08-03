@@ -19,7 +19,7 @@ namespace ClassLib
             string conn = "Data Source=(DESCRIPTION="
              + "(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.41.101)(PORT=1521))"
              + "(CONNECT_DATA=(SERVICE_NAME=EDBI)));"
-             + "User Id=ed_target;Password=oracle;Provider=OraOLEDB.Oracle;";
+             + "User Id=ed_target;Password=oracle;Provider=Oracle.DataAccess.Client;";
 
 
 
