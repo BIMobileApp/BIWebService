@@ -186,7 +186,10 @@
     <Compile Include="Controllers\CheckDeliveryController.cs" />
     <Compile Include="Controllers\CompareTaxController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
+    <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\newReportLineFollowProdController.cs" />
+    <Compile Include="Controllers\OldBarAllTaxController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
@@ -197,6 +200,7 @@
     <Compile Include="Controllers\TaxBudgetYearController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\WebServiceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
