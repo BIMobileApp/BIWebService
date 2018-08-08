@@ -8,8 +8,9 @@ using System.Web;
 
 namespace BILibraryBLL
 {
-    public class OldBarAllTaxSQL
-    { //get connectionString to connect Database
+    public class newReportLineFollowProdSQL
+    {
+        //get connectionString to connect Database
         Conn con = new Conn();
 
         //query out in dataTable
@@ -21,17 +22,19 @@ namespace BILibraryBLL
             using (OleDbConnection thisConnection = new OleDbConnection(con.connection()))
             {
                 //string q = "select * from Ic_Sum_Allday_Cube";
-                string q = "select b.sort as no, b.group_name as grp_name" +
-                    " ,nvl(sum(a.tax_nettax_amt), 0) as tax" +
-                    " ,nvl(sum(a.last_tax_nettax_amt), 0) as tax_ly" +
-                    " ,nvl(sum(a.estimate), 0) as est "+
-                    " from ic_sum_allday_cube a, ic_product_grp_dim b" +
+                string q = "select b.sort as no" +
+                    " ,b.group_name as grp_name" +
+                    " ,t.budget_month_desc as month" +
+                    " ,t.budget_month_cd" +
+                    " ,sum(a.tax_nettax_amt) as tax" +
+                    " ,sum(a.last_tax_nettax_amt) as tax_ly" +
+                    " ,sum(a.estimate) as est" +
+                    " from ic_sum_allday_cube a, ic_product_grp_dim b, ic_time_dim t" +
                     " where a.product_grp_cd = b.group_id" +
-                    " and a.product_grp_cd in (0101, 0501, 7001, 8001, 7002, 0201, 1690)" +
+                    " and a.product_grp_cd = 0101" +
                     " and a.time_id between 20180501 and 20180531" +
-                    " group by b.sort, b.group_name" +
-                    " order by b.sort";
-
+                    " group by b.sort, b.group_name,t.budget_month_desc,t.budget_month_cd" +
+                    " order by b.sort,t.budget_month_cd ";
                 //prepare get q to use with thisconnection by command
                 OleDbCommand cmd = new OleDbCommand(q, thisConnection);
                 thisConnection.Open();
@@ -43,6 +46,5 @@ namespace BILibraryBLL
                 return dt;
             }
         }
-
     }
 }

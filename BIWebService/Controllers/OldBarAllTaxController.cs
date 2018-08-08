@@ -12,7 +12,7 @@ namespace BIWebService.Controllers
 {
     public class OldBarAllTaxController : ApiController
     {
-        ConnectionStringTest con = new ConnectionStringTest();
+        Conn con = new Conn();
         OldBarAllTaxSQL dt = new OldBarAllTaxSQL();
 
         //Get Api

@@ -10,10 +10,10 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class GaugeMthSectionTaxController : ApiController
+    public class newReportLineFollowProdController : ApiController
     {
         Conn con = new Conn();
-        GaugeAllmthSectionSQL dt = new GaugeAllmthSectionSQL();
+        newReportLineFollowProdSQL dt = new newReportLineFollowProdSQL();
 
         //Get Api
         public IHttpActionResult Get()
@@ -21,6 +21,5 @@ namespace BIWebService.Controllers
             var jsonString = JsonConvert.SerializeObject(dt.SQL1());
             return new RawJsonActionResult(jsonString);
         }
-
     }
 }

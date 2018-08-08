@@ -8,7 +8,7 @@ using System.Web;
 
 namespace BILibraryBLL
 {
-    public class GaugeAllmthSectionSQL
+    public class selectProduct
     {
         //get connectionString to connect Database
         Conn con = new Conn();
@@ -60,6 +60,5 @@ namespace BILibraryBLL
                 return dt;
             }
         }
-
     }
 }

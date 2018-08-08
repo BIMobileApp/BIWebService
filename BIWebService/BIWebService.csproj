@@ -187,6 +187,7 @@
     <Compile Include="Controllers\FollowTaxController.cs" />
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
