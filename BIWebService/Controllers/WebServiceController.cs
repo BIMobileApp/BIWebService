@@ -15,7 +15,7 @@ namespace BIWebService.Controllers
     public class WebServiceController : ApiController
     {
         ConnectionStringTest con = new ConnectionStringTest();
-        QueryTest dt = new QueryTest();
+        GaugeAllmthSectionSQL dt = new GaugeAllmthSectionSQL();
 
         //Get Api
         public IHttpActionResult Get()

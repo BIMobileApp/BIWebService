@@ -8,9 +8,8 @@ using System.Web;
 
 namespace BILibraryBLL
 {
-    public class QueryTest
-    {
-        //get connectionString to connect Database
+    public class OldBarAllTaxSQL
+    { //get connectionString to connect Database
         ConnectionStringTest con = new ConnectionStringTest();
 
         //query out in dataTable
@@ -22,7 +21,17 @@ namespace BILibraryBLL
             using (OleDbConnection thisConnection = new OleDbConnection(con.connection()))
             {
                 //string q = "select * from Ic_Sum_Allday_Cube";
-                string q = "Select grp.group_name, sum(t.tax_amt) as amt from Ic_Sum_Allday_Cube t,Ic_Product_Grp_Dim grp Where t.product_grp_cd = grp.group_id and t.time_id between 20171001 and 20171031 and t.product_grp_cd in (0101,0501,8001,7002,0201) group by grp.group_name";
+                string q = "select b.sort as no, b.group_name as grp_name" +
+                    " ,nvl(sum(a.tax_nettax_amt), 0) as tax" +
+                    " ,nvl(sum(a.last_tax_nettax_amt), 0) as tax_ly" +
+                    " ,nvl(sum(a.estimate), 0) as est "+
+                    " from ic_sum_allday_cube a, ic_product_grp_dim b" +
+                    " where a.product_grp_cd = b.group_id" +
+                    " and a.product_grp_cd in (0101, 0501, 7001, 8001, 7002, 0201, 1690)" +
+                    " and a.time_id between 20180501 and 20180531" +
+                    " group by b.sort, b.group_name" +
+                    " order by b.sort";
+
                 //prepare get q to use with thisconnection by command
                 OleDbCommand cmd = new OleDbCommand(q, thisConnection);
                 thisConnection.Open();
@@ -34,8 +43,6 @@ namespace BILibraryBLL
                 return dt;
             }
         }
-
-        
 
     }
 }
