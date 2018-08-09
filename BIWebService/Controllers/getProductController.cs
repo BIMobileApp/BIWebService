@@ -1,5 +1,4 @@
 ﻿using BILibraryBLL;
-using ClassLib;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,15 +9,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class newReportLineFollowProdController : ApiController
+    
+    public class getProductController : ApiController
     {
-        Conn con = new Conn();
         newReportLineFollowProdSQL dt = new newReportLineFollowProdSQL();
-
-        //Get Api
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get()
         {
-            var jsonString = JsonConvert.SerializeObject(dt.SQL1(id));
+            var jsonString = JsonConvert.SerializeObject(dt.getProduct());
             return new RawJsonActionResult(jsonString);
         }
     }
