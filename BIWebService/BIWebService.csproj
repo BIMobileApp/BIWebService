@@ -188,10 +188,7 @@
     <Compile Include="Controllers\CompareTaxLineGraphController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
-<<<<<<< HEAD
     <Compile Include="Controllers\getProductController.cs" />
-=======
->>>>>>> ee3ed13dd3b1d879b92102293c3f07c7f2a91fe8
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
@@ -204,6 +201,7 @@
     <Compile Include="Controllers\TaxBudgetRegController.cs" />
     <Compile Include="Controllers\TaxBudgetYearController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\TMP_USERController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WebServiceController.cs" />
     <Compile Include="Global.asax.cs">
