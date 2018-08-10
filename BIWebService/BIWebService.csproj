@@ -188,7 +188,10 @@
     <Compile Include="Controllers\CompareTaxLineGraphController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
+<<<<<<< HEAD
     <Compile Include="Controllers\getProductController.cs" />
+=======
+>>>>>>> ee3ed13dd3b1d879b92102293c3f07c7f2a91fe8
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
