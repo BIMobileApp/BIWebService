@@ -185,6 +185,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CheckDeliveryController.cs" />
     <Compile Include="Controllers\CompareTaxController.cs" />
+    <Compile Include="Controllers\CompareTaxLineGraphController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\getProductController.cs" />

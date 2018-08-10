@@ -64,5 +64,35 @@ namespace BILibraryBLL
 
             return dt;
         }
+
+        public DataTable CompareTaxLineGraph(string id)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            
+            string sql = @"select c.budget_month_desc
+                            , c.budget_month_cd
+                            ,nvl(sum(a.tax_nettax_amt), 0) as tax
+                            ,nvl(sum(a.last_tax_nettax_amt), 0) as tax_ly
+                            ,nvl(sum(a.estimate), 0) as est
+                            ,nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0) as compare_estimate_diff
+                           from ic_sum_allday_cube a
+                            ,ic_product_grp_dim b
+                            , ic_time_dim c
+                           where a.product_grp_cd = b.group_id
+                            and a.time_id = c.time_id
+                            and a.time_id between 20171001 AND 20180931
+                            and a.product_grp_cd = " + id;
+                   sql += @"group by c.budget_month_desc ,c.budget_month_cd
+                           order by c.budget_month_cd";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
     }
 }
