@@ -1,5 +1,4 @@
 ﻿using BILibraryBLL;
-using ClassLib;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,16 +9,15 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class newReportLineFollowProdController : ApiController
+    
+    public class CompareTaxLineGraphController : ApiController
     {
-        Conn con = new Conn();
-        newReportLineFollowProdSQL dt = new newReportLineFollowProdSQL();
-
-        //Get Api
+        CompareTax dt = new CompareTax();
         public IHttpActionResult Get(string id)
         {
-            var jsonString = JsonConvert.SerializeObject(dt.SQL1(id));
+            var jsonString = JsonConvert.SerializeObject(dt.CompareTaxLineGraph(id));
             return new RawJsonActionResult(jsonString);
         }
+        
     }
 }
