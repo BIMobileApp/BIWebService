@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json.Serialization;
 
 namespace BIWebService.Controllers
 {
@@ -18,8 +19,11 @@ namespace BIWebService.Controllers
         //Get Api
         public IHttpActionResult Get(string id)
         {
+            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
             var jsonString = JsonConvert.SerializeObject(dt.SQL1(id));
-            return new RawJsonActionResult(jsonString);
+            return new RawJsonActionResult(jsonString.ToLower());
         }
     }
 }

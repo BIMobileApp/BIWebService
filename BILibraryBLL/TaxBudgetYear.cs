@@ -11,7 +11,7 @@ namespace BILibraryBLL
     public class TaxBudgetYear
     {
         Conn con = new Conn();
-        public DataTable TaxBudgetOnYear()
+        public DataTable TaxBudgetOnYear(string year)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -167,7 +167,7 @@ namespace BILibraryBLL
                        and d.budget_year = d2.budget_year
                        and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
                        and d.month_cd = " + mth + "";
-            sql += @"and a.reg_sk = r1.reg_sk and rownum <= 10
+            sql += @" and a.reg_sk = r1.reg_sk and rownum <= 10
                      group by  r1.reg_id,r1.reg_name
                      order by  r1.reg_id";
 

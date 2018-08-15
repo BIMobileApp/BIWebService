@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 using System.Web.Mvc;
 using BILibraryBLL;
 using ClassLib;
-
+using Newtonsoft.Json.Serialization;
 
 namespace BIWebService.Controllers
 {
@@ -29,6 +29,7 @@ namespace BIWebService.Controllers
 
         public IHttpActionResult Get()
         {
+
             var jsonString = JsonConvert.SerializeObject(dt.Sql1());
             return new RawJsonActionResult(jsonString);
         }

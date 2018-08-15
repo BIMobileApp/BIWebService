@@ -229,7 +229,10 @@
     </Compile>
     <Compile Include="SourceImcome.cs" />
     <Compile Include="TaxBudgetYear.cs" />
+    <Compile Include="TaxProduct.cs" />
+    <Compile Include="TaxRealtime.cs" />
     <Compile Include="TestSql.cs" />
+    <Compile Include="TMP_USER.cs" />
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
