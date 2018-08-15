@@ -24,7 +24,7 @@ namespace BILibraryBLL
                 //string q = "select * from Ic_Sum_Allday_Cube";
                 string q = "select b.sort as no" +
                     " ,b.group_name as grp_name" +
-                    " ,t.budget_month_desc as month" +
+                    " ,t.month_short_desc as month" +
                     " ,t.budget_month_cd" +
                     " ,sum(a.tax_nettax_amt) as tax" +
                     " ,sum(a.last_tax_nettax_amt) as tax_ly" +
@@ -33,7 +33,7 @@ namespace BILibraryBLL
                     " where a.product_grp_cd = b.group_id" +
                     " and a.product_grp_cd = "+ id +
                     " and a.time_id between 20180501 and 20180531" +
-                    " group by b.sort, b.group_name,t.budget_month_desc,t.budget_month_cd" +
+                    " group by b.sort, b.group_name,t.month_short_desc,t.budget_month_cd" +
                     " order by b.sort,t.budget_month_cd ";
                 //prepare get q to use with thisconnection by command
                 OleDbCommand cmd = new OleDbCommand(q, thisConnection);
