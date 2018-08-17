@@ -18,7 +18,7 @@ namespace BILibraryBLL
 
             string sql = @"select 
                             d.budget_month_cd
-                           ,d.month_desc
+                           ,d.month_short_desc
                            ,sum(a.tax_nettax_amt) as tax
                            ,sum(a.last_tax_nettax_amt) as tax_ly
                            ,sum(a.estimate) as estimate
@@ -32,7 +32,7 @@ namespace BILibraryBLL
                        and a.time_id = d.time_id
                        and d.budget_year = d2.budget_year
                        and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
-                     group by d.budget_month_cd, d.month_desc
+                     group by d.budget_month_cd, d.month_short_desc
                      order by d.budget_month_cd";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
