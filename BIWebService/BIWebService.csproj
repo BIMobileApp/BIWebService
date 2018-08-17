@@ -186,6 +186,7 @@
     <Compile Include="Controllers\CheckDeliveryController.cs" />
     <Compile Include="Controllers\CompareTaxController.cs" />
     <Compile Include="Controllers\CompareTaxLineGraphController.cs" />
+    <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
@@ -200,6 +201,10 @@
     <Compile Include="Controllers\TaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\TaxBudgetRegController.cs" />
     <Compile Include="Controllers\TaxBudgetYearController.cs" />
+    <Compile Include="Controllers\TaxCurYearController.cs" />
+    <Compile Include="Controllers\TaxProductGroupByYearController.cs" />
+    <Compile Include="Controllers\TaxProductGroupSourceController.cs" />
+    <Compile Include="Controllers\TaxRealtimeFreezoneController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TMP_USERController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

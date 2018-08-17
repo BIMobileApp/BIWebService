@@ -11,7 +11,39 @@ namespace BILibraryBLL
     public class TaxBudgetYear
     {
         Conn con = new Conn();
-        public DataTable TaxBudgetOnYear()
+        public DataTable TaxBudgetOnYear(string year)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select 
+                            d.budget_month_cd
+                           ,d.month_short_desc
+                           ,sum(a.tax_nettax_amt) as tax
+                           ,sum(a.last_tax_nettax_amt) as tax_ly
+                           ,sum(a.estimate) as estimate
+                      from ic_sum_allday_cube a
+                           ,ic_product_grp_dim b
+                           , ic_office_dim c
+                           ,ic_time_dim d
+                           , ic_time_dim d2
+                      where a.product_grp_cd = b.group_id
+                       and a.offcode_own = c.offcode
+                       and a.time_id = d.time_id
+                       and d.budget_year = d2.budget_year
+                       and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
+                     group by d.budget_month_cd, d.month_short_desc
+                     order by d.budget_month_cd";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable TaxCurYear()
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -167,7 +199,7 @@ namespace BILibraryBLL
                        and d.budget_year = d2.budget_year
                        and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
                        and d.month_cd = " + mth + "";
-            sql += @"and a.reg_sk = r1.reg_sk and rownum <= 10
+            sql += @" and a.reg_sk = r1.reg_sk and rownum <= 10
                      group by  r1.reg_id,r1.reg_name
                      order by  r1.reg_id";
 
