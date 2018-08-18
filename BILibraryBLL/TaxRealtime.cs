@@ -17,14 +17,14 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"SELECT TB.time_id,
+            string sql = @"SELECT TB.day_ID,
                            cast (nvl(SUM(TB.A_krom_tax),0) as decimal (15,2)) AS cd_income,
                            cast (nvl(SUM(TB.A_in_tax),0) as decimal (15,2)) AS income,
                            cast (nvl(SUM(TB.A_outpay_tax),0) as decimal (15,2)) AS import,
                            cast (nvl(SUM(tb.total),0) as decimal (15,2)) AS sum_all
        
                       FROM (SELECT *
-                              FROM (select a.time_id as time_id
+                              FROM (select c.day_ID as day_ID
                                            ,b.import_status as import_name
                                            ,b.import_status_code as cd
                                            ,nvl(sum(a.tax_nettax_amt),0) as tax
@@ -37,14 +37,14 @@ namespace BILibraryBLL
                                            and a.import_status = b.import_status_code
                                            and c.month_cd = 6 
                                            and c.budget_year = 2560
-                                     group by a.time_id ,b.import_status,b.import_status_code
+                                     group by c.day_ID ,b.import_status,b.import_status_code
                                      ) PIVOT(sum(tax) as tax FOR cd in('1' AS A_in
                                                                       ,'2' AS A_krom
                                                                       ,'4' AS A_outpay))
         
                             ) TB
-                     GROUP BY TB.time_id
-                     order by TB.time_id";
+                     GROUP BY TB.day_ID
+                     order by TB.day_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

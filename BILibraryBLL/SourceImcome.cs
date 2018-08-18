@@ -45,13 +45,11 @@ namespace BILibraryBLL
        , ic_time_dim d2
   where a.product_grp_cd = b.group_id
    and a.offcode_own = c.offcode
-   --and a.time_id between 20180501 and 20180531
    and a.time_id = d.time_id
    and d.budget_year = d2.budget_year
    and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
- --group by b.sort, b.group_name
+   and rownum <= 100
  group by c.region_name,b.sort, b.group_name, d.budget_month_cd, d.budget_year, d.month_desc
- --order by b.sort
  order by d.budget_month_cd,c.region_name, b.sort";
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

@@ -11,7 +11,7 @@ namespace BILibraryBLL
     public class TaxBudgetYear
     {
         Conn con = new Conn();
-        public DataTable TaxBudgetOnYear(string year)
+        public DataTable TaxBudgetOnYear()
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());

@@ -193,6 +193,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
+    <Compile Include="Controllers\OldReport_BI_1_MonthController.cs" />
+    <Compile Include="Controllers\OldReport_BI_1_Month_GraphController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
