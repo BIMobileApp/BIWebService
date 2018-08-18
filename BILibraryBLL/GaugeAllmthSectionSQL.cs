@@ -61,5 +61,203 @@ namespace BILibraryBLL
             }
         }
 
+        public DataTable taxPercentByProductGroup(string year,string grp_id) {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select d.budget_year as budget_year,
+                            sum(a.tax_nettax_amt) as tax,
+                            sum(a.last_tax_nettax_amt) as tax_ly,
+                            sum(a.estimate) as estimate,
+                            case
+                            when sum(a.tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_percent,
+                            case
+                            when sum(a.last_tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.last_tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_ly_percent,
+                            case
+                            when sum(a.estimate) > 0 and sum(a.tax_nettax_amt) > 0 then
+                            round(((nvl(sum(a.estimate), 0) - nvl(sum(a.tax_nettax_amt), 0)) * 100) /
+                                  sum(a.tax_nettax_amt),
+                                  2)
+                            else -100
+                            end as tax_estimate_percent                                
+                            from ic_sum_allday_cube a,
+                               ic_product_grp_dim b,
+                               ic_office_dim      c,
+                               ic_time_dim        d,
+                               ic_time_dim        d2
+                            where a.product_grp_cd = b.group_id
+                               and a.offcode_own = c.offcode
+                               and a.time_id = d.time_id
+                               and d.budget_year = d2.budget_year";
+                  sql += @" and b.group_id = "+ grp_id + " and d.budget_year = "+ year + "";
+                  sql += @" group by d.budget_year";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable taxPercent(string year)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select d.budget_year as budget_year,
+                            sum(a.tax_nettax_amt) as tax,
+                            sum(a.last_tax_nettax_amt) as tax_ly,
+                            sum(a.estimate) as estimate,
+                            case
+                            when sum(a.tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_percent,
+                            case
+                            when sum(a.last_tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.last_tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_ly_percent,
+                            case
+                            when sum(a.estimate) > 0 and sum(a.tax_nettax_amt) > 0 then
+                            round(((nvl(sum(a.estimate), 0) - nvl(sum(a.tax_nettax_amt), 0)) * 100) /
+                                  sum(a.tax_nettax_amt),
+                                  2)
+                            else -100
+                            end as tax_estimate_percent                                
+                            from ic_sum_allday_cube a,
+                               ic_product_grp_dim b,
+                               ic_office_dim      c,
+                               ic_time_dim        d,
+                               ic_time_dim        d2
+                            where a.product_grp_cd = b.group_id
+                               and a.offcode_own = c.offcode
+                               and a.time_id = d.time_id
+                               and d.budget_year = d2.budget_year";
+            sql += @" and d.budget_year = " + year + "";
+            sql += @" group by d.budget_year";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable taxPercentQuantity(string year, string grp_id)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select d.budget_year as budget_year,
+                            sum(a.tax_nettax_amt) as tax,
+                            sum(a.last_tax_nettax_amt) as tax_ly,
+                            sum(a.estimate) as estimate,
+                            case
+                            when sum(a.tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_percent,
+                            case
+                            when sum(a.last_tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.last_tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_ly_percent,
+                            case
+                            when sum(a.estimate) > 0 and sum(a.tax_nettax_amt) > 0 then
+                            round(((nvl(sum(a.estimate), 0) - nvl(sum(a.tax_nettax_amt), 0)) * 100) /
+                                  sum(a.tax_nettax_amt),
+                                  2)
+                            else -100
+                            end as tax_estimate_percent                                
+                            from ic_sum_allday_cube a,
+                               ic_product_grp_dim b,
+                               ic_office_dim      c,
+                               ic_time_dim        d,
+                               ic_time_dim        d2
+                            where a.product_grp_cd = b.group_id
+                               and a.offcode_own = c.offcode
+                               and a.time_id = d.time_id
+                               and d.budget_year = d2.budget_year";
+            sql += @" and b.group_id = " + grp_id + " and d.budget_year = " + year + "";
+            sql += @" group by d.budget_year";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable taxPercentByZone(string zone)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select d.budget_year as budget_year,
+                            sum(a.tax_nettax_amt) as tax,
+                            sum(a.last_tax_nettax_amt) as tax_ly,
+                            sum(a.estimate) as estimate,
+                            case
+                            when sum(a.tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_percent,
+                            case
+                            when sum(a.last_tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
+                            round(((nvl(sum(a.last_tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
+                                  sum(a.estimate),
+                                  2)
+                            else -100
+                            end as tax_ly_percent,
+                            case
+                            when sum(a.estimate) > 0 and sum(a.tax_nettax_amt) > 0 then
+                            round(((nvl(sum(a.estimate), 0) - nvl(sum(a.tax_nettax_amt), 0)) * 100) /
+                                  sum(a.tax_nettax_amt),
+                                  2)
+                            else -100
+                            end as tax_estimate_percent                                
+                            from ic_sum_allday_cube a,
+                               ic_product_grp_dim b,
+                               ic_office_dim      c,
+                               ic_time_dim        d,
+                               ic_time_dim        d2
+                            where a.product_grp_cd = b.group_id
+                               and a.offcode_own = c.offcode
+                               and a.time_id = d.time_id
+                               and d.budget_year = d2.budget_year";
+            sql += @" and b.group_id = " + zone + " ";
+            sql += @" group by d.budget_year";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
     }
 }

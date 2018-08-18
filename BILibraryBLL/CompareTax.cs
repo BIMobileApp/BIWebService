@@ -70,7 +70,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
             
-            string sql = @"select c.budget_month_desc
+            string sql = @"select c.month_short_desc
                             , c.budget_month_cd
                             ,nvl(sum(a.tax_nettax_amt), 0) as tax
                             ,nvl(sum(a.last_tax_nettax_amt), 0) as tax_ly
@@ -83,7 +83,7 @@ namespace BILibraryBLL
                             and a.time_id = c.time_id
                             and a.time_id between 20171001 AND 20180931
                             and a.product_grp_cd = " + id;
-                   sql += @"group by c.budget_month_desc ,c.budget_month_cd
+                   sql += @"group by c.month_short_desc ,c.budget_month_cd
                            order by c.budget_month_cd";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
