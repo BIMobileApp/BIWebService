@@ -25,7 +25,7 @@ namespace BILibraryBLL
                                 nvl(SUM(TB.a6_est), 0) AS mar,
                                     nvl(SUM(TB.a7_est), 0) AS apl,
                                     nvl(SUM(TB.a8_est), 0) AS may,
-                                    nvl(SUM(TB.a9_est), 0) AS jan,
+                                    nvl(SUM(TB.a9_est), 0) AS jun,
                                     nvl(SUM(TB.a10_est), 0) AS jul,
                                         nvl(SUM(TB.a11_est), 0) AS aug,
                                         nvl(SUM(TB.a12_est), 0) AS sep
