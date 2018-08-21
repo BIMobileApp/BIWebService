@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class OldReport_BI_1_MonthController : ApiController
+    public class OldREPORT_BI_1_MONTHController : ApiController
     {
         OldReportSQL sql = new OldReportSQL();
         public IHttpActionResult Get()

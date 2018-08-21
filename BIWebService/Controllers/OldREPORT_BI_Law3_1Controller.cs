@@ -9,12 +9,12 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class OldREPORT_BI_1_MONTH_GRAPHController : ApiController
+    public class OldREPORT_BI_Law3_1Controller : ApiController
     {
         OldReportSQL sql = new OldReportSQL();
         public IHttpActionResult Get()
         {
-            var jsonString = JsonConvert.SerializeObject(sql.REPORT_BI_1_MONTH_GRAPH());
+            var jsonString = JsonConvert.SerializeObject(sql.REPORT_BI_Law3_1());
             return new RawJsonActionResult(jsonString);
         }
     }
