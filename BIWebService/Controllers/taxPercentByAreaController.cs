@@ -9,33 +9,33 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class TaxRealtimeFreezoneController : ApiController
+    public class taxPercentByAreaController : ApiController
     {
-        TaxRealtime tax = new TaxRealtime();
-        // GET: api/TaxRealtimeFreezone
+        GaugeAllmthSectionSQL tax = new GaugeAllmthSectionSQL();
+        // GET: api/taxPercentByArea
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/TaxRealtimeFreezone/5
-        public IHttpActionResult Get(string month,string year)
+        // GET: api/taxPercentByArea/5
+        public IHttpActionResult Get(string area)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxRealtimeFreezone(month, year));
+            var jsonString = JsonConvert.SerializeObject(tax.taxPercentArea(area));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/TaxRealtimeFreezone
+        // POST: api/taxPercentByArea
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/TaxRealtimeFreezone/5
+        // PUT: api/taxPercentByArea/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/TaxRealtimeFreezone/5
+        // DELETE: api/taxPercentByArea/5
         public void Delete(int id)
         {
         }

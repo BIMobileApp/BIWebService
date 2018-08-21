@@ -210,7 +210,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable taxPercentByZone(string zone)
+        public DataTable taxPercentArea(string area)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -248,8 +248,9 @@ namespace BILibraryBLL
                             where a.product_grp_cd = b.group_id
                                and a.offcode_own = c.offcode
                                and a.time_id = d.time_id
-                               and d.budget_year = d2.budget_year";
-            sql += @" and b.group_id = " + zone + " ";
+                               and d.budget_year = d2.budget_year 
+                               and a.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))";
+            sql += @" and c.region_cd = " + area + " ";
             sql += @" group by d.budget_year";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
