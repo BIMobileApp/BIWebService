@@ -67,7 +67,10 @@ namespace BILibraryBLL
                      group by d.budget_month_cd, d.month_short_desc
                      order by d.budget_month_cd";*/
 
-            string sql = @"select * from  mbl_month_01 where offcode = '"+offcode+"'";
+            /*string sql = @"select * from  mbl_month_01 where offcode = '"+offcode+"'";*/
+
+            String sql = @"select distinct(a.budget_month_desc), a.time_id, a.tax ,a.last_tax,a.estimate,a.percent_tax,a.map_color 
+                            from mbl_month_01 a where offcode ='"+offcode+"' order by a.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -82,7 +85,8 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from mbl_goods_01 where offcode = '" + offcode + "'";
+            string sql = @"select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
+from                        mbl_goods_01 t where offcode ='" + offcode + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

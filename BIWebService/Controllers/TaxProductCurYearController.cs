@@ -16,7 +16,7 @@ namespace BIWebService.Controllers
         // GET: api/TaxBudgetYear/
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxCurYear(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxProductCurYear(offcode));
             return new RawJsonActionResult(jsonString);
         }
     }
