@@ -17,11 +17,10 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select t.u_username as username
-                                 ,t.p_password as password
-                                 ,t.offcode as offcode
-                                 ,t.offdesc as offdesc from TMP_USER_TEST t 
+                                 ,t.u_password as password
+                                 ,t.offcode as offcode from TMP_USER_ROLE t 
                            where t.u_username = '" + username+"'";
-                  sql += " and t.p_password = '"+password+"' and rownum <= 1";
+                  sql += " and t.u_password = '"+password+"' and rownum <= 1";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
