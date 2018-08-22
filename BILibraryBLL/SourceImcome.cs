@@ -17,40 +17,22 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select d.budget_year,d.budget_month_cd,d.month_desc,c.region_name
-                        ,b.sort,b.group_name,sum(a.tax_nettax_amt) as tax,sum(a.last_tax_nettax_amt) as tax_ly
-       ,nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.last_tax_nettax_amt), 0) as compare_tax_ly
-       ,case when sum(a.tax_nettax_amt) > 0 and sum(a.last_tax_nettax_amt) > 0 then
-          round(((nvl(sum(a.tax_nettax_amt), 0) -
-                nvl(sum(a.last_tax_nettax_amt), 0)) * 100) /
-                sum(a.last_tax_nettax_amt),
-                2)
-         else
-          -100
-       end as tax_percent
-       ,sum(a.estimate) as estimate
-       ,nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0) as compare_estimate_diff,
-       case
-         when sum(a.tax_nettax_amt) > 0 and sum(a.estimate) > 0 then
-          round(((nvl(sum(a.tax_nettax_amt), 0) - nvl(sum(a.estimate), 0)) * 100) /
-                sum(a.estimate),
-                2)
-         else
-          -100
-       end as estimate_percent
-  from ic_sum_allday_cube a
-       ,ic_product_grp_dim b
-       , ic_office_dim c
-       ,ic_time_dim d
-       , ic_time_dim d2
-  where a.product_grp_cd = b.group_id
-   and a.offcode_own = c.offcode
-   and a.time_id = d.time_id
-   and d.budget_year = d2.budget_year
-   and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
-   and rownum <= 100
- group by c.region_name,b.sort, b.group_name, d.budget_month_cd, d.budget_year, d.month_desc
- order by d.budget_month_cd,c.region_name, b.sort";
+           string sql = @"select ROW_NUMBER() OVER (ORDER BY  b.group_name) as sort,
+                   b.group_name,sum(a.tax_nettax_amt) as tax,sum(a.last_tax_nettax_amt) as tax_ly
+            from ic_sum_allday_cube a
+                 ,ic_product_grp_dim b
+                 , ic_office_dim c
+                 ,ic_time_dim d
+                 , ic_time_dim d2
+            where a.product_grp_cd = b.group_id
+             and a.offcode_own = c.offcode
+             and a.time_id = d.time_id
+             and d.budget_year = d2.budget_year
+             and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
+             and a.product_grp_cd in (0201, 0501, 7002, 7001)
+            group by b.group_name
+            order by b.group_name";
+
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);

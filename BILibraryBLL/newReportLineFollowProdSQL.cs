@@ -56,10 +56,10 @@ namespace BILibraryBLL
             {
                 //string q = "select * from Ic_Sum_Allday_Cube";
                 string q = @"select 
-                             b.group_name as grp_name,
+                             distinct b.group_name as grp_name,
                              b.group_id as grp_id
                              from ic_product_grp_dim b
-                             where b.sort != 0";
+                             where b.sort != 0 and b.group_id in (0201, 0501, 7002, 7001)";
                 //prepare get q to use with thisconnection by command
                 OleDbCommand cmd = new OleDbCommand(q, thisConnection);
                 thisConnection.Open();

@@ -15,14 +15,15 @@ namespace BIWebService.Controllers
         // GET: api/SumTaxBudgetReg
         public string Get()
         {
-            var jsonString = tax.SumTaxBudgetReg();//JsonConvert.SerializeObject(tax.SumTaxBudgetReg());
+            var jsonString = tax.SumTaxBudgetRegAll();//JsonConvert.SerializeObject(tax.SumTaxBudgetReg());
             return jsonString;
         }
 
         // GET: api/SumTaxBudgetReg/5
-        public string Get(int id)
+        public string Get(string year)
         {
-            return "value";
+            var jsonString = tax.SumTaxBudgetReg(year);//JsonConvert.SerializeObject(tax.SumTaxBudgetReg());
+            return jsonString;
         }
 
         // POST: api/SumTaxBudgetReg

@@ -9,33 +9,33 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class TaxRealtimeFreezoneController : ApiController
+    public class FollowPayTaxRealtimeAllController : ApiController
     {
         TaxRealtime tax = new TaxRealtime();
-        // GET: api/TaxRealtimeFreezone
+        // GET: api/FollowPayTaxRealtimeAll
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/TaxRealtimeFreezone/5
-        public IHttpActionResult Get(string month,string year)
+        // GET: api/FollowPayTaxRealtimeAll/5
+        public IHttpActionResult Get(string year)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxRealtimeFreezone(month, year));
+            var jsonString = JsonConvert.SerializeObject(tax.FollowPayTaxRealtimeAll(year));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/TaxRealtimeFreezone
+        // POST: api/FollowPayTaxRealtimeAll
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/TaxRealtimeFreezone/5
+        // PUT: api/FollowPayTaxRealtimeAll/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/TaxRealtimeFreezone/5
+        // DELETE: api/FollowPayTaxRealtimeAll/5
         public void Delete(int id)
         {
         }

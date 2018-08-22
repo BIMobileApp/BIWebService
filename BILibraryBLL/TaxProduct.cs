@@ -11,12 +11,12 @@ namespace BILibraryBLL
     public class TaxProduct
     {
         Conn con = new Conn();
-        public DataTable TaxBudgetProductByYear(string year) {
+        public DataTable TaxBudgetProductByYearAll() {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"SELECT TB.group_name,
+            string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort,  TB.group_name,
                             nvl(SUM(TB.a1_est), 0) AS oct,
                             nvl(SUM(TB.a2_est), 0) AS nov,
                                 nvl(SUM(TB.a3_est), 0) AS dec,
@@ -41,8 +41,65 @@ namespace BILibraryBLL
                                             where a.product_grp_cd = b.group_id
                                                   and a.time_id = c.time_id
                                                   and a.product_grp_cd in (0201, 0501, 7002, 7001)
-                                                  and a.time_id between 20171001 and 20180931
                                              group by c.budget_month_desc, b.group_name, c.budget_month_cd, group_id
+                                             order by b.group_name, c.budget_month_cd)
+                                             PIVOT(sum(est) as est FOR month_CD in ('1' AS a1
+                                                                          , '2' AS a2
+                                                                          , '3' AS a3
+                                                                          , '4' AS a4
+                                                                          , '5' AS a5
+                                                                          , '6' AS a6
+                                                                          , '7' AS a7
+                                                                          , '8' AS a8
+                                                                          , '9' AS a9
+                                                                          , '10' AS a10
+                                                                          , '11' AS a11
+                                                                          , '12' AS a12))
+        
+                                    ) TB
+                             GROUP BY TB.group_name,TB.group_id
+                             ORDER BY TB.group_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable TaxBudgetProductByYear(string year) {
+
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort, TB.group_name,
+                            nvl(SUM(TB.a1_est), 0) AS oct,
+                            nvl(SUM(TB.a2_est), 0) AS nov,
+                                nvl(SUM(TB.a3_est), 0) AS dec,
+                                nvl(SUM(TB.a4_est), 0) AS jan,
+                                nvl(SUM(TB.a5_est), 0) AS feb,
+                                nvl(SUM(TB.a6_est), 0) AS mar,
+                                    nvl(SUM(TB.a7_est), 0) AS apl,
+                                    nvl(SUM(TB.a8_est), 0) AS may,
+                                    nvl(SUM(TB.a9_est), 0) AS jun,
+                                    nvl(SUM(TB.a10_est), 0) AS jul,
+                                        nvl(SUM(TB.a11_est), 0) AS aug,
+                                        nvl(SUM(TB.a12_est), 0) AS sep
+                              FROM(SELECT *
+                                      FROM(select b.group_name as group_name
+                                                   , b.group_id as group_id
+                                                   , c.budget_month_desc as month_name
+                                                   , c.budget_month_cd as month_CD
+                                                   , nvl(sum(a.estimate), 0) as est
+                                            from ic_sum_allday_cube a
+                                                 , ic_product_grp_dim b
+                                                 , ic_time_dim c
+                                            where a.product_grp_cd = b.group_id
+                                                  and a.time_id = c.time_id
+                                                  and a.product_grp_cd in (0201, 0501, 7002, 7001)
+                                                  and c.budget_year = " + year + "";
+            sql += @" group by c.budget_month_desc, b.group_name, c.budget_month_cd, group_id
                                              order by b.group_name, c.budget_month_cd)
                                              PIVOT(sum(est) as est FOR month_CD in ('1' AS a1
                                                                           , '2' AS a2
