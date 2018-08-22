@@ -13,9 +13,9 @@ namespace BIWebService.Controllers
     public class CompareTaxLineGraphController : ApiController
     {
         CompareTax dt = new CompareTax();
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string group_name, string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(dt.CompareTaxLineGraph(id));
+            var jsonString = JsonConvert.SerializeObject(dt.CompareTaxLineGraph(group_name, offcode));
             return new RawJsonActionResult(jsonString);
         }
         

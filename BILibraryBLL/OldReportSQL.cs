@@ -16,7 +16,37 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MB_BI_MONTHLY";
+            string sql = @"select ROW_NUMBER() OVER(ORDER BY t.group_name) as sort, t.*
+                              from MB_BI_MONTHLY t
+                                union all
+                                select null,
+                                       null,
+                                       null,
+                                       'รวมทั้งหมด',
+                                       sum(s.tax_nettax_amt),
+                                       sum(s.estimate),
+                                       sum(s.last_tax_nettax_amt),
+                                       sum(s.compare_estimate),
+                                       case
+                                         when sum(s.tax_nettax_amt) > 0 and sum(s.estimate) > 0 then
+                                          round(((nvl(sum(s.tax_nettax_amt), 0) - nvl(sum(s.estimate), 0)) * 100) /
+                                                sum(s.estimate),
+                                                2)
+                                         else
+                                          -100
+                                       end,
+                                       sum(s.compare_tax),
+                                       case
+                                         when sum(s.last_tax_nettax_amt) > 0 and sum(s.tax_nettax_amt) > 0 then
+                                          round(((nvl(sum(s.last_tax_nettax_amt), 0) -
+                                                nvl(sum(s.tax_nettax_amt), 0)) * 100) /
+                                                sum(s.last_tax_nettax_amt),
+                                                2)
+                                         else
+                                          -100
+                                       end as LAST_TAX_PERCENTAGE,
+                                       null
+                                  from MB_BI_MONTHLY s";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -61,7 +91,36 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MB_BI_SUM_MONTH";
+            string sql = @"select ROW_NUMBER() OVER(ORDER BY t.group_name) as sort, t.*
+                              from MB_BI_SUM_MONTH t
+                            union all
+                            select null,
+                                   null,
+                                   'รวมทั้งหมด',
+                                   sum(s.tax_nettax_amt),
+                                   sum(s.estimate),
+                                   sum(s.last_tax_nettax_amt),
+                                   sum(s.compare_estimate),
+                                   case
+                                     when sum(s.tax_nettax_amt) > 0 and sum(s.estimate) > 0 then
+                                      round(((nvl(sum(s.tax_nettax_amt), 0) - nvl(sum(s.estimate), 0)) * 100) /
+                                            sum(s.estimate),
+                                            2)
+                                     else
+                                      -100
+                                   end,
+                                   sum(s.compare_tax),
+                                   case
+                                     when sum(s.last_tax_nettax_amt) > 0 and sum(s.tax_nettax_amt) > 0 then
+                                      round(((nvl(sum(s.last_tax_nettax_amt), 0) -
+                                            nvl(sum(s.tax_nettax_amt), 0)) * 100) /
+                                            sum(s.last_tax_nettax_amt),
+                                            2)
+                                     else
+                                      -100
+                                   end as LAST_TAX_PERCENTAGE,
+                                   null
+                              from MB_BI_SUM_MONTH s";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -115,8 +174,8 @@ namespace BILibraryBLL
 
             return dt;
         }
-        
-            public DataTable REPORT_BI_3_12GRAPH()
+
+        public DataTable REPORT_BI_3_12GRAPH()
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());

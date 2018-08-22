@@ -211,6 +211,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="MBLRegister.cs" />
+    <Compile Include="GuageOverviewRegion.cs" />
     <Compile Include="newReportLineFollowProdSQL.cs" />
     <Compile Include="OldBarAllTaxSQL.cs" />
     <Compile Include="OldReportSQL.cs" />

@@ -190,6 +190,7 @@
     <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
+    <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MBLRegisterController.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Controllers\TaxCurYearController.cs" />
     <Compile Include="Controllers\taxPercentByAreaController.cs" />
     <Compile Include="Controllers\taxPercentByProductGroupController.cs" />
+    <Compile Include="Controllers\TaxProductCurYearController.cs" />
     <Compile Include="Controllers\TaxProductGroupByYearController.cs" />
     <Compile Include="Controllers\TaxProductGroupSourceController.cs" />
     <Compile Include="Controllers\taxQuantityByProductGroupController.cs" />

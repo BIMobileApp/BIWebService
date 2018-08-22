@@ -8,19 +8,15 @@ using System.Web;
 
 namespace BILibraryBLL
 {
-    public class TMP_USER
+    public class GuageOverviewRegion
     {
         Conn con = new Conn();
-        public DataTable getUSER(string username, string password)
+        public DataTable GuageMonth_Region(String offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select t.u_username as username
-                                 ,t.u_password as password
-                                 ,t.offcode as offcode from TMP_USER_ROLE t 
-                           where t.u_username = '" + username+"'";
-                  sql += " and t.u_password = '"+password+"' and rownum <= 1";
+            string sql = @"select * from mbl_guadge_01 where offcode = '"+offcode+"'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
