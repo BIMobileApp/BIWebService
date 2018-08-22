@@ -9,17 +9,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class TaxCurYearController : ApiController
+    public class GaugeOverviewRegionController : ApiController
     {
-       
-        TaxBudgetYear tax = new TaxBudgetYear();
-        
-        // GET: api/TaxBudgetYear/
+        GuageOverviewRegion sql = new GuageOverviewRegion();
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxCurYear(offcode));
+            var jsonString = JsonConvert.SerializeObject(sql.GuageMonth_Region(offcode));
             return new RawJsonActionResult(jsonString);
         }
-
     }
 }

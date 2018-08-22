@@ -43,12 +43,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxCurYear()
+        public DataTable TaxCurYear(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select 
+            /*string sql = @"select 
                             d.budget_month_cd
                            ,d.month_short_desc
                            ,sum(a.tax_nettax_amt) as tax
@@ -65,7 +65,9 @@ namespace BILibraryBLL
                        and d.budget_year = d2.budget_year
                        and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
                      group by d.budget_month_cd, d.month_short_desc
-                     order by d.budget_month_cd";
+                     order by d.budget_month_cd";*/
+
+            string sql = @"select * from  mbl_month_01 where offcode = '"+offcode+"'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
