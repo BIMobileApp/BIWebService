@@ -11,7 +11,7 @@ namespace BILibraryBLL
     public class CompareTax
     {
         Conn con = new Conn();
-        public DataTable CompareTaxByGroup(string group_name)
+     /*   public DataTable CompareTaxByGroup(string group_name)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -92,7 +92,7 @@ namespace BILibraryBLL
             adapter.Fill(dt);
 
             return dt;
-        }
+        } */
 
         public DataTable CompareTaxSura()
         {
@@ -109,12 +109,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxSuraMonth(string code)
+        public DataTable CompareTaxSuraMonth(string code,string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code= '" + code+ "' order by t.time_id";
+            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code='" + code+"' and t.offcode='"+offcode+"' order by t.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -129,7 +129,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_SURA_MONTH t";
+            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_SURA_MONTH t order by t.i_type_code";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -139,6 +139,221 @@ namespace BILibraryBLL
             return dt;
         }
 
+        public DataTable CompareTaxBeer()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from MBL_PRODUCT_BEER";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxBeerMonth(string code, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_BEER_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable getTypeNameBeerMonth()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_BEER_MONTH t order by t.i_type_code";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxCar()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from MBL_PRODUCT_CAR";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxCarMonth(string code, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable getTypeNameCarMonth()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_CAR_MONTH t order by t.i_type_code";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxDrink()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from MBL_PRODUCT_DRINK";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxDrinkMonth(string code, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_DRINK_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable getTypeNameDrinkMonth()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_DRINK_MONTH t order by t.i_type_code";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        
+        public DataTable CompareTaxVolSura(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.time_id, 
+                            sum(t.total_tax_amt) as total_tax_amt,
+                            sum(t.last_total_tax_amt) as last_total_tax_amt,
+                            sum(t.total_volumn_capa) as total_volumn_capa,
+                            sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                            from MBL_PRODUCT_SURA_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxVolBeer(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.time_id, 
+                            sum(t.total_tax_amt) as total_tax_amt,
+                            sum(t.last_total_tax_amt) as last_total_tax_amt,
+                            sum(t.total_volumn_capa) as total_volumn_capa,
+                            sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                            from MBL_PRODUCT_BEER_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxVolCar(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.time_id, 
+                            sum(t.total_tax_amt) as total_tax_amt,
+                            sum(t.last_total_tax_amt) as last_total_tax_amt,
+                            sum(t.total_volumn_capa) as total_volumn_capa,
+                            sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                            from MBL_PRODUCT_CAR_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxVolDrink(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.time_id, 
+                            sum(t.total_tax_amt) as total_tax_amt,
+                            sum(t.last_total_tax_amt) as last_total_tax_amt,
+                            sum(t.total_volumn_capa) as total_volumn_capa,
+                            sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                            from MBL_PRODUCT_DRINK_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
 
     }
 }

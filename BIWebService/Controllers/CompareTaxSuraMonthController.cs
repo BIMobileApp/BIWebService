@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class CompareTaxSuraLineGraphController : ApiController
+    public class CompareTaxSuraMonthController : ApiController
     {
         CompareTax tax = new CompareTax();
 
@@ -18,9 +18,9 @@ namespace BIWebService.Controllers
             var jsonString = JsonConvert.SerializeObject(tax.getTypeNameSuraMonth());
             return new RawJsonActionResult(jsonString);
         }
-        public IHttpActionResult Get(string code)
+        public IHttpActionResult Get(string code, string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxSuraMonth(code));
+            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxSuraMonth(code, offcode));
             return new RawJsonActionResult(jsonString);
         }
     }
