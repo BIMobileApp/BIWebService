@@ -94,5 +94,51 @@ namespace BILibraryBLL
             return dt;
         }
 
+        public DataTable CompareTaxSura()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from MBL_PRODUCT_SURA";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable CompareTaxSuraMonth(string code)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code= '" + code+ "' order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+        public DataTable getTypeNameSuraMonth()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_SURA_MONTH t";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+        }
+
+
     }
 }

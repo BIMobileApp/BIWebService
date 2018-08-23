@@ -186,6 +186,8 @@
     <Compile Include="Controllers\CheckDeliveryController.cs" />
     <Compile Include="Controllers\CompareTaxController.cs" />
     <Compile Include="Controllers\CompareTaxLineGraphController.cs" />
+    <Compile Include="Controllers\CompareTaxSuraController.cs" />
+    <Compile Include="Controllers\CompareTaxSuraLineGraphController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeAllController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
