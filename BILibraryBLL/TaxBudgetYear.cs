@@ -277,12 +277,17 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "'";
             return result;
         }
 
-        public DataTable TaxBudgetRegByMthAll()
+        public DataTable TaxBudgetRegByMthAll(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select
+            string sql = @"select ROW_NUMBER() OVER (ORDER BY myrank) as sort,
+                            reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
+                   sql += @" where offcode = "+ offcode + "  and myrank between 1 and 10 ";
+                   sql += @" order by tax_nettax_amt";
+
+            /*string sql = @"select
                             r1.reg_id
                            ,r1.reg_name
                            , ROW_NUMBER() OVER (ORDER BY  r1.reg_id) as sort
@@ -303,7 +308,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "'";
                        and rownum <=10
                        and a.reg_sk = r1.reg_sk
                      group by  r1.reg_id,r1.reg_name
-                     order by  r1.reg_id";
+                     order by  r1.reg_id";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -313,12 +318,17 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "'";
             return dt;
         }
 
-        public DataTable TaxBudgetRegByMth(string mth)
+        public DataTable TaxBudgetRegByMth(string offcode,string month)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select
+            string sql = @"select myrank as sort,
+                            reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
+            sql += @" where offcode = " + offcode + " and month_cd = " + month + " and myrank between 1 and 10 ";
+            sql += @" order by tax_nettax_amt desc";
+
+            /*string sql = @"select
                             r1.reg_id
                            ,r1.reg_name
                            , ROW_NUMBER() OVER (ORDER BY  r1.reg_id) as sort
@@ -339,7 +349,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "'";
                        and d.month_cd = " + mth + "";
             sql += @" and a.reg_sk = r1.reg_sk and rownum <=10
                      group by  r1.reg_id,r1.reg_name
-                     order by  r1.reg_id";
+                     order by  r1.reg_id";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

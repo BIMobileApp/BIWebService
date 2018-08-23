@@ -9,33 +9,33 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class FollowPayTaxRealtimeAllController : ApiController
+    public class taxPercentSuraController : ApiController
     {
-        TaxRealtime tax = new TaxRealtime();
-        // GET: api/FollowPayTaxRealtimeAll
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        GaugeProduct tax = new GaugeProduct();
+        // GET: api/taxPercentSura
+        public  string Get()
+        {            
+            return "value";
         }
 
-        // GET: api/FollowPayTaxRealtimeAll/5
+        // GET: api/taxPercentSura/5
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.FollowPayTaxRealtimeAll(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxPercentSura(offcode));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/FollowPayTaxRealtimeAll
+        // POST: api/taxPercentSura
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/FollowPayTaxRealtimeAll/5
+        // PUT: api/taxPercentSura/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/FollowPayTaxRealtimeAll/5
+        // DELETE: api/taxPercentSura/5
         public void Delete(int id)
         {
         }

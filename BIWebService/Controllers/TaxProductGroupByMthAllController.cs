@@ -1,41 +1,41 @@
-﻿using System;
+﻿using BILibraryBLL;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using BILibraryBLL;
-using Newtonsoft.Json;
 
 namespace BIWebService.Controllers
 {
-    public class TaxBudgetRegByMthController : ApiController
+    public class TaxProductGroupByMthAllController : ApiController
     {
-        TaxBudgetYear tax = new TaxBudgetYear();
-        // GET: api/TaxBudgetRegByMth
+        TaxProduct tax = new TaxProduct();
+        // GET: api/TaxProductGroupByMthAll
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/TaxBudgetRegByMth/5
-        public IHttpActionResult Get(string offcode, string month)
+        // GET: api/TaxProductGroupByMthAll/5
+        public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetRegByMth(offcode, month));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetProductByMthAll(offcode));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/TaxBudgetRegByMth
+        // POST: api/TaxProductGroupByMthAll
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/TaxBudgetRegByMth/5
+        // PUT: api/TaxProductGroupByMthAll/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/TaxBudgetRegByMth/5
+        // DELETE: api/TaxProductGroupByMthAll/5
         public void Delete(int id)
         {
         }

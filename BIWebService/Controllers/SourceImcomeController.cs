@@ -13,16 +13,16 @@ namespace BIWebService.Controllers
     {
         SourceImcome income = new SourceImcome();
         // GET: api/SourceImcome
-        public IHttpActionResult Get()
+        public string Get()
         {
-            var jsonString = JsonConvert.SerializeObject(income.ImcomeList());
-            return new RawJsonActionResult(jsonString);
+            return "";
         }
 
         // GET: api/SourceImcome/5
-        public string Get(int id)
+        public IHttpActionResult Get(string offcode)
         {
-            return "value";
+            var jsonString = JsonConvert.SerializeObject(income.IncomeList(offcode));
+            return new RawJsonActionResult(jsonString);
         }
 
         // POST: api/SourceImcome

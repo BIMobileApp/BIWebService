@@ -11,12 +11,33 @@ namespace BILibraryBLL
     public class TaxProduct
     {
         Conn con = new Conn();
-        public DataTable TaxBudgetProductByYearAll() {
+        public DataTable TaxBudgetProductByYearAll(string offcode) {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort,  TB.group_name,
+            string sql = @"select ROW_NUMBER() OVER (ORDER BY tb.group_name ) as sort, tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax,
+                          tb.feb_tax AS feb, tb.mar_tax AS mar, tb.apl_tax AS apl,tb.may_tax AS may,tb.jun_tax AS jun,
+                          tb.jul_tax AS jul, tb.aug_tax AS aug, tb.sep_tax As sep
+                        from(
+                        select group_name, tax, budget_month_desc
+                        from mbl_budg_inc ";
+            sql += "   where  offcode = "+ offcode + " ";
+            sql += @" order by group_name, time_id asc) PIVOT(sum(tax) as tax FOR budget_month_desc in ('ตุลาคม' AS oct,
+                         'พฤศจิกายน' AS nov,
+                         'ธันวาคม' AS dec,
+                         'มกราคม' AS jan,
+                         'กุมภาพันธ์' AS feb,
+                         'มีนาคม' AS mar,
+                         'เมษายน' AS apl,
+                         'พฤษภาคม' AS may,
+                         'มิถุนายน' AS jun,
+                         'กรกฏาคม' AS jul,
+                         'สิงหาคม' AS aug,
+                         'กันยายน' AS sep
+                         )) TB";
+
+            /*string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort,  TB.group_name,
                             nvl(SUM(TB.a1_est), 0) AS oct,
                             nvl(SUM(TB.a2_est), 0) AS nov,
                                 nvl(SUM(TB.a3_est), 0) AS dec,
@@ -58,7 +79,7 @@ namespace BILibraryBLL
         
                                     ) TB
                              GROUP BY TB.group_name,TB.group_id
-                             ORDER BY TB.group_id";
+                             ORDER BY TB.group_id";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -68,12 +89,34 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetProductByYear(string year) {
+        public DataTable TaxBudgetProductByYear(string offcode,string year) {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort, TB.group_name,
+
+            string sql = @"select ROW_NUMBER() OVER (ORDER BY tb.group_name ) as sort,tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax,
+                          tb.feb_tax AS feb, tb.mar_tax AS mar, tb.apl_tax AS apl,tb.may_tax AS may,tb.jun_tax AS jun,
+                          tb.jul_tax AS jul, tb.aug_tax AS aug, tb.sep_tax As sep
+                        from(
+                        select group_name, tax, budget_month_desc
+                        from mbl_budg_inc ";
+            sql += "   where budget_year = "+ year + " and offcode = "+ offcode + " ";
+            sql += @" order by group_name, time_id asc) PIVOT(sum(tax) as tax FOR budget_month_desc in ('ตุลาคม' AS oct,
+                         'พฤศจิกายน' AS nov,
+                         'ธันวาคม' AS dec,
+                         'มกราคม' AS jan,
+                         'กุมภาพันธ์' AS feb,
+                         'มีนาคม' AS mar,
+                         'เมษายน' AS apl,
+                         'พฤษภาคม' AS may,
+                         'มิถุนายน' AS jun,
+                         'กรกฏาคม' AS jul,
+                         'สิงหาคม' AS aug,
+                         'กันยายน' AS sep
+                         )) TB";
+
+            /*string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort, TB.group_name,
                             nvl(SUM(TB.a1_est), 0) AS oct,
                             nvl(SUM(TB.a2_est), 0) AS nov,
                                 nvl(SUM(TB.a3_est), 0) AS dec,
@@ -116,7 +159,7 @@ namespace BILibraryBLL
         
                                     ) TB
                              GROUP BY TB.group_name,TB.group_id
-                             ORDER BY TB.group_id";
+                             ORDER BY TB.group_id";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -161,6 +204,46 @@ namespace BILibraryBLL
             adapter.Fill(dt);
 
             return dt;
+        }
+
+        public DataTable TaxBudgetProductByMthAll(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select group_name, budget_month_desc, tax, last_tax,estimate
+                            ,ROW_NUMBER() OVER (ORDER BY group_name ) as sort
+                            from mbl_month_inc 
+                            where  offcode = " + offcode + "";
+            sql += " order by  group_name";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+
+        }
+
+        public DataTable TaxBudgetProductByMth(string offcode,string month)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select group_name, budget_month_desc, tax, last_tax,estimate
+                            ,ROW_NUMBER() OVER (ORDER BY group_name ) as sort
+                            from mbl_month_inc 
+                            where budget_month_desc = trim('" + month + "') and offcode = "+ offcode + "";
+                    sql += " order by  group_name";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+
+            return dt;
+
         }
 
     }

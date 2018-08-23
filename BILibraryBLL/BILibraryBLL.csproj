@@ -207,6 +207,7 @@
     </Compile>
     <Compile Include="FollowTax.cs" />
     <Compile Include="GaugeAllmthSectionSQL.cs" />
+    <Compile Include="GaugeProduct.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
