@@ -9,15 +9,14 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    
-    public class CompareTaxLineGraphController : ApiController
+    public class CompareTaxBeerController : ApiController
     {
-        CompareTax dt = new CompareTax();
-        public IHttpActionResult Get(string group_name, string offcode)
+        CompareTax tax = new CompareTax();
+
+        public IHttpActionResult Get()
         {
-            var jsonString = JsonConvert.SerializeObject(dt.CompareTaxLineGraph(group_name, offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxBeer());
             return new RawJsonActionResult(jsonString);
         }
-        
     }
 }
