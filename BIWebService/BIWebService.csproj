@@ -193,6 +193,8 @@
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IncDataMonthController.cs" />
+    <Compile Include="Controllers\IncAreaController.cs" />
     <Compile Include="Controllers\MBLRegisterController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
