@@ -86,7 +86,7 @@ namespace BILibraryBLL
                             and a.time_id between 20171001 AND 20180931
                             and a.product_grp_cd = " + id;
                    sql += @"group by c.month_short_desc ,c.budget_month_cd
-                           order by c.budget_month_cd";*/
+                           order by c.budget_month_cd";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

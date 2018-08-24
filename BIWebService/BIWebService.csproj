@@ -203,11 +203,17 @@
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+<<<<<<< HEAD
     <Compile Include="Controllers\IncDataMonthController.cs" />
     <Compile Include="Controllers\IncAreaController.cs" />
     <Compile Include="Controllers\MBLRegisterController.cs" />
     <Compile Include="Controllers\LawReportAreaController.cs" />
     <Compile Include="Controllers\LawReportMthController.cs" />
+=======
+    <Compile Include="Controllers\LawReportAreaController.cs" />
+    <Compile Include="Controllers\LawReportMthController.cs" />
+    <Compile Include="Controllers\MBLRegisterController.cs" />
+>>>>>>> f49c7a8104e275b0f5e84eecba421104f4c4cc92
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
     <Compile Include="Controllers\OldREPORT_BI_1_10_4_1ALLController.cs" />
