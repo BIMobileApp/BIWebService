@@ -17,11 +17,18 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100)
-                            else 0 end as tax_percent,
-                            case when sum(a.Last_Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Last_Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100) 
-                            else 0 end as Last_tax_percent,
-                            100 as Est_percent
+            string sql = @"select 
+                            case 
+                              when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.last_total_tax_amt),0)= 0 then 0  
+                              when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.last_total_tax_amt),0) =0 then 100
+                              when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.last_total_tax_amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.last_total_tax_amt),0))*100)  end as TAX_PERCENT,  
+                            case 
+                              when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                              when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                              when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
+                            100 AS   EST_PERCENT
                          from MBL_PRODUCT_SURA a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -54,11 +61,18 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100)
-                            else 0 end as tax_percent,
-                            case when sum(a.Last_Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Last_Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100) 
-                            else 0 end as Last_tax_percent,
-                            100 as Est_percent
+            string sql = @"select 
+                            case 
+                                when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.last_total_tax_amt),0)= 0 then 0  
+                                when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.last_total_tax_amt),0) =0 then 100
+                                when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.last_total_tax_amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.last_total_tax_amt),0))*100)  end as TAX_PERCENT,  
+                            case 
+                                when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                                when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                                when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
+                            100 AS   EST_PERCENT
                          from MBL_PRODUCT_CAR a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -91,11 +105,17 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100)
-                            else 0 end as tax_percent,
-                            case when sum(a.Last_Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Last_Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100) 
-                            else 0 end as Last_tax_percent,
-                            100 as Est_percent
+            string sql = @"select case 
+                              when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.last_total_tax_amt),0)= 0 then 0  
+                              when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.last_total_tax_amt),0) =0 then 100
+                              when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.last_total_tax_amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.last_total_tax_amt),0))*100)  end as TAX_PERCENT,  
+                            case 
+                              when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                              when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                              when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
+                            100 AS   EST_PERCENT
                          from MBL_PRODUCT_BEER a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -128,11 +148,18 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100)
-                            else 0 end as tax_percent,
-                            case when sum(a.Last_Total_Tax_Amt) is not null then ROUND((nvl(sum(a.Last_Total_Tax_Amt),0)/nvl(sum(a.Est_Amt),0))*100) 
-                            else 0 end as Last_tax_percent,
-                            100 as Est_percent
+            string sql = @"select 
+                            case 
+                              when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.last_total_tax_amt),0)= 0 then 0  
+                              when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.last_total_tax_amt),0) =0 then 100
+                              when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.last_total_tax_amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.last_total_tax_amt),0))*100)  end as TAX_PERCENT,  
+                            case 
+                              when nvl(sum(a.total_tax_amt) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                              when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                              when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
+                            100 AS   EST_PERCENT
                          from MBL_PRODUCT_DRINK a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
