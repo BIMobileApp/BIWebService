@@ -65,12 +65,14 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxLineGraph(string id)
+        public DataTable CompareTaxLineGraph(string group_name,string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-            
-            string sql = @"select c.month_short_desc
+
+            string sql = "select * from mbl_tax_est where group_name = '"+ group_name + "' and offcode = "+ offcode + "";
+
+            /*string sql = @"select c.month_short_desc
                             , c.budget_month_cd
                             ,nvl(sum(a.tax_nettax_amt), 0) as tax
                             ,nvl(sum(a.last_tax_nettax_amt), 0) as tax_ly

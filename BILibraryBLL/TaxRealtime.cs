@@ -12,12 +12,15 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable FollowPayTaxRealtimeAll(string year)
+        public DataTable FollowPayTaxRealtimeAll(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"SELECT TB.TIME_ID,
+            string sql = @" select DIM_DATA_DATE_ID,FZ_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT,DIM_DATA_DATE_ID
+                            from mbl_cd_daily_report where officode = " + offcode + "";
+
+            /*string sql = @"SELECT TB.TIME_ID,
                            cast (nvl(SUM(TB.A_krom_tax),0) as decimal (15,2)) AS cd_income,
                            cast (nvl(SUM(TB.A_in_tax),0) as decimal (15,2)) AS income,
                            cast (nvl(SUM(TB.A_outpay_tax),0) as decimal (15,2)) AS import,
@@ -43,7 +46,7 @@ namespace BILibraryBLL
         
                             ) TB
                      GROUP BY TB.time_id
-                     order by TB.time_id";
+                     order by TB.time_id";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
