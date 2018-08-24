@@ -204,9 +204,11 @@
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IncDataMonthController.cs" />
+    <Compile Include="Controllers\IncAreaController.cs" />
+    <Compile Include="Controllers\MBLRegisterController.cs" />
     <Compile Include="Controllers\LawReportAreaController.cs" />
     <Compile Include="Controllers\LawReportMthController.cs" />
-    <Compile Include="Controllers\MBLRegisterController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
     <Compile Include="Controllers\OldREPORT_BI_1_10_4_1ALLController.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="Controllers\QuantityDrinkController.cs" />
     <Compile Include="Controllers\QuantitySuraController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
+    <Compile Include="Controllers\REP02_GUAGE_REGController.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegController.cs" />

@@ -134,7 +134,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "'";
 
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
-                            where offcode = " + offcode + " and group_id = "+ group_id + " ";
+                            where offcode = " + offcode + " and group_name = '"+ group_id + "' ";
                   sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
 
             /*string sql = @"select
@@ -174,7 +174,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "'";
 
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
-                            where offcode = " + offcode + " and group_id = " + group_id + " and budget_year = "+ year + "";
+                            where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = "+ year + "";
             sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
 
             /* string sql = @"select
