@@ -96,12 +96,12 @@ namespace BILibraryBLL
             return dt;
         } */
 
-        public DataTable CompareTaxSura()
+        public DataTable CompareTaxSura(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_SURA";
+            string sql = @"select * from MBL_PRODUCT_SURA t where t.offcode='"+ offcode + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
