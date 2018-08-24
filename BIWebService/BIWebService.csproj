@@ -203,6 +203,8 @@
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LawReportAreaController.cs" />
+    <Compile Include="Controllers\LawReportMthController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
     <Compile Include="Controllers\OldREPORT_BI_1_10_4_1ALLController.cs" />
