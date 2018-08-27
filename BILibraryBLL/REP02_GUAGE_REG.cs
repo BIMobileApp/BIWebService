@@ -28,8 +28,9 @@ namespace BILibraryBLL
                               when nvl(sum(a.tax),0)>0  and nvl(sum(a.estimate),0) =0 then 100
                               when nvl(sum(a.tax),0)=0  and nvl(sum(a.estimate),0) > 0 then -100    
                             else round((nvl(sum(a.tax) ,0)/nvl(sum(a.estimate),0))*100)  end as LAST_TAX_PERCENT,
-                              100 AS   EST_PERCENT
-                            from M_REP02_GUAGE_REG a where a.area_flag = "+ area + " ";
+                              100 AS   EST_PERCENT,
+                            sum(a.tax) AS tax, sum(a.last_tax) AS tax_ly, sum(a.estimate) AS est
+                            from M_REP02_GUAGE_REG a where a.area_flag = " + area + " ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
