@@ -211,11 +211,11 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select group_name, budget_month_desc, tax, last_tax,estimate
-                            ,ROW_NUMBER() OVER (ORDER BY group_name ) as sort
+            string sql = @"select group_name,  sum(tax) AS tax, sum(last_tax) AS last_tax,sum(estimate) AS estimate
+                            ,ROW_NUMBER() OVER (ORDER BY sum(tax) desc)  as sort
                             from mbl_month_inc 
-                            where  offcode = " + offcode + "";
-            sql += " order by  group_name";
+                            where  offcode = " + offcode + " group by group_name";
+                    sql += " order by  tax desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -231,11 +231,11 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select group_name, budget_month_desc, tax, last_tax,estimate
-                            ,ROW_NUMBER() OVER (ORDER BY group_name ) as sort
+            string sql = @" select group_name,  sum(tax) AS tax, sum(last_tax) AS last_tax,sum(estimate) AS estimate
+                            ,ROW_NUMBER() OVER (ORDER BY sum(tax) desc)  as sort
                             from mbl_month_inc 
                             where budget_month_desc = trim('" + month + "') and offcode = "+ offcode + "";
-                    sql += " order by  group_name";
+                    sql += " group by group_name order by  tax desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

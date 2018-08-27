@@ -28,7 +28,7 @@ namespace BILibraryBLL
                               when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
                               when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
                             else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
-                            100 AS   EST_PERCENT
+                            100 AS   EST_PERCENT, sum(a.total_tax_amt) AS tax, sum(a.last_total_tax_amt) AS tax_ly,sum(a.Est_Amt) AS est
                          from MBL_PRODUCT_SURA a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -44,8 +44,17 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.total_volumn_capa) is not null then ROUND((nvl(sum(a.total_volumn_capa),0)/nvl(sum(a.last_total_volumn_capa),0))*100)
-                           else 0 end as quan_percent
+            string sql = @"select case 
+                            when nvl(sum(a.total_volumn_capa) ,0) = 0  and nvl(sum(a.last_total_volumn_capa),0)= 0 then 0  
+                            when nvl(sum(a.total_volumn_capa),0)>0  and nvl(sum(a.last_total_volumn_capa),0) =0 then 100
+                            when nvl(sum(a.total_volumn_capa),0)=0  and nvl(sum(a.last_total_volumn_capa),0) > 0 then -100    
+                            else round((nvl(sum(a.total_volumn_capa) ,0)/nvl(sum(a.last_total_volumn_capa),0))*100)  end as quan_percent,
+                            case 
+                            when nvl(sum(a.last_total_volumn_capa) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                            when nvl(sum(a.last_total_volumn_capa),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                            when nvl(sum(a.last_total_volumn_capa),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.last_total_volumn_capa) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as last_quan_percent,
+                            sum(a.total_volumn_capa) AS total_volumn_capa, sum(a.last_total_volumn_capa) AS last_total_volumn_capa  
                          from MBL_PRODUCT_SURA a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -72,7 +81,7 @@ namespace BILibraryBLL
                                 when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
                                 when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
                             else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
-                            100 AS   EST_PERCENT
+                            100 AS   EST_PERCENT, sum(a.total_tax_amt) AS tax, sum(a.last_total_tax_amt) AS tax_ly,sum(a.Est_Amt) AS est
                          from MBL_PRODUCT_CAR a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -88,8 +97,17 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.total_volumn_capa) is not null then ROUND((nvl(sum(a.total_volumn_capa),0)/nvl(sum(a.last_total_volumn_capa),0))*100)
-                           else 0 end as quan_percent
+            string sql = @"select case 
+                            when nvl(sum(a.total_volumn_capa) ,0) = 0  and nvl(sum(a.last_total_volumn_capa),0)= 0 then 0  
+                            when nvl(sum(a.total_volumn_capa),0)>0  and nvl(sum(a.last_total_volumn_capa),0) =0 then 100
+                            when nvl(sum(a.total_volumn_capa),0)=0  and nvl(sum(a.last_total_volumn_capa),0) > 0 then -100    
+                            else round((nvl(sum(a.total_volumn_capa) ,0)/nvl(sum(a.last_total_volumn_capa),0))*100)  end as quan_percent,
+                            case 
+                            when nvl(sum(a.last_total_volumn_capa) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                            when nvl(sum(a.last_total_volumn_capa),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                            when nvl(sum(a.last_total_volumn_capa),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.last_total_volumn_capa) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as last_quan_percent,
+                            sum(a.total_volumn_capa) AS total_volumn_capa, sum(a.last_total_volumn_capa) AS last_total_volumn_capa  
                          from MBL_PRODUCT_CAR a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -115,7 +133,7 @@ namespace BILibraryBLL
                               when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
                               when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
                             else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
-                            100 AS   EST_PERCENT
+                            100 AS   EST_PERCENT, sum(a.total_tax_amt) AS tax, sum(a.last_total_tax_amt) AS tax_ly,sum(a.Est_Amt) AS est
                          from MBL_PRODUCT_BEER a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -131,8 +149,17 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.total_volumn_capa) is not null then ROUND((nvl(sum(a.total_volumn_capa),0)/nvl(sum(a.last_total_volumn_capa),0))*100)
-                           else 0 end as quan_percent
+            string sql = @"select case 
+                            when nvl(sum(a.total_volumn_capa) ,0) = 0  and nvl(sum(a.last_total_volumn_capa),0)= 0 then 0  
+                            when nvl(sum(a.total_volumn_capa),0)>0  and nvl(sum(a.last_total_volumn_capa),0) =0 then 100
+                            when nvl(sum(a.total_volumn_capa),0)=0  and nvl(sum(a.last_total_volumn_capa),0) > 0 then -100    
+                            else round((nvl(sum(a.total_volumn_capa) ,0)/nvl(sum(a.last_total_volumn_capa),0))*100)  end as quan_percent,
+                            case 
+                            when nvl(sum(a.last_total_volumn_capa) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                            when nvl(sum(a.last_total_volumn_capa),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                            when nvl(sum(a.last_total_volumn_capa),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.last_total_volumn_capa) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as last_quan_percent,
+                            sum(a.total_volumn_capa) AS total_volumn_capa, sum(a.last_total_volumn_capa) AS last_total_volumn_capa  
                          from MBL_PRODUCT_BEER a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -159,7 +186,7 @@ namespace BILibraryBLL
                               when nvl(sum(a.total_tax_amt),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
                               when nvl(sum(a.total_tax_amt),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
                             else round((nvl(sum(a.total_tax_amt) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as LAST_TAX_PERCENT,
-                            100 AS   EST_PERCENT
+                            100 AS   EST_PERCENT, sum(a.total_tax_amt) AS tax, sum(a.last_total_tax_amt) AS tax_ly,sum(a.Est_Amt) AS est
                          from MBL_PRODUCT_DRINK a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -175,8 +202,17 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select case when sum(a.total_volumn_capa) is not null then ROUND((nvl(sum(a.total_volumn_capa),0)/nvl(sum(a.last_total_volumn_capa),0))*100)
-                           else 0 end as quan_percent
+            string sql = @"select case 
+                            when nvl(sum(a.total_volumn_capa) ,0) = 0  and nvl(sum(a.last_total_volumn_capa),0)= 0 then 0  
+                            when nvl(sum(a.total_volumn_capa),0)>0  and nvl(sum(a.last_total_volumn_capa),0) =0 then 100
+                            when nvl(sum(a.total_volumn_capa),0)=0  and nvl(sum(a.last_total_volumn_capa),0) > 0 then -100    
+                            else round((nvl(sum(a.total_volumn_capa) ,0)/nvl(sum(a.last_total_volumn_capa),0))*100)  end as quan_percent,
+                            case 
+                            when nvl(sum(a.last_total_volumn_capa) ,0) = 0  and nvl(sum(a.Est_Amt),0)= 0 then 0  
+                            when nvl(sum(a.last_total_volumn_capa),0)>0  and nvl(sum(a.Est_Amt),0) =0 then 100
+                            when nvl(sum(a.last_total_volumn_capa),0)=0  and nvl(sum(a.Est_Amt),0) > 0 then -100    
+                            else round((nvl(sum(a.last_total_volumn_capa) ,0)/nvl(sum(a.Est_Amt),0))*100)  end as last_quan_percent,
+                            sum(a.total_volumn_capa) AS total_volumn_capa, sum(a.last_total_volumn_capa) AS last_total_volumn_capa  
                          from MBL_PRODUCT_DRINK a where a.offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
