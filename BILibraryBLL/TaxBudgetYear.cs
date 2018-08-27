@@ -86,7 +86,7 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
-from                        mbl_goods_01 t where offcode ='" + offcode + "'";
+from                        mbl_goods_01 t where offcode ='" + offcode + "' order by t.tax desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

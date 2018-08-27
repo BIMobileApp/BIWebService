@@ -196,6 +196,7 @@
     <Compile Include="Controllers\CompareTaxVolCarController.cs" />
     <Compile Include="Controllers\CompareTaxVolDrinkController.cs" />
     <Compile Include="Controllers\CompareTaxVolSuraController.cs" />
+    <Compile Include="Controllers\DataStatusController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeAllController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
