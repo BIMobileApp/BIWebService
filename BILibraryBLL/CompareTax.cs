@@ -101,7 +101,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_SURA t where t.offcode='"+ offcode + "'";
+            string sql = @"select * from MBL_PRODUCT_SURA t where t.offcode='"+ offcode + "' order by t.total_tax_amt desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -146,7 +146,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_BEER";
+            string sql = @"select * from MBL_PRODUCT_BEER t order by t.total_tax_amt desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -191,7 +191,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_CAR";
+            string sql = @"select * from MBL_PRODUCT_CAR t order by t.total_tax_amt desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -236,7 +236,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_DRINK";
+            string sql = @"select * from MBL_PRODUCT_DRINK t order by t.total_tax_amt desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

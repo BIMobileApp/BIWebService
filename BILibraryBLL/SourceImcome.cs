@@ -17,8 +17,8 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = "select goods as group_name, nettax_amt AS tax,trn_mth ,ROW_NUMBER() OVER (ORDER BY nettax_amt ) as sort ";
-                   sql += "  from MBL_INC_REAL_TIME where offcode = " + offcode + " order by nettax_amt asc";
+            string sql = "select goods as group_name, nettax_amt AS tax,trn_mth ,ROW_NUMBER() OVER (ORDER BY nettax_amt desc) as sort ";
+                   sql += "  from MBL_INC_REAL_TIME where offcode = " + offcode + "";
             /*string sql = @"select ROW_NUMBER() OVER (ORDER BY  b.group_name) as sort,
                     b.group_name,sum(a.tax_nettax_amt) as tax,sum(a.last_tax_nettax_amt) as tax_ly
              from ic_sum_allday_cube a
