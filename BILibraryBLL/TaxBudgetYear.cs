@@ -72,12 +72,14 @@ namespace BILibraryBLL
             /*String sql = @"select distinct(a.budget_month_desc), a.time_id, a.tax ,a.last_tax,a.estimate,a.percent_tax,a.map_color 
                             from mbl_month_01 a where offcode ='"+offcode+"' order by a.time_id";*/
 
-            string sql = @"select a.budget_month_desc, sum(a.tax) AS tax ,sum(a.last_tax) AS last_tax,sum(a.estimate) AS estimate
-                        , sum(a.percent_tax) AS percent_tax, a.map_color ,a.time_id
-                          from mbl_month_01 a
-                            where offcode = " + offcode + "";
-                  sql += @" group by a.budget_month_desc,a.map_color ,a.time_id
-                        order by a.time_id asc";
+            String sql = @"select TRANS_Short_month(a.budget_month_desc) as budget_month_desc
+                                   ,sum(a.tax) AS tax 
+                                   ,sum(a.last_tax) AS last_tax
+                                   ,sum(a.estimate) AS estimate
+                                   ,sum(a.percent_tax) AS percent_tax
+                                   ,a.time_id ,min(a.map_color) as map_color1
+                            from mbl_month_01 a
+                            where a.offcode = " + offcode + " group by a.budget_month_desc,a.time_id order by a.time_id asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
