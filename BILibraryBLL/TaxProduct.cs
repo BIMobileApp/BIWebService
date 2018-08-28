@@ -16,71 +16,108 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select ROW_NUMBER() OVER (ORDER BY tb.group_name ) as sort, tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax,
-                          tb.feb_tax AS feb, tb.mar_tax AS mar, tb.apl_tax AS apl,tb.may_tax AS may,tb.jun_tax AS jun,
-                          tb.jul_tax AS jul, tb.aug_tax AS aug, tb.sep_tax As sep
-                        from(
-                        select group_name, tax, budget_month_desc
-                        from mbl_budg_inc ";
-            sql += "   where  offcode = "+ offcode + " ";
-            sql += @" order by group_name, time_id asc) PIVOT(sum(tax) as tax FOR budget_month_desc in ('ตุลาคม' AS oct,
-                         'พฤศจิกายน' AS nov,
-                         'ธันวาคม' AS dec,
-                         'มกราคม' AS jan,
-                         'กุมภาพันธ์' AS feb,
-                         'มีนาคม' AS mar,
-                         'เมษายน' AS apl,
-                         'พฤษภาคม' AS may,
-                         'มิถุนายน' AS jun,
-                         'กรกฏาคม' AS jul,
-                         'สิงหาคม' AS aug,
-                         'กันยายน' AS sep
-                         )) TB";
+            /* string sql = @"select ROW_NUMBER() OVER (ORDER BY tb.group_name ) as sort, tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax,
+                           tb.feb_tax AS feb, tb.mar_tax AS mar, tb.apl_tax AS apl,tb.may_tax AS may,tb.jun_tax AS jun,
+                           tb.jul_tax AS jul, tb.aug_tax AS aug, tb.sep_tax As sep
+                         from(
+                         select group_name, tax, budget_month_desc
+                         from mbl_budg_inc ";
+             sql += "   where  offcode = "+ offcode + " ";
+             sql += @" order by group_name, time_id asc) PIVOT(sum(tax) as tax FOR budget_month_desc in ('ตุลาคม' AS oct,
+                          'พฤศจิกายน' AS nov,
+                          'ธันวาคม' AS dec,
+                          'มกราคม' AS jan,
+                          'กุมภาพันธ์' AS feb,
+                          'มีนาคม' AS mar,
+                          'เมษายน' AS apl,
+                          'พฤษภาคม' AS may,
+                          'มิถุนายน' AS jun,
+                          'กรกฏาคม' AS jul,
+                          'สิงหาคม' AS aug,
+                          'กันยายน' AS sep
+                          )) TB";
 
-            /*string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort,  TB.group_name,
-                            nvl(SUM(TB.a1_est), 0) AS oct,
-                            nvl(SUM(TB.a2_est), 0) AS nov,
-                                nvl(SUM(TB.a3_est), 0) AS dec,
-                                nvl(SUM(TB.a4_est), 0) AS jan,
-                                nvl(SUM(TB.a5_est), 0) AS feb,
-                                nvl(SUM(TB.a6_est), 0) AS mar,
-                                    nvl(SUM(TB.a7_est), 0) AS apl,
-                                    nvl(SUM(TB.a8_est), 0) AS may,
-                                    nvl(SUM(TB.a9_est), 0) AS jun,
-                                    nvl(SUM(TB.a10_est), 0) AS jul,
-                                        nvl(SUM(TB.a11_est), 0) AS aug,
-                                        nvl(SUM(TB.a12_est), 0) AS sep
-                              FROM(SELECT *
-                                      FROM(select b.group_name as group_name
-                                                   , b.group_id as group_id
-                                                   , c.budget_month_desc as month_name
-                                                   , c.budget_month_cd as month_CD
-                                                   , nvl(sum(a.estimate), 0) as est
-                                            from ic_sum_allday_cube a
-                                                 , ic_product_grp_dim b
-                                                 , ic_time_dim c
-                                            where a.product_grp_cd = b.group_id
-                                                  and a.time_id = c.time_id
-                                                  and a.product_grp_cd in (0201, 0501, 7002, 7001)
-                                             group by c.budget_month_desc, b.group_name, c.budget_month_cd, group_id
-                                             order by b.group_name, c.budget_month_cd)
-                                             PIVOT(sum(est) as est FOR month_CD in ('1' AS a1
-                                                                          , '2' AS a2
-                                                                          , '3' AS a3
-                                                                          , '4' AS a4
-                                                                          , '5' AS a5
-                                                                          , '6' AS a6
-                                                                          , '7' AS a7
-                                                                          , '8' AS a8
-                                                                          , '9' AS a9
-                                                                          , '10' AS a10
-                                                                          , '11' AS a11
-                                                                          , '12' AS a12))
-        
-                                    ) TB
-                             GROUP BY TB.group_name,TB.group_id
-                             ORDER BY TB.group_id";*/
+             string sql = @"SELECT ROW_NUMBER() OVER (ORDER BY  TB.group_name) as sort,  TB.group_name,
+                             nvl(SUM(TB.a1_est), 0) AS oct,
+                             nvl(SUM(TB.a2_est), 0) AS nov,
+                                 nvl(SUM(TB.a3_est), 0) AS dec,
+                                 nvl(SUM(TB.a4_est), 0) AS jan,
+                                 nvl(SUM(TB.a5_est), 0) AS feb,
+                                 nvl(SUM(TB.a6_est), 0) AS mar,
+                                     nvl(SUM(TB.a7_est), 0) AS apl,
+                                     nvl(SUM(TB.a8_est), 0) AS may,
+                                     nvl(SUM(TB.a9_est), 0) AS jun,
+                                     nvl(SUM(TB.a10_est), 0) AS jul,
+                                         nvl(SUM(TB.a11_est), 0) AS aug,
+                                         nvl(SUM(TB.a12_est), 0) AS sep
+                               FROM(SELECT *
+                                       FROM(select b.group_name as group_name
+                                                    , b.group_id as group_id
+                                                    , c.budget_month_desc as month_name
+                                                    , c.budget_month_cd as month_CD
+                                                    , nvl(sum(a.estimate), 0) as est
+                                             from ic_sum_allday_cube a
+                                                  , ic_product_grp_dim b
+                                                  , ic_time_dim c
+                                             where a.product_grp_cd = b.group_id
+                                                   and a.time_id = c.time_id
+                                                   and a.product_grp_cd in (0201, 0501, 7002, 7001)
+                                              group by c.budget_month_desc, b.group_name, c.budget_month_cd, group_id
+                                              order by b.group_name, c.budget_month_cd)
+                                              PIVOT(sum(est) as est FOR month_CD in ('1' AS a1
+                                                                           , '2' AS a2
+                                                                           , '3' AS a3
+                                                                           , '4' AS a4
+                                                                           , '5' AS a5
+                                                                           , '6' AS a6
+                                                                           , '7' AS a7
+                                                                           , '8' AS a8
+                                                                           , '9' AS a9
+                                                                           , '10' AS a10
+                                                                           , '11' AS a11
+                                                                           , '12' AS a12))
 
+                                     ) TB
+                              GROUP BY TB.group_name,TB.group_id
+                              ORDER BY TB.group_id";*/
+
+            string sql = @"select * from (select ROW_NUMBER() OVER(ORDER BY tb.group_name) as sort,
+                           tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax As jan,tb.feb_tax AS feb,
+                           tb.mar_tax AS mar,tb.apl_tax AS apl,tb.may_tax AS may,tb.jun_tax AS jun,tb.jul_tax AS jul,
+                           tb.aug_tax AS aug,tb.sep_tax As sep
+                           from (select group_name, tax, budget_month_desc from mbl_budg_inc
+                                     where offcode = " + offcode + " order by group_name, time_id asc)";
+            sql += @" PIVOT(sum(tax) as tax FOR budget_month_desc in('ตุลาคม' AS oct,
+                            'พฤศจิกายน' AS nov,'ธันวาคม' AS dec,'มกราคม' AS jan,'กุมภาพันธ์' AS feb,'มีนาคม' AS mar,
+                            'เมษายน' AS apl,'พฤษภาคม' AS may,'มิถุนายน' AS jun,'กรกฏาคม' AS jul,'สิงหาคม' AS aug,'กันยายน' AS sep)) TB) t1
+                          union all select null,'รวมทั้งหมด',sum(s.oct),sum(s.nov),sum(s.dec),sum(s.jan),sum(s.feb),
+                          sum(s.mar),sum(s.apl),sum(s.may),sum(s.jun),sum(s.jul),sum(s.aug),sum(s.sep)
+                          from (select ROW_NUMBER() OVER(ORDER BY tb.group_name) as sort,tb.group_name,tb.oct_tax AS oct,
+                            tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax As jan,tb.feb_tax AS feb,tb.mar_tax AS mar,
+                                           tb.apl_tax AS apl,
+                                           tb.may_tax AS may,
+                                           tb.jun_tax AS jun,
+                                           tb.jul_tax AS jul,
+                                           tb.aug_tax AS aug,
+                                           tb.sep_tax As sep
+                                      from (select group_name, tax, budget_month_desc
+                                              from mbl_budg_inc
+                                             where offcode = " + offcode + " order by tax desc)";
+                  sql += @" PIVOT(sum(tax) as tax
+                                       FOR budget_month_desc in('ตุลาคม' AS oct,
+                                                               'พฤศจิกายน' AS nov,
+                                                               'ธันวาคม' AS dec,
+                                                               'มกราคม' AS jan,
+                                                               'กุมภาพันธ์' AS feb,
+                                                               'มีนาคม' AS mar,
+                                                               'เมษายน' AS apl,
+                                                               'พฤษภาคม' AS may,
+                                                               'มิถุนายน' AS jun,
+                                                               'กรกฏาคม' AS jul,
+                                                               'สิงหาคม' AS aug,
+                                                               'กันยายน' AS sep)) TB) s";
+
+           
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);

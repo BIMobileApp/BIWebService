@@ -185,12 +185,16 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CheckDeliveryController.cs" />
     <Compile Include="Controllers\CompareTaxBeerController.cs" />
+    <Compile Include="Controllers\CompareTaxBeerMonthAllController.cs" />
     <Compile Include="Controllers\CompareTaxBeerMonthController.cs" />
     <Compile Include="Controllers\CompareTaxCarController.cs" />
+    <Compile Include="Controllers\CompareTaxCarMonthAllController.cs" />
     <Compile Include="Controllers\CompareTaxCarMonthController.cs" />
     <Compile Include="Controllers\CompareTaxDrinkController.cs" />
+    <Compile Include="Controllers\CompareTaxDrinkMonthAllController.cs" />
     <Compile Include="Controllers\CompareTaxDrinkMonthController.cs" />
     <Compile Include="Controllers\CompareTaxSuraController.cs" />
+    <Compile Include="Controllers\CompareTaxSuraMonthAllController.cs" />
     <Compile Include="Controllers\CompareTaxSuraMonthController.cs" />
     <Compile Include="Controllers\CompareTaxVolBeerController.cs" />
     <Compile Include="Controllers\CompareTaxVolCarController.cs" />
@@ -203,6 +207,10 @@
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
+    <Compile Include="Controllers\getTypeNameBeerMonthController.cs" />
+    <Compile Include="Controllers\getTypeNameCarMonthController.cs" />
+    <Compile Include="Controllers\getTypeNameDrinkMonthController.cs" />
+    <Compile Include="Controllers\getTypeNameSuraMonthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncDataMonthController.cs" />
     <Compile Include="Controllers\IncAreaController.cs" />

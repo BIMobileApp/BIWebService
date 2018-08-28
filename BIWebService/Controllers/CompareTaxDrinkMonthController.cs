@@ -12,12 +12,6 @@ namespace BIWebService.Controllers
     public class CompareTaxDrinkMonthController : ApiController
     {
         CompareTax tax = new CompareTax();
-
-        public IHttpActionResult Get()
-        {
-            var jsonString = JsonConvert.SerializeObject(tax.getTypeNameDrinkMonth());
-            return new RawJsonActionResult(jsonString);
-        }
         public IHttpActionResult Get(string code, string offcode)
         {
             var jsonString = JsonConvert.SerializeObject(tax.CompareTaxDrinkMonth(code, offcode));

@@ -9,13 +9,12 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class CompareTaxSuraMonthController : ApiController
+    public class getTypeNameDrinkMonthController : ApiController
     {
         CompareTax tax = new CompareTax();
-        
-        public IHttpActionResult Get(string code, string offcode)
+        public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxSuraMonth(code, offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.getTypeNameDrinkMonth(offcode));
             return new RawJsonActionResult(jsonString);
         }
     }

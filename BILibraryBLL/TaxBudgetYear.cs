@@ -72,14 +72,27 @@ namespace BILibraryBLL
             /*String sql = @"select distinct(a.budget_month_desc), a.time_id, a.tax ,a.last_tax,a.estimate,a.percent_tax,a.map_color 
                             from mbl_month_01 a where offcode ='"+offcode+"' order by a.time_id";*/
 
-            String sql = @"select TRANS_Short_month(a.budget_month_desc) as budget_month_desc
-                                   ,sum(a.tax) AS tax 
-                                   ,sum(a.last_tax) AS last_tax
-                                   ,sum(a.estimate) AS estimate
-                                   ,sum(a.percent_tax) AS percent_tax
-                                   ,a.time_id ,min(a.map_color) as map_color1
-                            from mbl_month_01 a
-                            where a.offcode = " + offcode + " group by a.budget_month_desc,a.time_id order by a.time_id asc";
+            String sql = @"select *
+                              from (select TRANS_Short_month(a.budget_month_desc) as budget_month_desc,
+                                           sum(a.tax) AS tax,
+                                           sum(a.last_tax) AS last_tax,
+                                           sum(a.estimate) AS estimate,
+                                           sum(a.percent_tax) AS percent_tax,
+                                           a.time_id,
+                                           min(a.map_color) as map_color1
+                                      from mbl_month_01 a
+                                     where a.offcode = '" + offcode + "'";
+                     sql += @" group by a.budget_month_desc, a.time_id
+                                    union all
+                                    select 'รวมทั้งหมด',
+                                           sum(s.tax),
+                                           sum(s.last_tax),
+                                           sum(s.estimate),
+                                           null,
+                                           null,
+                                           null
+                                      from mbl_month_01 s) tb
+                             order by tb.time_id asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -94,8 +107,18 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
-from                        mbl_goods_01 t where offcode ='" + offcode + "' order by t.tax desc";
+            string sql = @"select *
+                              from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
+                                    from mbl_goods_01 t where offcode = '" + offcode + "'";
+                  sql += @"order by t.tax desc)
+                                    union all
+                                    select 'รวมทั้งหมด',
+                                           sum(s.tax),
+                                           sum(s.last_tax),
+                                           sum(s.estimate),
+                                           null,
+                                           null
+                                      from mbl_goods_01 s";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -105,7 +128,8 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             return dt;
         }
 
-        public DataTable TaxBudgetProduct() {
+        public DataTable TaxBudgetProduct()
+        {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
@@ -136,15 +160,16 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             return dt;
         }
 
-        public DataTable TaxBudgetRegAll(string offcode,string group_id) {
+        public DataTable TaxBudgetRegAll(string offcode, string group_id)
+        {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
 
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
-                            where offcode = " + offcode + " and group_name = '"+ group_id + "' ";
-                  sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
+                            where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
 
             /*string sql = @"select
                             r1.reg_id
@@ -183,7 +208,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
 
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
-                            where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = "+ year + "";
+                            where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = " + year + "";
             sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
 
             /* string sql = @"select
@@ -251,7 +276,8 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             return result;
         }
 
-        public string SumTaxBudgetReg(string year) {
+        public string SumTaxBudgetReg(string year)
+        {
 
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
@@ -293,8 +319,8 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
 
             string sql = @"select ROW_NUMBER() OVER (ORDER BY myrank) as sort,
                             reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
-                   sql += @" where offcode = "+ offcode + "  and myrank between 1 and 10 ";
-                   sql += @" order by tax_nettax_amt";
+            sql += @" where offcode = " + offcode + "  and myrank between 1 and 10 ";
+            sql += @" order by tax_nettax_amt";
 
             /*string sql = @"select
                             r1.reg_id
@@ -327,7 +353,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             return dt;
         }
 
-        public DataTable TaxBudgetRegByMth(string offcode,string month)
+        public DataTable TaxBudgetRegByMth(string offcode, string month)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -419,7 +445,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
                            and d.budget_year = d2.budget_year
                            and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
                            and a.reg_sk = r1.reg_sk 
-                           and d.month_cd = " + mth + ""; 
+                           and d.month_cd = " + mth + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
