@@ -17,8 +17,8 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @" select DIM_DATA_DATE_ID,FZ_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT,DIM_DATA_DATE_ID
-                            from mbl_cd_daily_report where officode = " + offcode + "";
+            string sql = @" select DIM_DATA_DATE_ID,FZ_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT
+                            from mbl_cd_daily_report where officode = " + offcode + " order by DIM_DATA_DATE_ID, FZ_EXCISE_AMT,IN_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT desc";
 
             /*string sql = @"SELECT TB.TIME_ID,
                            cast (nvl(SUM(TB.A_krom_tax),0) as decimal (15,2)) AS cd_income,
