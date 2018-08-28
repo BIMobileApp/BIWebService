@@ -52,7 +52,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -61,13 +61,13 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select get_convert_short_group_name(t.group_name_new,'PRO') as group_name, t.* from MB_BI_MONTHLY_GRAPH t";
+            string sql = @"select * from MB_BI_MONTHLY_GRAPH t";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -76,13 +76,13 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select get_convert_short_group_name(t.group_name_new,'PRO') as group_name,t.* from MB_BI_MONTHLY_RATIO t";
+            string sql = @"select * from MB_BI_MONTHLY_RATIO t";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -126,7 +126,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -135,13 +135,13 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select get_convert_short_group_name(t.group_name_new,'PRO') as group_name,t.* from MB_BI_SUM_MONTH_GRAPH t";
+            string sql = @"select * from MB_BI_SUM_MONTH_GRAPH t";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -150,13 +150,13 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select get_convert_short_group_name(t.group_name_new,'PRO') as group_name,t.* from MB_BI_SUM_MONTH_RATIO t";
+            string sql = @"select * from MB_BI_SUM_MONTH_RATIO t";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -171,7 +171,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -186,7 +186,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -201,7 +201,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -216,7 +216,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -231,7 +231,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -246,7 +246,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -261,7 +261,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -276,7 +276,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -291,7 +291,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -306,7 +306,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -321,7 +321,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -336,7 +336,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -354,7 +354,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -369,7 +369,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
         //////////////////////////////////////////////////////////////////////////////////
@@ -384,7 +384,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -399,7 +399,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -414,7 +414,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -429,7 +429,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
