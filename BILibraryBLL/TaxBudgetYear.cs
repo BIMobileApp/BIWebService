@@ -39,7 +39,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -76,7 +76,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -92,7 +92,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -123,7 +123,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -163,7 +163,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -203,7 +203,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -238,7 +238,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
                     result = reader.ToString();
                 }
             }
-
+            thisConnection.Close();
             return result;
         }
 
@@ -273,7 +273,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
                     result = reader.ToString();
                 }
             }
-
+            thisConnection.Close();
             return result;
         }
 
@@ -314,7 +314,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -355,7 +355,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
         }
 
@@ -389,7 +389,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
                     result = reader.ToString();
                 }
             }
-
+            thisConnection.Close();
             return result;
         }
 
@@ -424,7 +424,7 @@ from                        mbl_goods_01 t where offcode ='" + offcode + "' orde
                     result = reader.ToString();
                 }
             }
-
+            thisConnection.Close();
             return result;
         }
     }

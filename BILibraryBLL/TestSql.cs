@@ -25,7 +25,7 @@ namespace BILibraryBLL
                 thisConnection.Open();
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 adapter.Fill(dt);
-
+                thisConnection.Close();
                 return dt;
             }
         }
@@ -53,7 +53,7 @@ namespace BILibraryBLL
                     dict.Add(key, rec);
                 }
             }
-
+            thisConnection.Close();
             return dict;
         }
 

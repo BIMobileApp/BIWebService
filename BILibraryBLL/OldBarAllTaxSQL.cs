@@ -39,7 +39,7 @@ namespace BILibraryBLL
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 //get result to fill in 'dt'
                 adapter.Fill(dt);
-
+                thisConnection.Close();
                 return dt;
             }
         }

@@ -25,7 +25,7 @@ namespace BILibraryBLL
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
-
+            thisConnection.Close();
             return dt;
 
         }
