@@ -285,6 +285,7 @@
     <Compile Include="Controllers\TaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\TaxBudgetRegController.cs" />
     <Compile Include="Controllers\TaxBudgetYearController.cs" />
+    <Compile Include="Controllers\TaxCurYearbyYearController.cs" />
     <Compile Include="Controllers\TaxCurYearController.cs" />
     <Compile Include="Controllers\taxPercentBeerController.cs" />
     <Compile Include="Controllers\taxPercentByAreaController.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Controllers\taxPercentCarController.cs" />
     <Compile Include="Controllers\taxPercentDrinkController.cs" />
     <Compile Include="Controllers\taxPercentSuraController.cs" />
+    <Compile Include="Controllers\TaxProductCurYearbyYearController.cs" />
     <Compile Include="Controllers\TaxProductCurYearController.cs" />
     <Compile Include="Controllers\TaxProductGroupByMthAllController.cs" />
     <Compile Include="Controllers\TaxProductGroupByMthController.cs" />

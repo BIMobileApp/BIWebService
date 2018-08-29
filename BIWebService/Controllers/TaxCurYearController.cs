@@ -13,11 +13,15 @@ namespace BIWebService.Controllers
     {
        
         TaxBudgetYear tax = new TaxBudgetYear();
-        
-        // GET: api/TaxBudgetYear/
+
+        public IHttpActionResult Get()
+        {
+            var jsonString = JsonConvert.SerializeObject(tax.getTaxCurYear());
+            return new RawJsonActionResult(jsonString);
+        }
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxCurYear(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxCurYearAll(offcode));
             return new RawJsonActionResult(jsonString);
         }
 

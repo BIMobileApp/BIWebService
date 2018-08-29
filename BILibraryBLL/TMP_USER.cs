@@ -18,7 +18,9 @@ namespace BILibraryBLL
 
             string sql = @"select t.u_username as username
                                  ,t.u_password as password
-                                 ,t.offcode as offcode from TMP_USER_ROLE t 
+                                 ,t.offcode as offcode
+                                 ,get_last_data_date_mobile() as last_update_date
+                           from TMP_USER_ROLE t 
                            where t.u_username = '" + username+"'";
                   sql += " and t.u_password = '"+password+"' and rownum <= 1";
 
