@@ -251,6 +251,7 @@
     <Compile Include="Controllers\REP02_GUAGE_REGController.cs" />
     <Compile Include="Controllers\SelectionAreaController.cs" />
     <Compile Include="Controllers\SelectionGroupNameController.cs" />
+    <Compile Include="Controllers\SelectionProvinceChangeController.cs" />
     <Compile Include="Controllers\SelectionProvinceController.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
     <Compile Include="Controllers\SumIncomeListController.cs" />

@@ -60,7 +60,22 @@ namespace BILibraryBLL
             return dt;
         }
 
+        public DataTable SelectionProvinceChange(string offcode, string region) {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
+            string sql = @"select distinct group_desc from mbl_lic_data_1_1 where offcode ='" + offcode + "'";
+                    sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                    sql += " order by group_desc asc";
+            // string sql = @"select * from MBL_LAW_REPORT_1 t where t.offcode ='"+ offcode+"'";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
 
     }
 }
