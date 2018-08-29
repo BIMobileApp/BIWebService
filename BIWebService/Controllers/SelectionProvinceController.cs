@@ -11,7 +11,7 @@ namespace BIWebService.Controllers
 {
     public class SelectionProvinceController : ApiController
     {
-        LawReport tax = new LawReport();
+        MasterData tax = new MasterData();
         // GET: api/SelectionProvince
         public IEnumerable<string> Get()
         {

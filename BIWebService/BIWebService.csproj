@@ -207,6 +207,10 @@
     <Compile Include="Controllers\IncAreaDetailController.cs" />
     <Compile Include="Controllers\IncDataMonthController.cs" />
     <Compile Include="Controllers\IncAreaController.cs" />
+    <Compile Include="Controllers\IncProductByAreaAllController.cs" />
+    <Compile Include="Controllers\IncProductByAreaController.cs" />
+    <Compile Include="Controllers\IncProductByMthAllController.cs" />
+    <Compile Include="Controllers\IncProductByMthController.cs" />
     <Compile Include="Controllers\MasterAreaController.cs" />
     <Compile Include="Controllers\MasterBranchController.cs" />
     <Compile Include="Controllers\MasterProvinceController.cs" />
