@@ -204,8 +204,12 @@
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IncAreaDetailController.cs" />
     <Compile Include="Controllers\IncDataMonthController.cs" />
     <Compile Include="Controllers\IncAreaController.cs" />
+    <Compile Include="Controllers\MasterAreaController.cs" />
+    <Compile Include="Controllers\MasterBranchController.cs" />
+    <Compile Include="Controllers\MasterProvinceController.cs" />
     <Compile Include="Controllers\MBLRegisterController.cs" />
     <Compile Include="Controllers\LawReportAreaController.cs" />
     <Compile Include="Controllers\LawReportMthController.cs" />
@@ -241,7 +245,11 @@
     <Compile Include="Controllers\QuantitySuraController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
     <Compile Include="Controllers\REP02_GUAGE_REGController.cs" />
+    <Compile Include="Controllers\SelectionAreaController.cs" />
+    <Compile Include="Controllers\SelectionGroupNameController.cs" />
+    <Compile Include="Controllers\SelectionProvinceController.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
+    <Compile Include="Controllers\SumIncomeListController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegController.cs" />
     <Compile Include="Controllers\TaxBudgetProductController.cs" />
