@@ -43,7 +43,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxCurYear(string offcode)
+        public DataTable TaxCurYearAll(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -84,7 +84,7 @@ namespace BILibraryBLL
                                      where a.offcode = '" + offcode + "'";
                      sql += @" group by a.budget_month_desc, a.time_id
                                     union all
-                                    select 'รวมทั้งหมด',
+                                    select 'รวม',
                                            sum(s.tax),
                                            sum(s.last_tax),
                                            sum(s.estimate),
@@ -102,7 +102,58 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxProductCurYear(string offcode)
+        public DataTable TaxCurYearbyYear(string offcode,string year)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            
+
+            String sql = @"select *
+                              from (select TRANS_Short_month(a.budget_month_desc) as budget_month_desc,
+                                           sum(a.tax) AS tax,
+                                           sum(a.last_tax) AS last_tax,
+                                           sum(a.estimate) AS estimate,
+                                           sum(a.percent_tax) AS percent_tax,
+                                           a.time_id,
+                                           min(a.map_color) as map_color1
+                                      from mbl_month_01 a
+                                     where a.offcode = '" + offcode + "' and a.budget_year = '"+ year + "'";
+            sql += @" group by a.budget_month_desc, a.time_id
+                                    union all
+                                    select 'รวม',
+                                           sum(s.tax),
+                                           sum(s.last_tax),
+                                           sum(s.estimate),
+                                           null,
+                                           null,
+                                           null
+                                      from mbl_month_01 s where s.offcode= '" + offcode + "'  and s.budget_year = '" + year + "') tb order by tb.time_id asc";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable getTaxCurYear()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            
+            String sql = @"select distinct(t.budget_year) from mbl_month_01 t";
+            
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxProductCurYearAll(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -119,6 +170,47 @@ namespace BILibraryBLL
                                            null,
                                            null
                                       from mbl_goods_01 s where s.offcode = '" + offcode + "'";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxProductCurYearbyYear(string offcode, string year)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select *
+                              from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
+                                    from mbl_goods_01 t where t.offcode = '" + offcode + "' and t.budget_year = '" + year + "'";
+            sql += @"order by t.tax desc)
+                                    union all
+                                    select 'รวม',
+                                           sum(s.tax),
+                                           sum(s.last_tax),
+                                           sum(s.estimate),
+                                           null,
+                                           null
+                                      from mbl_goods_01 s where s.offcode = '" + offcode + "' and s.budget_year = '" + year + "'";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable getProductCurYear()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            String sql = @"select distinct(t.budget_year) from MBL_GOODS_01 t";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
