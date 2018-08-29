@@ -123,7 +123,7 @@ namespace BILibraryBLL
 
             string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + "  AND GROUP_DESC = '" + group_desc + "' ";
-            sql += " AND PROVINCE_NAME = '" + province + "' and REGION_NAME = '" + region + "' AND BUDGET_MONTH_DESC = "+ mth + "";
+            sql += " AND PROVINCE_NAME = '" + province + "' and REGION_NAME = '" + region + "' AND BUDGET_MONTH_DESC = '"+ mth + "'";
             sql += " GROUP BY TYPE_DESC ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
