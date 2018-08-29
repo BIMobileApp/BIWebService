@@ -1,40 +1,41 @@
-﻿using BILibraryBLL;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BILibraryBLL;
+using Newtonsoft.Json;
 
 namespace BIWebService.Controllers
 {
-    public class SelectionGroupNameController : ApiController
+    public class LawProductAreaAllController : ApiController
     {
-        IncMasterData tax = new IncMasterData();
-        // GET: api/SelectionGroupName
+        LawReport tax = new LawReport();
+        // GET: api/LawProductAreaAll
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/SelectionGroupName/5
+        // GET: api/LawProductAreaAll/5
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.SelectionGroupName(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.LawProductAreaAll(offcode));
             return new RawJsonActionResult(jsonString);
         }
-        // POST: api/SelectionGroupName
+
+        // POST: api/LawProductAreaAll
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/SelectionGroupName/5
+        // PUT: api/LawProductAreaAll/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/SelectionGroupName/5
+        // DELETE: api/LawProductAreaAll/5
         public void Delete(int id)
         {
         }

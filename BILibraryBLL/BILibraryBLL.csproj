@@ -213,7 +213,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IncData.cs" />
-    <Compile Include="MasterData.cs" />
+    <Compile Include="IncMasterData.cs" />
+    <Compile Include="LawMasterData.cs" />
     <Compile Include="MBLRegister.cs" />
     <Compile Include="GuageOverviewRegion.cs" />
     <Compile Include="LawReport.cs" />

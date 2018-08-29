@@ -9,32 +9,33 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class SelectionGroupNameController : ApiController
+    public class SelectionMthGroupNameController : ApiController
     {
         IncMasterData tax = new IncMasterData();
-        // GET: api/SelectionGroupName
+        // GET: api/SelectionMthGroupName
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/SelectionGroupName/5
+        // GET: api/SelectionMthGroupName/5
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.SelectionGroupName(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.SelectionMthGroupName(offcode));
             return new RawJsonActionResult(jsonString);
         }
-        // POST: api/SelectionGroupName
+
+        // POST: api/SelectionMthGroupName
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/SelectionGroupName/5
+        // PUT: api/SelectionMthGroupName/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/SelectionGroupName/5
+        // DELETE: api/SelectionMthGroupName/5
         public void Delete(int id)
         {
         }
