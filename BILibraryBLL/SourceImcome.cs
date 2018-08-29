@@ -35,13 +35,28 @@ namespace BILibraryBLL
              group by b.group_name
              order by b.group_name";*/
 
-            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);
             thisConnection.Close();
             return dt;
 
+        }
+
+        public DataTable SumIncomeList(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = "select sum(nettax_amt) AS sum_tax from MBL_INC_REAL_TIME where offcode = " + offcode + " ";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
         }
     }
 }
