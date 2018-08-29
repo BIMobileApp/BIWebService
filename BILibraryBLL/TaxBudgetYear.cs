@@ -91,8 +91,8 @@ namespace BILibraryBLL
                                            null,
                                            null,
                                            null
-                                      from mbl_month_01 s) tb
-                             order by tb.time_id asc";
+                                      from mbl_month_01 s where s.offcode= '" + offcode + "') tb order by tb.time_id asc";
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -118,7 +118,7 @@ namespace BILibraryBLL
                                            sum(s.estimate),
                                            null,
                                            null
-                                      from mbl_goods_01 s";
+                                      from mbl_goods_01 s where s.offcode = '" + offcode + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
