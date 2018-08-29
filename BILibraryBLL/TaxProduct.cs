@@ -132,7 +132,7 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
 
-            string sql = @"select ROW_NUMBER() OVER (ORDER BY tb.group_name ) as sort,tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax,
+            string sql = @"select ROW_NUMBER() OVER (ORDER BY tb.group_name ) as sort,tb.group_name,tb.oct_tax AS oct,tb.nov_tax AS nov,tb.dec_tax AS dec,tb.jan_tax as jan,
                           tb.feb_tax AS feb, tb.mar_tax AS mar, tb.apl_tax AS apl,tb.may_tax AS may,tb.jun_tax AS jun,
                           tb.jul_tax AS jul, tb.aug_tax AS aug, tb.sep_tax As sep
                         from(
