@@ -30,16 +30,17 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByArea(string offcode, string region, string province, string group_desc) {
+        public DataTable IncProductByArea(string offcode, string region, string province, string group_desc, string month) {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_1_1 ";
+            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + " ";
             sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end   ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND budget_month_desc = case when '" + month + "' = 'undefined' then budget_month_desc else '" + month + "' end";
             sql += " GROUP BY TYPE_DESC ";
             sql += " ORDER BY TYPE_DESC ";
 
@@ -56,7 +57,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_1_1 ";
+            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + " ";
             sql += " GROUP BY TYPE_DESC ";
             sql += " ORDER BY TYPE_DESC";
