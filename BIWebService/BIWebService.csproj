@@ -219,6 +219,8 @@
     <Compile Include="Controllers\IncProductByAreaController.cs" />
     <Compile Include="Controllers\IncProductByMthAllController.cs" />
     <Compile Include="Controllers\IncProductByMthController.cs" />
+    <Compile Include="Controllers\IncSumDataByMonthController.cs" />
+    <Compile Include="Controllers\IncSumProductByMthController.cs" />
     <Compile Include="Controllers\LawProductAreaAllController.cs" />
     <Compile Include="Controllers\LawProductByAreaAllController.cs" />
     <Compile Include="Controllers\LawProductByAreaController.cs" />
