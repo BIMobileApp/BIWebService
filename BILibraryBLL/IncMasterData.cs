@@ -91,12 +91,13 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable SelectionMthProvince(string offcode)
+        public DataTable SelectionMthProvince(string offcode, string region)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct province_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by province_name asc";
+            string sql = @"select distinct province_name from mbl_lic_data_2_1 ";
+                   sql += " where offcode ='" + offcode + "' and REGION_NAME = '"+ region + "' order by province_name asc";
  
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -106,12 +107,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable SelectionMthGroupName(string offcode)
+        public DataTable SelectionMthGroupName(string offcode, string group_name)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct group_desc from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by group_desc asc";
+            string sql = @"select distinct TYPE_DESC from mbl_lic_data_2_1 where offcode ='" + offcode + "' and GROUP_DESC = '"+ group_name + "' order by TYPE_DESC asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 
             thisConnection.Open();

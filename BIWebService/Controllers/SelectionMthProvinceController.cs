@@ -20,9 +20,9 @@ namespace BIWebService.Controllers
         }
 
         // GET: api/SelectionMthProvince/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode,string region)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.SelectionMthProvince(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.SelectionMthProvince(offcode, region));
             return new RawJsonActionResult(jsonString);
         }
 
