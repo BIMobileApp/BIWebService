@@ -16,7 +16,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct region_name from mbl_lic_data_1_1 where offcode ='" + offcode + "' order by region_name asc";
+            string sql = @"select distinct region_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by region_name asc";
             // string sql = @"select * from MBL_LAW_REPORT_1 t where t.offcode ='"+ offcode+"'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 
@@ -27,12 +27,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable SelectionProvince(string offcode)
+        public DataTable SelectionProvince(string offcode,string area)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct province_name from mbl_lic_data_1_1 where offcode ='" + offcode + "' order by province_name asc";
+            string sql = @"select distinct province_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' and region_name = '" + area + "' order by province_name asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 
             thisConnection.Open();
@@ -48,7 +48,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct group_desc from mbl_lic_data_1_1 where offcode ='" + offcode + "' order by group_desc asc";
+            string sql = @"select distinct group_desc from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by group_desc asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -62,7 +62,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct group_desc from mbl_lic_data_1_1 where offcode ='" + offcode + "'";
+            string sql = @"select distinct group_desc from mbl_lic_data_2_1 where offcode ='" + offcode + "'";
                     sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
                     sql += " order by group_desc asc";
 
