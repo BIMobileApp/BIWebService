@@ -11,7 +11,7 @@ namespace BIWebService.Controllers
 {
     public class SelectionAreaController : ApiController
     {
-        MasterData tax = new MasterData();
+        IncMasterData tax = new IncMasterData();
         // GET: api/SelectionArea
         public IEnumerable<string> Get()
         {

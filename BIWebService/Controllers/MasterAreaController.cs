@@ -10,7 +10,7 @@ namespace BIWebService.Controllers
 {
     public class MasterAreaController : ApiController
     {
-        MasterData tax = new MasterData();
+        IncMasterData tax = new IncMasterData();
 
         // GET: api/MasterArea
         public IEnumerable<string> Get()

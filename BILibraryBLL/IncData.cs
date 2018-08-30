@@ -20,7 +20,7 @@ namespace BILibraryBLL
 
            string sql = "select REGION_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
                    sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-                   sql += " from MBL_LIC_DATA where  offcode = " + offcode + "";
+                   sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ORDER BY REGION_DESC";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -35,10 +35,13 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_1_1 ";
-            sql += " WHERE offcode = " + offcode + "  AND GROUP_DESC = '" + group_desc + "' ";
-            sql += " AND PROVINCE_NAME = '" + province + "' and REGION_NAME = '" + region + "'";
+            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_1_1 ";
+            sql += " WHERE offcode = " + offcode + " ";
+            sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end   ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             sql += " GROUP BY TYPE_DESC ";
+            sql += " ORDER BY TYPE_DESC ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -50,13 +53,13 @@ namespace BILibraryBLL
 
         public DataTable IncProductByAreaAll(string offcode)
         {
-
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_1_1 ";
+            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_1_1 ";
             sql += " WHERE offcode = " + offcode + " ";
             sql += " GROUP BY TYPE_DESC ";
+            sql += " ORDER BY TYPE_DESC";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -73,7 +76,7 @@ namespace BILibraryBLL
 
             string sql = "select MONTH_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
                    sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-                   sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + "";
+                   sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " ORDER BY TIME_ID asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -89,7 +92,7 @@ namespace BILibraryBLL
 
             string sql = "select MONTH_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
             sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-            sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + "";
+            sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " ORDER BY TIME_ID asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -105,7 +108,7 @@ namespace BILibraryBLL
 
             string sql = @"select TYPE_DESC,SUM(LICENSE_AMT) AS AMT,SUM(LICENSE_COUNT) AS COUNT from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + " ";
-            sql += " GROUP BY TYPE_DESC ";
+            sql += " GROUP BY TYPE_DESC ORDER BY TYPE_DESC ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -117,14 +120,17 @@ namespace BILibraryBLL
 
         public DataTable IncProductByMth(string offcode, string region, string province, string group_desc,string mth)
         {
-
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_2_1 ";
-            sql += " WHERE offcode = " + offcode + "  AND GROUP_DESC = '" + group_desc + "' ";
-            sql += " AND PROVINCE_NAME = '" + province + "' and REGION_NAME = '" + region + "' AND BUDGET_MONTH_DESC = '"+ mth + "'";
-            sql += " GROUP BY TYPE_DESC ";
+            sql += " WHERE offcode = " + offcode + " ";
+            sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end   ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND BUDGET_MONTH_DESC = case when '" + mth + "' = 'undefined' then BUDGET_MONTH_DESC else '" + mth + "' end";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            //sql += " AND PROVINCE_NAME = nvl('" + province + "',PROVINCE_NAME) and REGION_NAME = nvl('" + region + "',REGION_NAME) AND BUDGET_MONTH_DESC = nvl('" + mth + "',BUDGET_MONTH_DESC)";
+            sql += " GROUP BY TYPE_DESC ORDER BY TYPE_DESC asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
