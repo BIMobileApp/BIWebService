@@ -18,6 +18,8 @@ namespace BILibraryBLL
 
             string sql = @"select t.u_username as username
                                  ,t.u_password as password
+                                 ,t.offdesc as offdesc
+                                 ,t.username as name
                                  ,t.offcode as offcode
                                  ,get_last_data_date_mobile() as last_update_date
                            from TMP_USER_ROLE t 
