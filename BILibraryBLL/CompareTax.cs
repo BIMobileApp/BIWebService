@@ -101,7 +101,23 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_SURA t where t.offcode='"+ offcode + "' order by t.total_tax_amt desc";
+            //string sql = @"select * from MBL_PRODUCT_SURA t where t.offcode='"+ offcode + "' order by t.total_tax_amt desc";
+            string sql = @"select *
+                              from (select *
+                              from MBL_PRODUCT_SURA t
+                              where t.offcode = " + offcode + "" ;
+                   sql += @" order by t.total_tax_amt desc)
+                            union all
+                            select null,
+                                   'รวม',
+                                   sum(TOTAL_TAX_AMT),
+                                   sum(LAST_TOTAL_TAX_AMT),
+                                   sum(EST_AMT),
+                                   sum(TOTAL_VOLUMN_CAPA),
+                                   sum(LAST_TOTAL_VOLUMN_CAPA),
+                                   null
+                              from MBL_PRODUCT_SURA
+                              where offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -161,12 +177,25 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxBeer()
+        public DataTable CompareTaxBeer(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_BEER t order by t.total_tax_amt desc";
+            //string sql = @"select * from MBL_PRODUCT_BEER t order by t.total_tax_amt desc";
+            string sql = @"select *
+                              from (select * from MBL_PRODUCT_BEER t where offcode = " + offcode + " order by t.total_tax_amt desc )";
+                  sql += @" union all
+                            select null,
+                                   'รวม',
+                                   sum(TOTAL_TAX_AMT),
+                                   sum(LAST_TOTAL_TAX_AMT),
+                                   sum(EST_AMT),
+                                   sum(TOTAL_VOLUMN_CAPA),
+                                   sum(LAST_TOTAL_VOLUMN_CAPA),
+                                   null
+                              from MBL_PRODUCT_BEER
+                             where offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -226,12 +255,25 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxCar()
+        public DataTable CompareTaxCar(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_CAR t order by t.total_tax_amt desc";
+            //string sql = @"select * from MBL_PRODUCT_CAR t order by t.total_tax_amt desc";
+            string sql = @"select *
+                              from (select * from MBL_PRODUCT_CAR t where offcode = " + offcode + " order by t.total_tax_amt desc )";
+            sql += @" union all
+                            select null,
+                                   'รวม',
+                                   sum(TOTAL_TAX_AMT),
+                                   sum(LAST_TOTAL_TAX_AMT),
+                                   sum(EST_AMT),
+                                   sum(TOTAL_VOLUMN_CAPA),
+                                   sum(LAST_TOTAL_VOLUMN_CAPA),
+                                   null
+                              from MBL_PRODUCT_CAR
+                             where offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -291,12 +333,25 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxDrink()
+        public DataTable CompareTaxDrink(string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MBL_PRODUCT_DRINK t order by t.total_tax_amt desc";
+            //string sql = @"select * from MBL_PRODUCT_DRINK t order by t.total_tax_amt desc";
+            string sql = @"select *
+                              from (select * from MBL_PRODUCT_DRINK t where offcode = " + offcode + " order by t.total_tax_amt desc )";
+            sql += @" union all
+                            select null,
+                                   'รวม',
+                                   sum(TOTAL_TAX_AMT),
+                                   sum(LAST_TOTAL_TAX_AMT),
+                                   sum(EST_AMT),
+                                   sum(TOTAL_VOLUMN_CAPA),
+                                   sum(LAST_TOTAL_VOLUMN_CAPA),
+                                   null
+                              from MBL_PRODUCT_DRINK
+                             where offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

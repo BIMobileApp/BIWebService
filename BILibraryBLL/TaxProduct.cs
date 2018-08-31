@@ -11,7 +11,8 @@ namespace BILibraryBLL
     public class TaxProduct
     {
         Conn con = new Conn();
-        public DataTable TaxBudgetProductByYearAll(string offcode) {
+        public DataTable TaxBudgetProductByYearAll(string offcode)
+        {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -103,7 +104,7 @@ namespace BILibraryBLL
                                       from (select group_name, tax, budget_month_desc
                                               from mbl_budg_inc
                                              where offcode = " + offcode + " order by tax desc)";
-                  sql += @" PIVOT(sum(tax) as tax
+            sql += @" PIVOT(sum(tax) as tax
                                        FOR budget_month_desc in('ตุลาคม' AS oct,
                                                                'พฤศจิกายน' AS nov,
                                                                'ธันวาคม' AS dec,
@@ -117,7 +118,7 @@ namespace BILibraryBLL
                                                                'สิงหาคม' AS aug,
                                                                'กันยายน' AS sep)) TB) s";
 
-           
+
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -126,7 +127,8 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetProductByYear(string offcode,string year) {
+        public DataTable TaxBudgetProductByYear(string offcode, string year)
+        {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -138,7 +140,7 @@ namespace BILibraryBLL
                         from(
                         select group_name, tax, budget_month_desc
                         from mbl_budg_inc ";
-            sql += "   where budget_year = "+ year + " and offcode = "+ offcode + " ";
+            sql += "   where budget_year = " + year + " and offcode = " + offcode + " ";
             sql += @" order by group_name, time_id asc) PIVOT(sum(tax) as tax FOR budget_month_desc in ('ตุลาคม' AS oct,
                          'พฤศจิกายน' AS nov,
                          'ธันวาคม' AS dec,
@@ -206,7 +208,8 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxProductGroupSource() {
+        public DataTable TaxProductGroupSource()
+        {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
@@ -248,11 +251,26 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select group_name,  sum(tax) AS tax, sum(last_tax) AS last_tax,sum(estimate) AS estimate
-                            ,ROW_NUMBER() OVER (ORDER BY sum(tax) desc)  as sort
-                            from mbl_month_inc 
-                            where  offcode = " + offcode + " group by group_name";
-                    sql += " order by  tax desc";
+            //string sql = @"select group_name,  sum(tax) AS tax, sum(last_tax) AS last_tax,sum(estimate) AS estimate
+            //                ,ROW_NUMBER() OVER (ORDER BY sum(tax) desc)  as sort
+            //                from mbl_month_inc 
+            //                where  offcode = " + offcode + " group by group_name";
+            //sql += " order by  tax desc";
+
+            string sql = @"select *
+                              from (select group_name,
+                                           sum(tax) AS tax,
+                                           sum(last_tax) AS last_tax,
+                                           sum(estimate) AS estimate,
+                                           ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
+                                      from mbl_month_inc
+                                     where offcode = " + offcode + "";
+                  sql += @" group by group_name
+                            order by tax desc)
+                            union all
+                            select 'รวม', sum(tax), sum(last_tax), sum(estimate), null
+                              from mbl_month_inc
+                            where offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -263,16 +281,31 @@ namespace BILibraryBLL
 
         }
 
-        public DataTable TaxBudgetProductByMth(string offcode,string month)
+        public DataTable TaxBudgetProductByMth(string offcode, string month)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @" select group_name,  sum(tax) AS tax, sum(last_tax) AS last_tax,sum(estimate) AS estimate
-                            ,ROW_NUMBER() OVER (ORDER BY sum(tax) desc)  as sort
-                            from mbl_month_inc 
-                            where budget_month_desc = trim('" + month + "') and offcode = "+ offcode + "";
-                    sql += " group by group_name order by  tax desc";
+            //string sql = @" select group_name,  sum(tax) AS tax, sum(last_tax) AS last_tax,sum(estimate) AS estimate
+            //                ,ROW_NUMBER() OVER (ORDER BY sum(tax) desc)  as sort
+            //                from mbl_month_inc 
+            //                where budget_month_desc = trim('" + month + "') and offcode = " + offcode + "";
+            //sql += " group by group_name order by  tax desc";
+
+            string sql = @"select *
+                              from (select group_name,
+                                           sum(tax) AS tax,
+                                           sum(last_tax) AS last_tax,
+                                           sum(estimate) AS estimate,
+                                           ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
+                                      from mbl_month_inc
+                                     where budget_month_desc = trim('" + month + "')";
+                   sql += @" and offcode = " + offcode + " group by group_name order by tax desc)";
+                   sql += @" union all
+                              select 'รวม', sum(tax), sum(last_tax), sum(estimate), null
+                                from mbl_month_inc
+                              where budget_month_desc = trim('" + month + "')";
+                   sql += @" and offcode = " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

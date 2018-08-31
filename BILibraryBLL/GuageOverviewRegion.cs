@@ -16,7 +16,8 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from mbl_guadge_01 where offcode = '"+offcode+"'";
+            //string sql = @"select * from mbl_guadge_01 where offcode = '"+offcode+"'";
+            string sql = "select sum(t.tax) as tax, sum(t.last_tax) as last_tax, sum(t.estimate) as estimate from MBL_GUADGE_01 t where offcode = '" + offcode + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
