@@ -72,26 +72,29 @@ namespace BILibraryBLL
             /*String sql = @"select distinct(a.budget_month_desc), a.time_id, a.tax ,a.last_tax,a.estimate,a.percent_tax,a.map_color 
                             from mbl_month_01 a where offcode ='"+offcode+"' order by a.time_id";*/
 
-            String sql = @"select *
-                              from (select TRANS_Short_month(a.budget_month_desc) as budget_month_desc,
-                                           sum(a.tax) AS tax,
-                                           sum(a.last_tax) AS last_tax,
-                                           sum(a.estimate) AS estimate,
-                                           sum(a.percent_tax) AS percent_tax,
-                                           a.time_id,
-                                           min(a.map_color) as map_color1
-                                      from mbl_month_01 a
-                                     where a.offcode = '" + offcode + "'";
-                     sql += @" group by a.budget_month_desc, a.time_id
+            String sql = @"select * from (select TRANS_Short_month(a.budget_month_desc) as budget_month_desc,
+                            sum(a.tax) AS tax,
+                            sum(a.last_tax) AS last_tax,
+                            sum(a.estimate) AS estimate,
+                            sum(a.percent_tax) AS percent_tax,
+                            a.time_id,
+                            min(a.map_color) as map_color1
+                           from mbl_month_01 a
+                           where a.offcode = '" + offcode + "'";
+                sql += @" group by a.budget_month_desc, a.time_id 
+                          order by a.time_id asc )
                                     union all
                                     select 'รวม',
                                            sum(s.tax),
                                            sum(s.last_tax),
                                            sum(s.estimate),
-                                           null,
+                                           case
+                                           when sum(s.tax) > 0 and sum(s.estimate) > 0 then
+                                              round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) /sum(s.estimate),2)
+                                              else -100 end as percent_tax,
                                            null,
                                            null
-                                      from mbl_month_01 s where s.offcode= '" + offcode + "') tb order by tb.time_id asc";
+                                      from mbl_month_01 s where s.offcode= '" + offcode + "'";
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
@@ -159,14 +162,16 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select *
-                              from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
+                              from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color,t.sort 
                                     from mbl_goods_01 t where offcode = '" + offcode + "'";
-                  sql += @"order by t.tax desc)
+                  sql += @"order by t.sort)
                                     union all
-                                    select 'รวมทั้งหมด',
+                                    select 'รวม',
                                            sum(s.tax),
                                            sum(s.last_tax),
                                            sum(s.estimate),
+                                           case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
+                                                else -100 end as percent_tax,
                                            null,
                                            null
                                       from mbl_goods_01 s where s.offcode = '" + offcode + "'";
