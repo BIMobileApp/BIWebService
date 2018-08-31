@@ -27,6 +27,22 @@ namespace BILibraryBLL
             return dt;
         }
 
+        public DataTable SelectionAllProvince(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct province_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by province_name asc";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+
         public DataTable SelectionProvince(string offcode,string area)
         {
             DataTable dt = new DataTable();

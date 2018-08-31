@@ -213,6 +213,7 @@
     <Compile Include="Controllers\getTypeNameSuraMonthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncAreaDetailController.cs" />
+    <Compile Include="Controllers\IncDataMarketListController.cs" />
     <Compile Include="Controllers\IncDataMonthController.cs" />
     <Compile Include="Controllers\IncAreaController.cs" />
     <Compile Include="Controllers\IncProductByAreaAllController.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Controllers\IncProductByMthAllController.cs" />
     <Compile Include="Controllers\IncProductByMthController.cs" />
     <Compile Include="Controllers\IncSumDataByMonthController.cs" />
+    <Compile Include="Controllers\IncSumDataMarketListController.cs" />
     <Compile Include="Controllers\IncSumProductByMthController.cs" />
     <Compile Include="Controllers\LawProductAreaAllController.cs" />
     <Compile Include="Controllers\LawProductByAreaAllController.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Controllers\QuantitySuraController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
     <Compile Include="Controllers\REP02_GUAGE_REGController.cs" />
+    <Compile Include="Controllers\SelectionAllProvinceController.cs" />
     <Compile Include="Controllers\SelectionAreaController.cs" />
     <Compile Include="Controllers\SelectionGroupNameController.cs" />
     <Compile Include="Controllers\SelectionLawAreaController.cs" />
