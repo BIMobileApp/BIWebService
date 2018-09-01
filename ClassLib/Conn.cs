@@ -21,8 +21,8 @@ namespace ClassLib
              + "(CONNECT_DATA=(SERVICE_NAME=XE)));"
              + "User Id=ed_target;Password=ed_target;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";*/
 
-    
-           string conn = "Data Source=(DESCRIPTION="
+
+            string conn = "Data Source=(DESCRIPTION="
              + "(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.41.101)(PORT=1521))"
              + "(CONNECT_DATA=(SERVICE_NAME=EDBI)));"
              + "User Id=ed_target;Password=oracle;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";
