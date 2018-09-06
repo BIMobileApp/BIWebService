@@ -9,16 +9,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class SumIncomeListController : ApiController
+    public class TaxProvinceCurYearController : ApiController
     {
-        SourceImcome income = new SourceImcome();
-
-        // GET: api/SumIncomeList/5
-        public IHttpActionResult Get(string offcode)
+        TaxBudgetYear tax = new TaxBudgetYear();
+        public IHttpActionResult Get(string area)
         {
-            var jsonString = JsonConvert.SerializeObject(income.SumIncomeList(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxProvinceCurYear(area));
             return new RawJsonActionResult(jsonString);
         }
-
     }
 }

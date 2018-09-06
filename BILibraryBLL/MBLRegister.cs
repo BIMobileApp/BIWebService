@@ -16,10 +16,14 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select *
+            string sql = @"select GROUP_DESC, SUM(IMP_REGISTER) AS IMP_REGISTER,SUM(IN_REGISTER) AS IN_REGISTER,
+  SUM(IN_REGISTER) AS IN_REGISTER, SUM(TOTAL_REGISTER) AS TOTAL_REGISTER
                             from mbl_register_1 
-                            where offcode = " + offcode + "";
-                   sql += @"order by offdesc asc";
+                            where offcode = " + offcode + " group by GROUP_DESC";
+            sql += @" UNION ALL  select 'รวม' , SUM(IMP_REGISTER) AS IMP_REGISTER,SUM(IN_REGISTER) AS IN_REGISTER,
+      SUM(IN_REGISTER) AS IN_REGISTER, SUM(TOTAL_REGISTER) AS TOTAL_REGISTER
+      from mbl_register_1 where offcode = " + offcode + " ";
+                  // sql += @"order by offdesc asc";
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);

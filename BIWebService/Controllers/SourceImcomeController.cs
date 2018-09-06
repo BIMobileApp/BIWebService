@@ -12,32 +12,12 @@ namespace BIWebService.Controllers
     public class SourceImcomeController : ApiController
     {
         SourceImcome income = new SourceImcome();
-        // GET: api/SourceImcome
-        public string Get()
-        {
-            return "";
-        }
 
         // GET: api/SourceImcome/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode,string region,string province)
         {
-            var jsonString = JsonConvert.SerializeObject(income.IncomeList(offcode));
+            var jsonString = JsonConvert.SerializeObject(income.IncomeList(offcode, region, province));
             return new RawJsonActionResult(jsonString);
-        }
-
-        // POST: api/SourceImcome
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/SourceImcome/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/SourceImcome/5
-        public void Delete(int id)
-        {
-        }
+        }        
     }
 }

@@ -156,6 +156,155 @@ namespace BILibraryBLL
             return dt;
         }
 
+        public DataTable getAreaTaxCurYear(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            String sql = @"select distinct(t.region_name) as reg, case when t.region_name = 'N/A' then 'ไม่ระบุภาค' else t.region_name end AS region_name
+                            from MBL_MONTH_01_P t where t.offcode = " + offcode+" order by case when t.region_name = 'N/A' then 'ไม่ระบุภาค' else t.region_name end";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable getProvinceTaxCurYear(string offcode,string area)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            String sql = @"select distinct(t.province_name) from MBL_MONTH_01_P t where t.offcode = " + offcode + " and t.region_name = trim('"+ area + "') order by t.province_name";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxCurYearByAreaProvince(string offcode, string area, string Province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            //String sql = @"select * from (select TRANS_Short_month(t.budget_month_desc) as budget_month_desc,t.time_id,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
+
+            //                  ((sum(tax) - sum(estimate)) / sum(estimate)) * 100 as PERCENT_TAX
+            //                  from MBL_MONTH_01_P t where t.offcode = '" + offcode + "'";
+            //      sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end   ";
+            //      sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            //      sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
+            //                union all
+            //                select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
+            //                       case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
+            //                       else -100 end as percent_tax 
+            //                from MBL_MONTH_01_P s where s.offcode = '" + offcode +"'";
+            //      sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end   ";
+            //      sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+            String sql = @"select * from (select TRANS_Short_month(t.budget_month_desc) as budget_month_desc,t.time_id,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
+                             case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
+                                      round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
+                                      else -100 end as PERCENT_TAX
+                              from MBL_MONTH_01_P t where t.offcode = '" + offcode + "'";
+            sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end   ";
+            sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
+                            union all
+                            select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
+                                   case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
+                                   else -100 end as percent_tax 
+                            from MBL_MONTH_01_P s where s.offcode = '" + offcode + "'";
+            sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end   ";
+            sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxCurYearOverviewAll(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            String sql = @"select * from (select TRANS_Short_month(t.budget_month_desc) as budget_month_desc,t.time_id,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
+                             case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
+                                      round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
+                                      else -100 end as PERCENT_TAX
+                              from MBL_MONTH_01_P t where t.offcode = "+offcode+"";
+                   sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
+                             union all
+                              select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
+                                   case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
+                                   else -100 end as percent_tax 
+                            from MBL_MONTH_01_P s where s.offcode = " + offcode + "";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxProductYearByAreaProvince(string offcode, string area, string Province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            //String sql = @"select * from (select TRANS_Short_month(t.budget_month_desc) as budget_month_desc,t.time_id,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
+
+            //                  ((sum(tax) - sum(estimate)) / sum(estimate)) * 100 as PERCENT_TAX
+            //                  from MBL_MONTH_01_P t where t.offcode = '" + offcode + "'";
+            //      sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end   ";
+            //      sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            //      sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
+            //                union all
+            //                select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
+            //                       case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
+            //                       else -100 end as percent_tax 
+            //                from MBL_MONTH_01_P s where s.offcode = '" + offcode +"'";
+            //      sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end   ";
+            //      sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+            string sql = @"select * from (
+                           select t.group_name,t.sort, sum(t.tax) as TAX, sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
+                                  case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
+                                  round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
+                                  else -100 end as PERCENT_TAX
+                          from mbl_goods_01_p t where t.offcode = " + offcode + "";
+            sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end ";
+            sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            sql += @" group by t.group_name, t.sort order by t.sort)
+                     union all
+                     select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
+                            case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
+                            else -100 end as percent_tax 
+                     from mbl_goods_01_p s where s.offcode =  " + offcode + "";
+            sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end  ";
+            sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
         public DataTable TaxProductCurYearAll(string offcode)
         {
             DataTable dt = new DataTable();
@@ -164,7 +313,7 @@ namespace BILibraryBLL
             string sql = @"select *
                               from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color,t.sort 
                                     from mbl_goods_01 t where offcode = '" + offcode + "'";
-                  sql += @"order by t.sort)
+            sql += @"order by t.sort)
                                     union all
                                     select 'รวม',
                                            sum(s.tax),
@@ -175,6 +324,26 @@ namespace BILibraryBLL
                                            null,
                                            null
                                       from mbl_goods_01 s where s.offcode = '" + offcode + "'";
+            
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxProductCurYearOverviewAll(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @" select * from (select t.group_name,t.sort,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
+                           case when sum(t.tax) > 0 and sum(t.estimate) > 0 then round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
+                           sum(t.estimate),2) else -100 end as PERCENT_TAX
+                           from mbl_goods_01_p t where t.offcode = " + offcode + " group by t.group_name, t.sort order by t.sort)";
+                   sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from mbl_goods_01_p s where s.offcode = "+offcode+"";
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -183,6 +352,7 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
+
 
         public DataTable TaxProductCurYearbyYear(string offcode, string year)
         {
@@ -216,6 +386,37 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             String sql = @"select distinct(t.budget_year) from MBL_GOODS_01 t";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxProvinceCurYear(string area)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from (select t.province_name,sum(t.Tax) as Tax,sum(t.Last_Tax) as Last_Tax,sum(t.estimate) as estimate,
+                                   case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
+                                      round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
+                                            sum(t.estimate),2)
+                                     else -100
+                                   end as PERCENT_TAX
+                              from MBL_MONTH_01_P t
+                             where t.region_name = '" + area + "'";
+                  sql += @" group by t.province_name  order by t.province_name)
+                           union all
+                                select 'รวม',sum(s.Tax) as Tax,sum(s.Last_Tax) as Last_Tax,sum(s.estimate) as estimate,
+                                       case
+                                         when sum(s.tax) > 0 and sum(s.estimate) > 0 then
+                                          round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) /
+                                                sum(s.estimate),2)
+                                         else -100 end as PERCENT_TAX
+                                  from MBL_MONTH_01_P s where s.region_name = '" + area + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -266,7 +467,11 @@ namespace BILibraryBLL
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
                             where offcode = " + offcode + " and group_name = '" + group_id + "' ";
-            sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
+            sql += @" and myrank between '1' and '10' ";
+            sql += @" union all select 'รวม' ,sum(TAX_NETTAX_AMT) AS tax,null
+                        from mbl_top_product_10 
+                        where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            sql += @"  and myrank between '1' and '10'";
 
             /*string sql = @"select
                             r1.reg_id
@@ -306,7 +511,13 @@ namespace BILibraryBLL
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
                             where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = " + year + "";
-            sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
+            sql += @" and myrank between '1' and '10' ";
+
+            sql += @" union all select 'รวม' ,sum(TAX_NETTAX_AMT) AS tax,null
+                        from mbl_top_product_10 
+                        where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            sql += @"  and myrank between '1' and '10'";
+
 
             /* string sql = @"select
                              r1.reg_id
@@ -455,10 +666,10 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select myrank as sort,
-                            reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
-            sql += @" where offcode = " + offcode + " and month_cd = " + month + " and myrank between 1 and 10 ";
-            sql += @" order by tax_nettax_amt desc";
+            //string sql = @"select myrank as sort,
+            //                reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
+            //sql += @" where offcode = " + offcode + " and month_cd = " + month + " and myrank between 1 and 10 ";
+            //sql += @" order by tax_nettax_amt desc";
 
             /*string sql = @"select
                             r1.reg_id
@@ -482,6 +693,12 @@ namespace BILibraryBLL
             sql += @" and a.reg_sk = r1.reg_sk and rownum <=10
                      group by  r1.reg_id,r1.reg_name
                      order by  r1.reg_id";*/
+
+            string sql = @"select myrank as sort,
+                            reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
+            sql += @" where offcode = " + offcode + " ";
+            sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
+            sql += @" order by tax_nettax_amt desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

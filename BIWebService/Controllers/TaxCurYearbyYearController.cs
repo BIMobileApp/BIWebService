@@ -18,5 +18,15 @@ namespace BIWebService.Controllers
             var jsonString = JsonConvert.SerializeObject(tax.TaxCurYearbyYear(offcode, year));
             return new RawJsonActionResult(jsonString);
         }
+        public IHttpActionResult Get(string offcode, string area, string Province)
+        {
+            var jsonString = JsonConvert.SerializeObject(tax.TaxCurYearByAreaProvince(offcode, area, Province));
+            return new RawJsonActionResult(jsonString);
+        }
+            public IHttpActionResult Get(string offcode)
+        {
+            var jsonString = JsonConvert.SerializeObject(tax.TaxCurYearOverviewAll(offcode));
+            return new RawJsonActionResult(jsonString);
+        }
     }
 }

@@ -9,16 +9,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class SumIncomeListController : ApiController
+    public class ddlMRegionController : ApiController
     {
-        SourceImcome income = new SourceImcome();
-
-        // GET: api/SumIncomeList/5
+        DDLMaster sql = new DDLMaster();
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(income.SumIncomeList(offcode));
+            var jsonString = JsonConvert.SerializeObject(sql.MRegion(offcode));
             return new RawJsonActionResult(jsonString);
         }
-
     }
 }

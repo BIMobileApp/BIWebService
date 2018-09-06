@@ -12,13 +12,19 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable FollowPayTaxRealtimeAll(string offcode)
+        public DataTable FollowPayTaxRealtimeAll(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @" select DIM_DATA_DATE_ID,FZ_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT
-                            from mbl_cd_daily_report where officode = " + offcode + " order by DIM_DATA_DATE_ID, FZ_EXCISE_AMT,IN_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT desc";
+            string sql = @" select DIM_DATA_DATE_ID, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
+                       SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
+                       SUM(STAMP_AMT) AS STAMP_AMT,
+                       SUM(EXCISE_AMT) AS EXCISE_AMT
+                     from mbl_cd_daily_report where officode = " + offcode + " ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
+            sql += @" group by DIM_DATA_DATE_ID order by DIM_DATA_DATE_ID, FZ_EXCISE_AMT,IN_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT desc";
 
             /*string sql = @"SELECT TB.TIME_ID,
                            cast (nvl(SUM(TB.A_krom_tax),0) as decimal (15,2)) AS cd_income,
@@ -56,7 +62,52 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable FollowPayTaxRealtime(string month,string year)
+
+        public DataTable TaxRealtimeDaily(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @" select DIM_DATA_DATE_ID, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
+                       SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
+                       SUM(STAMP_AMT) AS STAMP_AMT,
+                       SUM(EXCISE_AMT) AS EXCISE_AMT
+                     from mbl_cd_daily_report where officode = " + offcode + " group by DIM_DATA_DATE_ID";
+           
+                sql += " order by DIM_DATA_DATE_ID, FZ_EXCISE_AMT,IN_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT desc";
+
+           
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+
+
+        public DataTable SumFollowPayTaxRealtime(string offcode, string region, string province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @" select  sum(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,SUM(STAMP_AMT) AS STAMP_AMT
+                            ,SUM(EXCISE_AMT) AS EXCISE_AMT
+                            from mbl_cd_daily_report where officode = " + offcode + " ";
+                    sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                    sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+            public DataTable FollowPayTaxRealtime(string month,string year)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -174,5 +225,68 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
+
+
+        public DataTable MRegion(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            string sql = "";
+            if (offcode.Equals("") || offcode.Equals("undefined") || offcode.Equals("000000"))
+            {
+                sql = @"select  distinct region_name
+                             from MBL_INC_REAL_TIME 
+                             where OFFCODE != 000000
+                             group by  region_name order by region_name";
+            }
+            else
+            {
+
+                sql = @"select  distinct region_name
+                             from MBL_INC_REAL_TIME
+                             where OFFCODE ='" + offcode + "' and OFFCODE != 000000" +
+                               "group by  region_name order by region_name";
+            }
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable MProvince(string offcode, string area)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            string sql = "";
+            area = area == null ? "" : area;
+            if ((offcode.Equals("") || offcode.Equals("000000") || offcode.Equals("undefined")) && (area.Equals("") || area.Equals("undefined")))
+            {
+                sql = @" select  distinct province_name
+                        from MBL_INC_REAL_TIME
+                        where  province_name not like 'ภาค%' 
+                        group by  province_name
+                        order by province_name";
+            }
+            else
+            {
+
+                sql = @"select  distinct province_name
+                        from MBL_INC_REAL_TIME
+                        where  province_name not like 'ภาค%'  and region_name = '" + area + "' ";
+                sql += " group by  province_name order by province_name";
+            } 
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
     }
 }
