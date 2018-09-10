@@ -61,15 +61,18 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByAreaAll(string offcode)
+        public DataTable IncProductByAreaAll(string offcode, string group_name)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_2_1 ";
+            string sql = @"select * from (select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) AS count from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + " ";
+            sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end   ";
             sql += " GROUP BY TYPE_DESC ";
-            sql += " ORDER BY TYPE_DESC";
+            sql += " union all select 'รวม',sum(LICENSE_AMT),sum(LICENSE_COUNT) from mbl_lic_data_2_1 ";
+            sql += " WHERE offcode = " + offcode + " ";
+            sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end ) ";    
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

@@ -13,9 +13,9 @@ namespace BIWebService.Controllers
     {
         CompareTax tax = new CompareTax();
 
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string area, string Province, string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxCar(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxCar(area, Province, offcode));
             return new RawJsonActionResult(jsonString);
         }
     }

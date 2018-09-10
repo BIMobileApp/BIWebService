@@ -257,7 +257,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegAll(string offcode, string group_id)
+        public DataTable TaxBudgetRegAll(string offcode, string group_id, string region,string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -266,7 +266,15 @@ namespace BILibraryBLL
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
                             where offcode = " + offcode + " and group_name = '" + group_id + "' ";
-            sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += @" and myrank between '1' and '10' ";
+            sql += @" union all select 'รวม' ,SUM(TAX_NETTAX_AMT) AS tax,null
+                        from mbl_top_product_10 
+                        where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += @"  and myrank between '1' and '10'";
 
             /*string sql = @"select
                             r1.reg_id
@@ -306,7 +314,13 @@ namespace BILibraryBLL
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
                             from mbl_top_product_10 
                             where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = " + year + "";
-            sql += @" and myrank between '1' and '10' order by tax_nettax_amt desc";
+            sql += @" and myrank between '1' and '10' ";
+
+            sql += @" union all select 'รวม' ,SUM(TAX_NETTAX_AMT) AS tax,null
+                        from mbl_top_product_10 
+                        where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            sql += @"  and myrank between '1' and '10'";
+
 
             /* string sql = @"select
                              r1.reg_id
@@ -455,10 +469,16 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select myrank as sort,
-                            reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
-            sql += @" where offcode = " + offcode + " and month_cd = " + month + " and myrank between 1 and 10 ";
-            sql += @" order by tax_nettax_amt desc";
+            string sql = @"select reg_name AS reg_name, tax_nettax_amt AS tax,myrank as sort from mbl_top10_register_mth ";
+            sql += @" where offcode = " + offcode + " ";
+            sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
+
+            sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT) ,null from mbl_top10_register_mth ";
+            sql += @" where offcode = " + offcode + " ";
+            sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
+            sql += @" and myrank between '1' and '10' ";
+
+            //sql += @" order by tax_nettax_amt desc";
 
             /*string sql = @"select
                             r1.reg_id

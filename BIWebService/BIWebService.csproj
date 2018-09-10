@@ -201,6 +201,9 @@
     <Compile Include="Controllers\CompareTaxVolDrinkController.cs" />
     <Compile Include="Controllers\CompareTaxVolSuraController.cs" />
     <Compile Include="Controllers\DataStatusController.cs" />
+    <Compile Include="Controllers\ddlMBranchController.cs" />
+    <Compile Include="Controllers\ddlMProvinceController.cs" />
+    <Compile Include="Controllers\ddlMRegionController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeAllController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
@@ -280,7 +283,11 @@
     <Compile Include="Controllers\SelectionMthProvinceController.cs" />
     <Compile Include="Controllers\SelectionProvinceChangeController.cs" />
     <Compile Include="Controllers\SelectionProvinceController.cs" />
+    <Compile Include="Controllers\selectionTaxDailyProvinceController.cs" />
+    <Compile Include="Controllers\selectionTaxDailyRegionController.cs" />
+    <Compile Include="Controllers\SelectRealtimeRegionController.cs" />
     <Compile Include="Controllers\SourceImcomeController.cs" />
+    <Compile Include="Controllers\SumFollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\SumIncomeListController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegController.cs" />
@@ -306,8 +313,11 @@
     <Compile Include="Controllers\TaxProductGroupByYearController.cs" />
     <Compile Include="Controllers\TaxProductGroupSourceController.cs" />
     <Compile Include="Controllers\taxQuantityByProductGroupController.cs" />
+    <Compile Include="Controllers\TaxRealtimeDailyController.cs" />
     <Compile Include="Controllers\TaxRealtimeFreezoneAllController.cs" />
     <Compile Include="Controllers\TaxRealtimeFreezoneController.cs" />
+    <Compile Include="Controllers\TaxRealtimeProvinceController.cs" />
+    <Compile Include="Controllers\TaxRealtimeRegionController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TMP_USERController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

@@ -12,32 +12,12 @@ namespace BIWebService.Controllers
     public class LawProductByAreaAllController : ApiController
     {
         LawReport tax = new LawReport();
-        // GET: api/LawProductByAreaAll
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET: api/LawProductByAreaAll/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode,string group_name)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.LawProductAreaAll(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.LawProductAreaAll(offcode, group_name));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/LawProductByAreaAll
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/LawProductByAreaAll/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/LawProductByAreaAll/5
-        public void Delete(int id)
-        {
-        }
     }
 }

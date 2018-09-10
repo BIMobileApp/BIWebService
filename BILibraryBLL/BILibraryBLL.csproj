@@ -199,6 +199,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="DataStatus.cs" />
+    <Compile Include="ddlMaster.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -240,6 +241,7 @@
     </Compile>
     <Compile Include="SourceImcome.cs" />
     <Compile Include="TaxBudgetYear.cs" />
+    <Compile Include="TaxDaily.cs" />
     <Compile Include="TaxProduct.cs" />
     <Compile Include="TaxRealtime.cs" />
     <Compile Include="TestSql.cs" />
