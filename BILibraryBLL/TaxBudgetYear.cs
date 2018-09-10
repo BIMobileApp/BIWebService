@@ -473,6 +473,8 @@ namespace BILibraryBLL
                         where offcode = " + offcode + " and group_name = '" + group_id + "' ";
             sql += @"  and myrank between '1' and '10'";
 
+
+
             /*string sql = @"select
                             r1.reg_id
                            ,r1.reg_name
@@ -503,20 +505,32 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetReg(string offcode, string group_id, string year)
+        public DataTable TaxBudgetReg(string offcode, string group_id, string area, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            string sql = @"select t.reg_name AS reg_name,t.TAX_NETTAX_AMT AS tax,myrank AS sort
+                        from mbl_top_product_10 t
+                        where
+                        t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end";
+            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end";
+            sql += " and t.province_name like case when '" + province + "' = 'undefined' then t.province_name else '" + province + "' end";
+            sql += " and t.group_name = '" + group_id + "' and t.myrank between '1' and '10'";
+            sql += " union all select 'รวม' ,sum(s.TAX_NETTAX_AMT) AS tax,null from mbl_top_product_10 s where ";
+            sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
+            sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end";
+            sql += " and s.province_name like case when '" + province + "' = 'undefined' then s.province_name else '" + province + "' end";
+            sql += " and s.group_name = '" + group_id + "' and s.myrank between '1' and '10'";
 
-            string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
-                            from mbl_top_product_10 
-                            where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = " + year + "";
-            sql += @" and myrank between '1' and '10' ";
+            //string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
+            //                from mbl_top_product_10 
+            //                where offcode = " + offcode + " and group_name = '" + group_id + "' and budget_year = " + year + "";
+            //sql += @" and myrank between '1' and '10' ";
 
-            sql += @" union all select 'รวม' ,sum(TAX_NETTAX_AMT) AS tax,null
-                        from mbl_top_product_10 
-                        where offcode = " + offcode + " and group_name = '" + group_id + "' ";
-            sql += @"  and myrank between '1' and '10'";
+            //sql += @" union all select 'รวม' ,sum(TAX_NETTAX_AMT) AS tax,null
+            //            from mbl_top_product_10 
+            //            where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            //sql += @"  and myrank between '1' and '10'";
 
 
             /* string sql = @"select

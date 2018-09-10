@@ -14,7 +14,7 @@ namespace BIWebService.Controllers
         TaxBudgetYear tax = new TaxBudgetYear();
 
         // GET: api/TaxBudgetRegAll/5
-        public IHttpActionResult Get(string offcode,string group_id)
+        public IHttpActionResult Get(string offcode, string group_id)
         {
             var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetRegAll(offcode, group_id));
             return new RawJsonActionResult(jsonString);

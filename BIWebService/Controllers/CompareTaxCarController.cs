@@ -15,7 +15,7 @@ namespace BIWebService.Controllers
 
         public IHttpActionResult Get(string area, string Province, string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxCar(area,offcode,Province));
+            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxCar(area, Province, offcode));
             return new RawJsonActionResult(jsonString);
         }
     }
