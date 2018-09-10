@@ -19,9 +19,9 @@ namespace BIWebService.Controllers
         }
 
         // GET: api/LawProductAreaAll/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode,string group_name)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.LawProductAreaAll(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.LawProductAreaAll(offcode, group_name));
             return new RawJsonActionResult(jsonString);
         }
 

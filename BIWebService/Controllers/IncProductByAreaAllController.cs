@@ -12,32 +12,13 @@ namespace BIWebService.Controllers
     public class IncProductByAreaAllController : ApiController
     {
         IncData tax = new IncData();
-        // GET: api/IncProductByAreaAll
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET: api/IncProductByAreaAll/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode,string group_name)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.IncProductByAreaAll(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.IncProductByAreaAll(offcode, group_name));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/IncProductByAreaAll
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/IncProductByAreaAll/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/IncProductByAreaAll/5
-        public void Delete(int id)
-        {
-        }
     }
 }
