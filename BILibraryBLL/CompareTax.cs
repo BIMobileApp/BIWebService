@@ -114,7 +114,6 @@ namespace BILibraryBLL
             sql += @" group by t.i_type_desc
                         order by t.i_type_desc) union all select 
                                          'รวม',
-<<<<<<< HEAD
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
@@ -122,15 +121,6 @@ namespace BILibraryBLL
                                           sum(s.LAST_TOTAL_VOLUMN_CAPA)
                                     from MBL_PRODUCT_SURA s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
-=======
-                                          sum(TOTAL_TAX_AMT),
-                                          sum(LAST_TOTAL_TAX_AMT),
-                                          sum(EST_AMT),
-                                          sum(TOTAL_VOLUMN_CAPA),
-                                          sum(LAST_TOTAL_VOLUMN_CAPA)
-                                    from MBL_PRODUCT_SURA  s where ";
-            sql += "   s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
             sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
 
@@ -346,7 +336,6 @@ namespace BILibraryBLL
             sql += @" group by t.i_type_desc
                         order by t.i_type_desc) union all select 
                                          'รวม',
-<<<<<<< HEAD
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
@@ -356,17 +345,6 @@ namespace BILibraryBLL
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
             sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
-=======
-                                          sum(TOTAL_TAX_AMT),
-                                          sum(LAST_TOTAL_TAX_AMT),
-                                          sum(EST_AMT),
-                                          sum(TOTAL_VOLUMN_CAPA),
-                                          sum(LAST_TOTAL_VOLUMN_CAPA)
-                                    from MBL_PRODUCT_CAR where ";
-            sql += "   s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
-            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
-            sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -445,7 +423,6 @@ namespace BILibraryBLL
             sql += @" group by t.i_type_desc
                         order by t.i_type_desc) union all select 
                                          'รวม',
-<<<<<<< HEAD
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
@@ -455,17 +432,6 @@ namespace BILibraryBLL
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
             sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
-=======
-                                          sum(TOTAL_TAX_AMT),
-                                          sum(LAST_TOTAL_TAX_AMT),
-                                          sum(EST_AMT),
-                                          sum(TOTAL_VOLUMN_CAPA),
-                                          sum(LAST_TOTAL_VOLUMN_CAPA)
-                                    from MBL_PRODUCT_DRINK where ";
-            sql += "   s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
-            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
-            sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

@@ -697,14 +697,14 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select reg_name AS reg_name, tax_nettax_amt AS tax,myrank as sort from mbl_top10_register_mth ";
-            sql += @" where offcode = " + offcode + " ";
-            sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
+            //string sql = @"select reg_name AS reg_name, tax_nettax_amt AS tax,myrank as sort from mbl_top10_register_mth ";
+            //sql += @" where offcode = " + offcode + " ";
+            //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
 
-            sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT) ,null from mbl_top10_register_mth ";
-            sql += @" where offcode = " + offcode + " ";
-            sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
-            sql += @" and myrank between '1' and '10' ";
+            //sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT) ,null from mbl_top10_register_mth ";
+            //sql += @" where offcode = " + offcode + " ";
+            //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
+            //sql += @" and myrank between '1' and '10' ";
 
             //sql += @" order by tax_nettax_amt desc";
 

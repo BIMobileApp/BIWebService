@@ -21,21 +21,13 @@ namespace BILibraryBLL
                 sql = @"select  region_cd ,region_name
                              from ic_office_dim 
                              where region_cd != 000000
-<<<<<<< HEAD
                              group by  region_cd ,region_name order by region_cd";
-=======
-                             group by  region_cd ,region_name";
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
             }else {
 
                 sql = @"select  region_cd ,region_name
                              from ic_office_dim
                              where offcode ='" + offcode + "' and region_cd != 000000" +
-<<<<<<< HEAD
                                "group by  region_cd ,region_name order by region_cd"; 
-=======
-                               "group by  region_cd ,region_name"; 
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
             }
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 

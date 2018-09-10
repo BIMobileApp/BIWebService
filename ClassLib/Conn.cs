@@ -31,14 +31,7 @@ namespace ClassLib
              + "(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.10.250)(PORT=1521))"
              + "(CONNECT_DATA=(SERVICE_NAME=EDBI)));"
              + "User Id=ed_target;Password=oracle;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";*/
-
             return conn;
-<<<<<<< HEAD
-}
-}
-=======
         }
-
     }
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
 }
