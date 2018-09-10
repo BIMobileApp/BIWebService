@@ -151,19 +151,26 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByMth(string offcode, string region, string province, string type_name, string group_name)
+        public DataTable IncProductByMth(string offcode, string region, string province, string month, string group_name)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select BUDGET_MONTH_DESC,TIME_ID, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_2_1 ";
+            string sql = @"select TYPE_DESC, SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + " ";
             sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end   ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND TYPE_DESC = case when '" + type_name + "' = 'undefined' then TYPE_DESC else '" + type_name + "' end";
+            sql += " AND BUDGET_MONTH_DESC = case when '" + month + "' = 'undefined' then BUDGET_MONTH_DESC else '" + month + "' end";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             //sql += " AND PROVINCE_NAME = nvl('" + province + "',PROVINCE_NAME) and REGION_NAME = nvl('" + region + "',REGION_NAME) AND BUDGET_MONTH_DESC = nvl('" + mth + "',BUDGET_MONTH_DESC)";
-            sql += " GROUP BY BUDGET_MONTH_DESC,TIME_ID ORDER BY TIME_ID asc";
+            sql += " GROUP BY TYPE_DESC";
+            sql += " union all";
+            sql += " select 'รวม', SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_2_1 WHERE offcode = " + offcode + "";
+            sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end   ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND BUDGET_MONTH_DESC = case when '" + month + "' = 'undefined' then BUDGET_MONTH_DESC else '" + month + "' end";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
