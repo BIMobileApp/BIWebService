@@ -322,6 +322,7 @@
     <Compile Include="Controllers\TaxRealtimeRegionController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TMP_USERController.cs" />
+    <Compile Include="Controllers\TopRegSegmentController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WebServiceController.cs" />
     <Compile Include="Global.asax.cs">
