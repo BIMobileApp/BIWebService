@@ -265,7 +265,7 @@ namespace BILibraryBLL
                                            ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
                                       from mbl_month_inc
                                      where offcode = " + offcode + "";
-                  sql += @" group by group_name
+            sql += @" group by group_name
                             order by tax desc)
                             union all
                             select 'รวม', sum(tax), sum(last_tax), sum(estimate), null
@@ -281,7 +281,7 @@ namespace BILibraryBLL
 
         }
 
-        public DataTable TaxBudgetProductByMth(string offcode, string monthFrom, string monthTo ,string area, string Province)
+        public DataTable TaxBudgetProductByMth(string offcode, string monthFrom, string monthTo, string area, string Province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -292,76 +292,101 @@ namespace BILibraryBLL
             //                where budget_month_desc = trim('" + month + "') and offcode = " + offcode + "";
             //sql += " group by group_name order by  tax desc";
 
-
-            monthFrom = (monthFrom == null ? "" : monthFrom);
-            monthTo = (monthTo==null? "":monthTo).Equals("") ? monthFrom : monthTo;
-            string MontStr = "";
-            string sql = "";
-            area = area == null ? "" : area;
-            Province = Province == null ? "" : Province;
-            if ((!area.Equals("") && !(area.Equals("000000") || area.Equals("undefined"))) && (Province.Equals("") || Province.Equals("undefined")))
-            {
-                sql = @"select *
-                              from (select group_name,
-                                           sum(tax) AS tax,
-                                           sum(last_tax) AS last_tax,
-                                           sum(estimate) AS estimate,
-                                           ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
-                                      from mbl_month_inc
-                                      where offcode = " +
-                                      area +
-                                     ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "") +
-                    "   group by group_name order by tax desc)" +
-                   "  union all " +
-                   "           select 'รวม', sum(tax), sum(last_tax), sum(estimate), null " +
-                   "             from mbl_month_inc " +
-                               "where offcode = " + area +
-                                     ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "");
-
-
-            }
-            else if (!Province.Equals("") && !Province.Equals("undefined"))
-            {
-                sql = @"select *
-                              from (select group_name,
-                                           sum(tax) AS tax,
-                                           sum(last_tax) AS last_tax,
-                                           sum(estimate) AS estimate,
-                                           ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
-                                      from mbl_month_inc
-                                      where offcode = " +
-                                      Province +
-                                     ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "") +
-                    "   group by group_name order by tax desc)" +
-                   "  union all " +
-                   "           select 'รวม', sum(tax), sum(last_tax), sum(estimate), null " +
-                   "             from mbl_month_inc " +
-                               "where offcode = " + Province +
-                                     ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "");
+            string sql = @"select * from (
+                                    select t.group_name
+                                           ,sum(t.tax) AS tax
+                                           ,sum(t.last_tax) AS last_tax
+                                           ,sum(t.estimate) AS estimate,
+                                           ROW_NUMBER() OVER(ORDER BY sum(t.tax) desc) as sort
+                                      from mbl_month_inc t
+                                      where 
+                                      t.offcode = '000000' 
+                                      AND t.region_name = case when 'ภาค 01' = 'undefined' then t.region_name else 'ภาค 01' end    
+                                      AND t.province_name = case when 'undefined' = 'undefined' then t.province_name else 'undefined' end  
+                                      group by t.group_name order by t.group_name desc)  
+                                      union all 
+                                      select 'รวม'
+                                             ,sum(s.tax)
+                                             ,sum(s.last_tax)
+                                             ,sum(s.estimate), null 
+                                      from mbl_month_inc s
+                                      where 
+                                      s.offcode = '000000' 
+                                      AND s.region_name = case when 'ภาค 01' = 'undefined' then s.region_name else 'ภาค 01' end    
+                                      AND s.province_name = case when 'สสพ.ปทุมธานี 1' = 'undefined' then s.province_name else 'สสพ.ปทุมธานี 1' end 
+  
+                                    ";
 
 
-            }
-            else if ((area.Equals("") || area.Equals("000000") || area.Equals("undefined")) && (Province.Equals("") || Province.Equals("undefined")))
-            {
-                sql = @"select *
-                              from (select group_name,
-                                           sum(tax) AS tax,
-                                           sum(last_tax) AS last_tax,
-                                           sum(estimate) AS estimate,
-                                           ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
-                                      from mbl_month_inc
-                                      where offcode = " +
-                                      offcode +
-                                     ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "") +
-                    "   group by group_name order by tax desc)" +
-                   "  union all " +
-                   "           select 'รวม', sum(tax), sum(last_tax), sum(estimate), null " +
-                   "             from mbl_month_inc " +
-                               "where offcode = " + offcode +
-                                     ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "");
+            //monthFrom = (monthFrom == null ? "" : monthFrom);
+            //monthTo = (monthTo==null? "":monthTo).Equals("") ? monthFrom : monthTo;
+            //string MontStr = "";
+            //string sql = "";
+            //area = area == null ? "" : area;
+            //Province = Province == null ? "" : Province;
+            //if ((!area.Equals("") && !(area.Equals("000000") || area.Equals("undefined"))) && (Province.Equals("") || Province.Equals("undefined")))
+            //{
+            //    sql = @"select *
+            //                  from (select group_name,
+            //                               sum(tax) AS tax,
+            //                               sum(last_tax) AS last_tax,
+            //                               sum(estimate) AS estimate,
+            //                               ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
+            //                          from mbl_month_inc
+            //                          where offcode = " +
+            //                          area +
+            //                         ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "") +
+            //        "   group by group_name order by tax desc)" +
+            //       "  union all " +
+            //       "           select 'รวม', sum(tax), sum(last_tax), sum(estimate), null " +
+            //       "             from mbl_month_inc " +
+            //                   "where offcode = " + area +
+            //                         ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "");
 
 
-            }
+            //}
+            //else if (!Province.Equals("") && !Province.Equals("undefined"))
+            //{
+            //    sql = @"select *
+            //                  from (select group_name,
+            //                               sum(tax) AS tax,
+            //                               sum(last_tax) AS last_tax,
+            //                               sum(estimate) AS estimate,
+            //                               ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
+            //                          from mbl_month_inc
+            //                          where offcode = " +
+            //                          Province +
+            //                         ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "") +
+            //        "   group by group_name order by tax desc)" +
+            //       "  union all " +
+            //       "           select 'รวม', sum(tax), sum(last_tax), sum(estimate), null " +
+            //       "             from mbl_month_inc " +
+            //                   "where offcode = " + Province +
+            //                         ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "");
+
+
+            //}
+            //else if ((area.Equals("") || area.Equals("000000") || area.Equals("undefined")) && (Province.Equals("") || Province.Equals("undefined")))
+            //{
+            //    sql = @"select *
+            //                  from (select group_name,
+            //                               sum(tax) AS tax,
+            //                               sum(last_tax) AS last_tax,
+            //                               sum(estimate) AS estimate,
+            //                               ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
+            //                          from mbl_month_inc
+            //                          where offcode = " +
+            //                          offcode +
+            //                         ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "") +
+            //        "   group by group_name order by tax desc)" +
+            //       "  union all " +
+            //       "           select 'รวม', sum(tax), sum(last_tax), sum(estimate), null " +
+            //       "             from mbl_month_inc " +
+            //                   "where offcode = " + offcode +
+            //                         ((!monthFrom.Equals("") && !monthTo.Equals("")) ? " and to_number(substr(nvl(time_id, '00000000'), 5, 2)) between " + monthFrom + " and  " + monthTo + "" : "");
+
+
+            //}
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
