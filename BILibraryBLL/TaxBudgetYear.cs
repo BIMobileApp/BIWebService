@@ -312,7 +312,7 @@ namespace BILibraryBLL
 
             string sql = @"select *
                               from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color,t.sort 
-                                    from mbl_goods_01 t where offcode = '" + offcode + "'";
+                                    from MBL_TAX_GOODS t where offcode = '" + offcode + "'";
             sql += @"order by t.sort)
                                     union all
                                     select 'รวม',
@@ -323,7 +323,7 @@ namespace BILibraryBLL
                                                 else -100 end as percent_tax,
                                            null,
                                            null
-                                      from mbl_goods_01 s where s.offcode = '" + offcode + "'";
+                                      from MBL_TAX_GOODS s where s.offcode = '" + offcode + "'";
             
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -345,6 +345,7 @@ namespace BILibraryBLL
                    sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from MBL_TAX_GOODS s where s.offcode = "+offcode+"";
 
 
+
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -361,7 +362,7 @@ namespace BILibraryBLL
 
             string sql = @"select *
                               from (select distinct(t.group_name), t.tax ,t.last_tax,t.estimate,t.percent_tax,t.map_color 
-                                    from mbl_goods_01 t where t.offcode = '" + offcode + "' and t.budget_year = '" + year + "'";
+                                    from MBL_TAX_GOODS t where t.offcode = '" + offcode + "' and t.budget_year = '" + year + "'";
             sql += @"order by t.tax desc)
                                     union all
                                     select 'รวม',
@@ -370,7 +371,7 @@ namespace BILibraryBLL
                                            sum(s.estimate),
                                            null,
                                            null
-                                      from mbl_goods_01 s where s.offcode = '" + offcode + "' and s.budget_year = '" + year + "'";
+                                      from MBL_TAX_GOODS s where s.offcode = '" + offcode + "' and s.budget_year = '" + year + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -385,7 +386,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            String sql = @"select distinct(t.budget_year) from MBL_GOODS_01 t";
+            String sql = @"select distinct(t.budget_year) from MBL_TAX_GOODS t";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -721,11 +722,9 @@ namespace BILibraryBLL
             //sql += @" and myrank between '1' and '10' ";
 
 
-
             //string sql = @"select myrank as sort,
             //                reg_name AS reg_name, tax_nettax_amt AS tax from mbl_top10_register_mth ";
             //sql += @" where offcode = " + offcode + " and month_cd = " + month + " and myrank between 1 and 10 ";
-
             //sql += @" order by tax_nettax_amt desc";
 
             /*string sql = @"select
