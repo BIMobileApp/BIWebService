@@ -14,9 +14,9 @@ namespace BIWebService.Controllers
         TaxRealtime tax = new TaxRealtime();
 
         // GET: api/FollowPayTaxRealtimeAll/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode, string area, string province)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxRealtimeDaily(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxRealtimeDaily(offcode, area, province));
             return new RawJsonActionResult(jsonString);
         }
 

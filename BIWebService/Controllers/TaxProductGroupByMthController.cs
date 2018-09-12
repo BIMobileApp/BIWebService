@@ -19,9 +19,9 @@ namespace BIWebService.Controllers
         }
 
         // GET: api/TaxProductGroupByMth/5
-        public IHttpActionResult Get(string offcode,string monthFrom , string monthTo,string area, string Province )
+        public IHttpActionResult Get(string offcode, string area, string province,string monthFrom , string monthTo)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetProductByMth(offcode, monthFrom, monthTo, area, Province));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetProductByMth(offcode, area, province, monthFrom, monthTo));
             return new RawJsonActionResult(jsonString);
         }
 
