@@ -382,24 +382,28 @@ namespace BILibraryBLL
             //    sql += " and MONTH_CD between "+ monthFrom + " and "+ monthTo + " ";
             //}
 
-            string sql = @"select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,
-                                   ROW_NUMBER() OVER(ORDER BY group_name desc) as sort from mbl_month_inc
-                            WHERE offcode = 000000 AND province_name = case when 'สสพ.ฉะเชิงเทรา' = 'undefined' then province_name
-                                     else 'สสพ.ฉะเชิงเทรา' end AND region_name = case when 'ภาค 02' = 'undefined' then region_name
-                                     else 'ภาค 02' end and MONTH_CD between 1 and 4
-                             group by group_name
-                            union all select 'รวม',sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,null 
-                            from mbl_month_inc WHERE offcode = 000000 AND province_name = case when 'สสพ.ฉะเชิงเทรา' = 'undefined' then
-                                 province_name else
-                                      'สสพ.ฉะเชิงเทรา'
-                                   end
-                               AND region_name = case
-                                     when 'ภาค 02' = 'undefined' then
-                                      region_name
-                                     else
-                                      'ภาค 02'
-                                   end
-                               and MONTH_CD between 1 and 4";
+            string sql = "select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,";
+            sql += " ROW_NUMBER() OVER(ORDER BY group_name desc) as sort";
+            sql += " from mbl_month_inc WHERE offcode = " + offcode + "";
+            sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
+            sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
+            if (monthFrom != "undefined" && monthTo != "undefined")
+            {
+                sql += " and MONTH_CD between " + monthFrom + " and " + monthTo + "";
+            }
+
+            sql += " group by group_name";
+            sql += " union all select 'รวม',sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,null from mbl_month_inc";
+            sql += " WHERE offcode = " + offcode + "";
+            sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
+            sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
+
+            if (monthFrom != "undefined" && monthTo != "undefined")
+            {
+
+                sql += " and MONTH_CD between " + monthFrom + " and " + monthTo + "";
+
+            }
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
