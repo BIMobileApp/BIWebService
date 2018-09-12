@@ -342,7 +342,7 @@ namespace BILibraryBLL
                            case when sum(t.tax) > 0 and sum(t.estimate) > 0 then round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
                            sum(t.estimate),2) else -100 end as PERCENT_TAX
                            from MBL_TAX_GOODS t where t.offcode = " + offcode + " group by t.group_name, t.sort order by t.sort)";
-                   sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from MBL_TAX_GOODS s where s.offcode = " + offcode+"";
+                  sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from MBL_TAX_GOODS s where s.offcode = "+offcode+"";
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
@@ -514,7 +514,6 @@ namespace BILibraryBLL
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-
 
 
             string sql = @"select reg_name AS reg_name,TAX_NETTAX_AMT AS tax,myrank AS sort 
@@ -704,6 +703,17 @@ namespace BILibraryBLL
             string sql = @"select reg_name AS reg_name, tax_nettax_amt AS tax,myrank as sort from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
             sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
+
+            sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT) ,null from mbl_top10_register_mth ";
+            sql += @" where offcode = " + offcode + " ";
+            sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
+            sql += @" and myrank between '1' and '10' ";
+
+
+            //string sql = @"select reg_name AS reg_name, tax_nettax_amt AS tax,myrank as sort from mbl_top10_register_mth ";
+            //sql += @" where offcode = " + offcode + " ";
+            //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
+
 
             //sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT) ,null from mbl_top10_register_mth ";
             //sql += @" where offcode = " + offcode + " ";
