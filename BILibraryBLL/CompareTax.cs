@@ -107,18 +107,20 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        ,t.i_type_code
                         from MBL_PRODUCT_SURA t  where 1=1  ";
             sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
             sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
             sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-            sql += @" group by t.i_type_desc
-                        order by t.i_type_desc) union all select 
+            sql += @" group by t.i_type_desc ,t.i_type_code
+                        order by t.i_type_code) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
+                                          null
                                     from MBL_PRODUCT_SURA s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
@@ -232,22 +234,24 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        ,t.i_type_code
                         from MBL_PRODUCT_BEER t  where 1=1  ";
                     sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
                     sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
                     sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-                    sql += @" group by t.i_type_desc
-                        order by t.i_type_desc) union all select 
+                    sql += @" group by t.i_type_desc ,t.i_type_code
+                        order by t.i_type_code) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
+                                          null
                                     from MBL_PRODUCT_BEER s where ";
             sql += "   s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
-                               sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
-                    sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+            sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
+            sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -329,18 +333,20 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        ,t.i_type_code
                         from MBL_PRODUCT_CAR t  where 1=1  ";
             sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
             sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
             sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-            sql += @" group by t.i_type_desc
-                        order by t.i_type_desc) union all select 
+            sql += @" group by t.i_type_desc ,t.i_type_code
+                        order by t.i_type_code) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
+                                          null
                                     from MBL_PRODUCT_CAR s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
@@ -416,18 +422,20 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        ,t.i_type_code
                         from MBL_PRODUCT_DRINK t  where 1=1  ";
             sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
             sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
             sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-            sql += @" group by t.i_type_desc
-                        order by t.i_type_desc) union all select 
+            sql += @" group by t.i_type_desc ,t.i_type_code
+                        order by t.i_type_code) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
+                                          null
                                     from MBL_PRODUCT_DRINK s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";

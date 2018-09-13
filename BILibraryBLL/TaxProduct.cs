@@ -262,11 +262,11 @@ namespace BILibraryBLL
                                            sum(tax) AS tax,
                                            sum(last_tax) AS last_tax,
                                            sum(estimate) AS estimate,
-                                           ROW_NUMBER() OVER(ORDER BY sum(tax) desc) as sort
+                                           ROW_NUMBER() OVER(ORDER BY sort) as sort
                                       from mbl_month_inc
                                      where offcode = " + offcode + "";
-            sql += @" group by group_name
-                            order by tax desc)
+            sql += @" group by group_name,sort
+                            order by sort)
                             union all
                             select 'รวม', sum(tax), sum(last_tax), sum(estimate), null
                               from mbl_month_inc
@@ -364,8 +364,26 @@ namespace BILibraryBLL
             }*/
 
 
-            string sql = "select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,";
-            sql += " ROW_NUMBER() OVER(ORDER BY group_name desc) as sort";
+            //string sql = "select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,";
+            //sql += " ROW_NUMBER() OVER(ORDER BY group_name desc) as sort";
+            //sql += " from mbl_month_inc WHERE offcode = "+ offcode + "";
+            //sql += " AND PROVINCE_CD = case when '" + province + "'= 'undefined' then PROVINCE_CD else '" + province + "' end ";
+            //sql += " AND REGION_CD = case when '" + area + "' = 'undefined' then REGION_CD else '" + area + "' end";
+            //if (monthFrom.Equals("") || monthFrom.Equals("undefined") && monthTo.Equals("") || monthTo.Equals("undefined")) { 
+            //    sql += " and MONTH_CD between " + monthFrom + " and " + monthTo + " group by group_name";
+            //}
+            //sql += " union all select 'รวม',sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,null from mbl_month_inc";
+            //sql += " WHERE offcode = '000000'";
+            //sql += " AND PROVINCE_CD = case when '" + province + "'= 'undefined' then PROVINCE_CD else '" + province + "' end ";
+            //sql += " AND REGION_CD = case when '" + area + "' = 'undefined' then REGION_CD else '" + area + "' end";
+
+            //if (monthFrom.Equals("") || monthFrom.Equals("undefined") && monthTo.Equals("") || monthTo.Equals("undefined"))
+            //{
+            //    sql += " and MONTH_CD between "+ monthFrom + " and "+ monthTo + " ";
+            //}
+
+            string sql = " select * from (select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,";
+            sql += " sort";
             sql += " from mbl_month_inc WHERE offcode = "+ offcode + "";
             sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
             sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
@@ -374,7 +392,7 @@ namespace BILibraryBLL
                 sql += " and MONTH_CD between " + monthFrom + " and " + monthTo + "";
             }
             
-            sql += " group by group_name";
+            sql += " group by group_name,sort order by sort)";
             sql += " union all select 'รวม',sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,null from mbl_month_inc";
             sql += " WHERE offcode = "+ offcode + "";
             sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
