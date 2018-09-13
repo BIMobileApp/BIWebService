@@ -21,6 +21,8 @@ namespace BILibraryBLL
                                  ,t.offdesc as offdesc
                                  ,t.username as name
                                  ,t.offcode as offcode
+                                 ,trans_region(substr(to_char(t.offcode),0, 2)) AS region_desc
+                                 ,trans_region_short(substr(to_char(t.offcode),0, 2)) AS region_shot
                                  ,get_last_data_date_mobile() as last_update_date
                            from TMP_USER_ROLE t 
                            where t.u_username = '" + username+"'";
