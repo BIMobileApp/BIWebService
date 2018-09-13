@@ -459,7 +459,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegAll(string offcode, string group_id, string region,string province, string year)
+        public DataTable TaxBudgetRegAll(string offcode, string group_id, string region,string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -470,14 +470,14 @@ namespace BILibraryBLL
                             where offcode = " + offcode + " and group_name = '" + group_id + "' ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-            sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
+            //sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
             sql += @" and myrank between '1' and '10' ";
             sql += @" union all select 'รวม' ,SUM(TAX_NETTAX_AMT) AS tax,null
                         from mbl_top_product_10 
                         where offcode = " + offcode + " and group_name = '" + group_id + "' ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-            sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
+            //sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
             sql += @"  and myrank between '1' and '10'";
 
 
