@@ -17,14 +17,14 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = "select * from (select goods as group_name,SUM(nettax_amt) AS tax,ROW_NUMBER() OVER(ORDER BY goods asc) as sort ";
+            string sql = "select * from (select goods as group_name,SUM(nettax_amt) AS tax,ROW_NUMBER() OVER (ORDER BY sort) as sort ";
                    sql += "  from MBL_INC_REAL_TIME where offcode = " + offcode + "";
                    sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end ";
-                   sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end group by goods";
+                   sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end group by goods,sort";
                     sql += @" union all select 'รวม', SUM(nettax_amt) AS tax,null from MBL_INC_REAL_TIME where offcode = " + offcode + " ";
                     sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
                     sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
-                    sql += " ) t order by t.group_name asc";
+                    sql += " ) t order by sort";
             /*string sql = @"select ROW_NUMBER() OVER (ORDER BY  b.group_name) as sort,
                     b.group_name,sum(a.tax_nettax_amt) as tax,sum(a.last_tax_nettax_amt) as tax_ly
              from ic_sum_allday_cube a
