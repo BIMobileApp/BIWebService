@@ -383,7 +383,7 @@ namespace BILibraryBLL
             //}
 
             string sql = " select * from (select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,";
-            sql += " sort";
+            sql += " ROW_NUMBER() OVER(ORDER BY sort) as sort";
             sql += " from mbl_month_inc WHERE offcode = "+ offcode + "";
             sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
             sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";

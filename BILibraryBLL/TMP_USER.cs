@@ -25,8 +25,11 @@ namespace BILibraryBLL
                                  ,trans_region_short(substr(to_char(t.offcode),0, 2)) AS region_shot
                                  ,get_last_data_date_mobile() as last_update_date
                            from TMP_USER_ROLE t 
-                           where t.u_username = '" + username+"'";
-                  sql += " and t.u_password = '"+password+"' and rownum <= 1";
+                           where t.u_username = '" + username + "'";
+            sql += " and t.u_password = '" + password + "' and rownum <= 1";
+
+
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
