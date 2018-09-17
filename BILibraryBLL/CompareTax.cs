@@ -500,7 +500,7 @@ namespace BILibraryBLL
         }
 
         
-        public DataTable CompareTaxVolSura(string offcode)
+        public DataTable CompareTaxVolSura(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -510,7 +510,10 @@ namespace BILibraryBLL
                             sum(t.last_total_tax_amt) as last_total_tax_amt,
                             sum(t.total_volumn_capa) as total_volumn_capa,
                             sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                            from MBL_PRODUCT_SURA_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            from MBL_PRODUCT_SURA_MONTH t where t.offcode='" + offcode + "' ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -520,7 +523,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxVolBeer(string offcode)
+        public DataTable CompareTaxVolBeer(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -530,7 +533,10 @@ namespace BILibraryBLL
                             sum(t.last_total_tax_amt) as last_total_tax_amt,
                             sum(t.total_volumn_capa) as total_volumn_capa,
                             sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                            from MBL_PRODUCT_BEER_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            from MBL_PRODUCT_BEER_MONTH t where t.offcode='" + offcode + "' ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -540,7 +546,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxVolCar(string offcode)
+        public DataTable CompareTaxVolCar(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -550,7 +556,10 @@ namespace BILibraryBLL
                             sum(t.last_total_tax_amt) as last_total_tax_amt,
                             sum(t.total_volumn_capa) as total_volumn_capa,
                             sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                            from MBL_PRODUCT_CAR_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            from MBL_PRODUCT_CAR_MONTH t where t.offcode='" + offcode + "' ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -560,7 +569,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxVolDrink(string offcode)
+        public DataTable CompareTaxVolDrink(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -570,7 +579,10 @@ namespace BILibraryBLL
                             sum(t.last_total_tax_amt) as last_total_tax_amt,
                             sum(t.total_volumn_capa) as total_volumn_capa,
                             sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                            from MBL_PRODUCT_DRINK_MONTH t where t.offcode='" + offcode + "'group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            from MBL_PRODUCT_DRINK_MONTH t where t.offcode='" + offcode + "' ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
