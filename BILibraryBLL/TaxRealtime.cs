@@ -84,13 +84,17 @@ namespace BILibraryBLL
                             SUM(STAMP_AMT) AS STAMP_AMT,
                             SUM(EXCISE_AMT) AS EXCISE_AMT
                             from mbl_cd_daily_report where officode = '" + offcode + "'";
-                  sql += @" group by DIM_DATA_DATE_ID 
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end";
+            sql += @" group by DIM_DATA_DATE_ID 
                             union all
                             select 'รวม', SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
                             SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
                             SUM(STAMP_AMT) AS STAMP_AMT,
                             SUM(EXCISE_AMT) AS EXCISE_AMT
-                            from mbl_cd_daily_report where officode ='" + offcode + "') t order by DIM_DATA_DATE_ID";
+                            from mbl_cd_daily_report where officode ='" + offcode + "' ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end) t order by DIM_DATA_DATE_ID";
            
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
