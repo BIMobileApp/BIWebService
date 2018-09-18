@@ -204,6 +204,7 @@
     <Compile Include="Controllers\ddlMBranchController.cs" />
     <Compile Include="Controllers\ddlMProvinceController.cs" />
     <Compile Include="Controllers\ddlMRegionController.cs" />
+    <Compile Include="Controllers\DimansionTime03Controller.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeAllController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />
