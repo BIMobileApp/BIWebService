@@ -172,12 +172,23 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxSuraMonth(string code,string offcode)
+        public DataTable CompareTaxSuraMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code='" + code+"' and t.offcode='"+offcode+"' order by t.time_id";
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code='" + code+"' and t.offcode='"+offcode+"' order by t.time_id";
+
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_SURA_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+                  sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -261,23 +272,33 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxBeerMonth(string code, string offcode)
+        public DataTable CompareTaxBeerMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_BEER_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
-            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,
-                           sum(t.total_tax_amt),
-                           t.time_id,
-                           t.offcode
-                           from MBL_PRODUCT_BEER_MONTH t
-                           where t.i_type_code = '"+ code + "'";
-                 sql += @" and t.offcode = '"+ offcode + "'";
-                 sql += @" group by TRANS_Short_month(t.budget_month_desc),
-                                  t.time_id,
-                                  t.offcode
-                           order by t.time_id";
+            //string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,
+            //               sum(t.total_tax_amt),
+            //               t.time_id,
+            //               t.offcode
+            //               from MBL_PRODUCT_BEER_MONTH t
+            //               where t.i_type_code = '"+ code + "'";
+            //     sql += @" and t.offcode = '"+ offcode + "'";
+            //     sql += @" group by TRANS_Short_month(t.budget_month_desc),
+            //                      t.time_id,
+            //                      t.offcode
+            //               order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_BEER_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -360,12 +381,22 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxCarMonth(string code, string offcode)
+        public DataTable CompareTaxCarMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_CAR_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -449,12 +480,22 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxDrinkMonth(string code, string offcode)
+        public DataTable CompareTaxDrinkMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_DRINK_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_DRINK_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_DRINK_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
