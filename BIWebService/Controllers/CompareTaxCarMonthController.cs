@@ -12,9 +12,9 @@ namespace BIWebService.Controllers
     public class CompareTaxCarMonthController : ApiController
     {
         CompareTax tax = new CompareTax();
-        public IHttpActionResult Get(string code, string offcode)
+        public IHttpActionResult Get(string TYPE_DESC, string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxCarMonth(code, offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.CompareTaxCarMonth(TYPE_DESC, offcode));
             return new RawJsonActionResult(jsonString);
         }
     }

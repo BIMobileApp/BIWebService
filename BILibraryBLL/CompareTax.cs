@@ -107,62 +107,23 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                        ,t.i_type_code
                         from MBL_PRODUCT_SURA t  where 1=1  ";
             sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
             sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
             sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-            sql += @" group by t.i_type_desc ,t.i_type_code
-                        order by t.i_type_code) union all select 
+            sql += @" group by t.i_type_desc 
+                        order by t.i_type_desc) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
-                                          null
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
                                     from MBL_PRODUCT_SURA s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
             sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
-
-            //string sql = "";
-            //string condi = " where 1=1 ";
-            //string union = @" group by t.i_type_desc order by t.i_type_desc) union all select 
-            //                     'รวม',
-            //                      sum(s.TOTAL_TAX_AMT),
-            //                      sum(s.LAST_TOTAL_TAX_AMT),
-            //                      sum(s.EST_AMT),
-            //                      sum(s.TOTAL_VOLUMN_CAPA),
-            //                      sum(s.LAST_TOTAL_VOLUMN_CAPA)
-            //                from MBL_PRODUCT_SURA s";
-            //area = area == null ? "" : area;
-            //Province = Province == null ? "" : Province;
-            //if ((!area.Equals("") && !(area.Equals("000000") || area.Equals("undefined"))) && (Province.Equals("") || Province.Equals("undefined")))
-            //{
-            //    condi += " and t.offcode like case when '" + area + "%' = 'undefined' then t.offcode else '" + area + "%' end " + union + " where s.offcode like case when '" + area + "%' = 'undefined' then s.offcode else '" + area + "%' end ";
-            //}
-            //else if (!Province.Equals("") && !Province.Equals("undefined"))
-            //{
-            //    condi += " and t.offcode like case when '" + Province + "%' = 'undefined' then t.offcode else '" + Province + "%' end " + union + " where s.offcode like case when '" + Province + "%' = 'undefined' then s.offcode else '" + Province + "%' end ";
-            //}
-            //else if ((area.Equals("") || area.Equals("000000") || area.Equals("undefined")) && (Province.Equals("") || Province.Equals("undefined")) && !(offcode.Equals("000000")))
-            //{
-            //    condi += " and t.offcode like case when '" + offcode + "%' = 'undefined' then t.offcode else '" + offcode + "%' end " + union + " where s.offcode like case when '" + offcode + "%' = 'undefined' then s.offcode else '" + offcode + "%' end ";
-            //}else if (offcode.Equals("000000"))
-            //{
-            //    condi += " and t.offcode like case when 'undefined' = 'undefined' then t.offcode else 'undefined' end " + union + " where s.offcode like case when 'undefined' = 'undefined' then s.offcode else 'undefined' end ";
-            //}
-
-            //sql = @" select * from (select t.i_type_desc
-            //                        ,sum(t.total_tax_amt) as total_tax_amt
-            //                        ,sum(t.last_total_tax_amt) as last_total_tax_amt
-            //                        ,sum(t.est_amt) as est_amt 
-            //                        ,sum(t.total_volumn_capa) as total_volumn_capa
-            //                        ,sum(t.last_total_volumn_capa) as last_total_volumn_capa from MBL_PRODUCT_SURA t " + condi + " ";
-
-
-
+            
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -172,12 +133,23 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxSuraMonth(string code,string offcode)
+        public DataTable CompareTaxSuraMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code='" + code+"' and t.offcode='"+offcode+"' order by t.time_id";
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_SURA_MONTH t where t.i_type_code='" + code+"' and t.offcode='"+offcode+"' order by t.time_id";
+
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_SURA_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+                  sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -234,20 +206,18 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                        ,t.i_type_code
                         from MBL_PRODUCT_BEER t  where 1=1  ";
                     sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
                     sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
                     sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-                    sql += @" group by t.i_type_desc ,t.i_type_code
-                        order by t.i_type_code) union all select 
+                    sql += @" group by t.i_type_desc 
+                        order by t.i_type_desc) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
-                                          null
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
                                     from MBL_PRODUCT_BEER s where ";
             sql += "   s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
@@ -261,23 +231,33 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxBeerMonth(string code, string offcode)
+        public DataTable CompareTaxBeerMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_BEER_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
-            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,
-                           sum(t.total_tax_amt),
-                           t.time_id,
-                           t.offcode
-                           from MBL_PRODUCT_BEER_MONTH t
-                           where t.i_type_code = '"+ code + "'";
-                 sql += @" and t.offcode = '"+ offcode + "'";
-                 sql += @" group by TRANS_Short_month(t.budget_month_desc),
-                                  t.time_id,
-                                  t.offcode
-                           order by t.time_id";
+            //string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,
+            //               sum(t.total_tax_amt),
+            //               t.time_id,
+            //               t.offcode
+            //               from MBL_PRODUCT_BEER_MONTH t
+            //               where t.i_type_code = '"+ code + "'";
+            //     sql += @" and t.offcode = '"+ offcode + "'";
+            //     sql += @" group by TRANS_Short_month(t.budget_month_desc),
+            //                      t.time_id,
+            //                      t.offcode
+            //               order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_BEER_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -333,20 +313,18 @@ namespace BILibraryBLL
                         ,sum(t.est_amt) as est_amt 
                         ,sum(t.total_volumn_capa) as total_volumn_capa
                         ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                        ,t.i_type_code
                         from MBL_PRODUCT_CAR t  where 1=1  ";
             sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
             sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
             sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-            sql += @" group by t.i_type_desc ,t.i_type_code
-                        order by t.i_type_code) union all select 
+            sql += @" group by t.i_type_desc 
+                        order by t.i_type_desc) union all select 
                                          'รวม',
                                           sum(s.TOTAL_TAX_AMT),
                                           sum(s.LAST_TOTAL_TAX_AMT),
                                           sum(s.EST_AMT),
                                           sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
-                                          null
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
                                     from MBL_PRODUCT_CAR s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
@@ -360,12 +338,22 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxCarMonth(string code, string offcode)
+        public DataTable CompareTaxCarMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_CAR_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -416,30 +404,29 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             //string sql = @"select * from MBL_PRODUCT_DRINK t order by t.total_tax_amt desc";
-            string sql = @" select * from (select t.i_type_desc
-                        ,sum(t.total_tax_amt) as total_tax_amt
-                        ,sum(t.last_total_tax_amt) as last_total_tax_amt
-                        ,sum(t.est_amt) as est_amt 
-                        ,sum(t.total_volumn_capa) as total_volumn_capa
-                        ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                        ,t.i_type_code
-                        from MBL_PRODUCT_DRINK t  where 1=1  ";
-            sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
-            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
-            sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
-            sql += @" group by t.i_type_desc ,t.i_type_code
-                        order by t.i_type_code) union all select 
-                                         'รวม',
-                                          sum(s.TOTAL_TAX_AMT),
-                                          sum(s.LAST_TOTAL_TAX_AMT),
-                                          sum(s.EST_AMT),
-                                          sum(s.TOTAL_VOLUMN_CAPA),
-                                          sum(s.LAST_TOTAL_VOLUMN_CAPA),
-                                          null
-                                    from MBL_PRODUCT_DRINK s where ";
-            sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
-            sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
-            sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+            
+
+            string sql = @" SELECT * FROM (SELECT T.I_TYPE_DESC
+                                ,SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT
+                                ,SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT
+                                ,SUM(T.EST_AMT) AS EST_AMT 
+                                ,SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA
+                                ,SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA
+                                FROM MBL_PRODUCT_DRINK T  WHERE 1=1   
+                                AND T.OFFCODE LIKE CASE WHEN '" + offcode + "' = 'undefined' THEN T.OFFCODE ELSE '" + offcode + "' END  ";
+                      sql += " AND T.REGION_NAME LIKE CASE WHEN '" + area + "' = 'undefined' THEN T.REGION_NAME ELSE '" + area + "' END  ";
+                      sql += " AND T.PROVINCE_NAME LIKE CASE WHEN '" + Province + "' = 'undefined' THEN T.PROVINCE_NAME ELSE '" + Province + "' END  ";
+                      sql += " GROUP BY T.I_TYPE_DESC ORDER BY T.I_TYPE_DESC) UNION ALL SELECT ";
+                      sql += @" 'รวม',
+                                  SUM(S.TOTAL_TAX_AMT),
+                                  SUM(S.LAST_TOTAL_TAX_AMT),
+                                  SUM(S.EST_AMT),
+                                  SUM(S.TOTAL_VOLUMN_CAPA),
+                                  SUM(S.LAST_TOTAL_VOLUMN_CAPA)
+                                FROM MBL_PRODUCT_DRINK S ";
+                      sql += " WHERE  S.OFFCODE LIKE CASE WHEN '" + offcode + "' = 'undefined' THEN S.OFFCODE ELSE '" + offcode + "' END";
+                      sql += " AND S.REGION_NAME LIKE CASE WHEN '" + area + "' = 'undefined' THEN S.REGION_NAME ELSE '" + area + "' END  ";
+                      sql += " AND S.PROVINCE_NAME LIKE CASE WHEN '" + Province + "' = 'undefined' THEN S.PROVINCE_NAME ELSE '" + Province + "' END ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -449,12 +436,22 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable CompareTaxDrinkMonth(string code, string offcode)
+        public DataTable CompareTaxDrinkMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_DRINK_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_DRINK_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_DRINK_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
