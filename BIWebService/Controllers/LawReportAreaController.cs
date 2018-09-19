@@ -11,7 +11,7 @@ namespace BIWebService.Controllers
 {
     public class LawReportAreaController : ApiController
     {
-        LawReport tax = new LawReport();
+        LawReport tax = new LawReport(); 
         public IHttpActionResult Get(string offcode)
         {
             var jsonString = JsonConvert.SerializeObject(tax.LawReportArea(offcode));
