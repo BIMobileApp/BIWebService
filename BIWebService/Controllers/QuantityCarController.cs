@@ -21,7 +21,7 @@ namespace BIWebService.Controllers
         // GET: api/QuantityCar/5
         public IHttpActionResult Get(string offcode)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.QuantityPercentSura(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.QuantityPercentCar(offcode));
             return new RawJsonActionResult(jsonString);
         }
 

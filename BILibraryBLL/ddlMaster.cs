@@ -46,7 +46,7 @@ namespace BILibraryBLL
             area = area == null ? "" : area ;
             if ((offcode.Equals("") || offcode.Equals("000000") || offcode.Equals("undefined")) &&  (area.Equals("")  || area.Equals("undefined")))
             {
-                sql  = @"  select  province_cd,province_name
+                sql  = @"  select  distinct province_cd,province_name
                              from ic_office_dim
                              where  province_name not like 'ภาค%' and province_cd != 000000 
                              group by province_cd,province_name
@@ -55,7 +55,7 @@ namespace BILibraryBLL
             else
             {
 
-                sql = @"select province_cd,province_name
+                sql = @"select distinct province_cd,province_name
                              from ic_office_dim
                              where  province_name not like 'ภาค%'  
                              and region_name='" + area + "' " +

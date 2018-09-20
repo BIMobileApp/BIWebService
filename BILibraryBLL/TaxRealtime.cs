@@ -68,17 +68,33 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @" select DIM_DATA_DATE_ID, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
-                       SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
-                       SUM(STAMP_AMT) AS STAMP_AMT,
-                       SUM(EXCISE_AMT) AS EXCISE_AMT
-                     from mbl_cd_daily_report 
-                     where ";
-             sql += " officode like case when '" + offcode + "' = 'undefined' then officode else '" + offcode + "' end";
-             sql += " and Region_CD like case when '" + area + "' = 'undefined' then Region_CD else '" + area + "' end";
-             sql += " and province_CD like case when '" + province + "' = 'undefined' then province_CD else '" + province + "' end";
-             sql += " group by DIM_DATA_DATE_ID order by DIM_DATA_DATE_ID";
+            //string sql = @" select DIM_DATA_DATE_ID, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
+            //           SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
+            //           SUM(STAMP_AMT) AS STAMP_AMT,
+            //           SUM(EXCISE_AMT) AS EXCISE_AMT
+            //         from mbl_cd_daily_report 
+            //         where ";
+            // sql += " officode like case when '" + offcode + "' = 'undefined' then officode else '" + offcode + "' end";
+            // sql += " and Region_CD like case when '" + area + "' = 'undefined' then Region_CD else '" + area + "' end";
+            // sql += " and province_CD like case when '" + province + "' = 'undefined' then province_CD else '" + province + "' end";
+            // sql += " group by DIM_DATA_DATE_ID order by DIM_DATA_DATE_ID";
 
+            string sql = @"select * from  (select to_char(DIM_DATA_DATE_ID) AS DIM_DATA_DATE_ID, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
+                            SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
+                            SUM(STAMP_AMT) AS STAMP_AMT,
+                            SUM(EXCISE_AMT) AS EXCISE_AMT
+                            from mbl_cd_daily_report where officode = '" + offcode + "'";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end";
+            sql += @" group by DIM_DATA_DATE_ID 
+                            union all
+                            select 'รวม', SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
+                            SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
+                            SUM(STAMP_AMT) AS STAMP_AMT,
+                            SUM(EXCISE_AMT) AS EXCISE_AMT
+                            from mbl_cd_daily_report where officode ='" + offcode + "' ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end) t order by DIM_DATA_DATE_ID";
            
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
