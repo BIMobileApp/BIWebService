@@ -33,12 +33,7 @@ namespace ClassLib
              + "User Id=ed_target;Password=oracle;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";*/
 
             return conn;
-<<<<<<< HEAD
-}
-}
-=======
         }
 
     }
->>>>>>> 6676944a65b11ed598ef08a2bf5bb7b54e2d96a0
 }
