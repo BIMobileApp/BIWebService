@@ -183,6 +183,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AuthenticateUserController.cs" />
     <Compile Include="Controllers\CheckDeliveryController.cs" />
     <Compile Include="Controllers\CompareTaxBeerController.cs" />
     <Compile Include="Controllers\CompareTaxBeerMonthAllController.cs" />
@@ -193,6 +194,10 @@
     <Compile Include="Controllers\CompareTaxDrinkController.cs" />
     <Compile Include="Controllers\CompareTaxDrinkMonthAllController.cs" />
     <Compile Include="Controllers\CompareTaxDrinkMonthController.cs" />
+    <Compile Include="Controllers\CompareTaxOilController.cs" />
+    <Compile Include="Controllers\CompareTaxOilMonthController.cs" />
+    <Compile Include="Controllers\CompareTaxSicaController.cs" />
+    <Compile Include="Controllers\CompareTaxSicaMonthController.cs" />
     <Compile Include="Controllers\CompareTaxSuraController.cs" />
     <Compile Include="Controllers\CompareTaxSuraMonthAllController.cs" />
     <Compile Include="Controllers\CompareTaxSuraMonthController.cs" />
@@ -215,6 +220,8 @@
     <Compile Include="Controllers\getTypeNameBeerMonthController.cs" />
     <Compile Include="Controllers\getTypeNameCarMonthController.cs" />
     <Compile Include="Controllers\getTypeNameDrinkMonthController.cs" />
+    <Compile Include="Controllers\getTypeNameOilMonthController.cs" />
+    <Compile Include="Controllers\getTypeNameSicaMonthController.cs" />
     <Compile Include="Controllers\getTypeNameSuraMonthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncAreaDetailController.cs" />
@@ -270,6 +277,8 @@
     <Compile Include="Controllers\QuantityBeerController.cs" />
     <Compile Include="Controllers\QuantityCarController.cs" />
     <Compile Include="Controllers\QuantityDrinkController.cs" />
+    <Compile Include="Controllers\QuantityOilController.cs" />
+    <Compile Include="Controllers\QuantitySicaController.cs" />
     <Compile Include="Controllers\QuantitySuraController.cs" />
     <Compile Include="Controllers\RawJsonActionResult.cs" />
     <Compile Include="Controllers\REP02_GUAGE_REGController.cs" />
@@ -308,6 +317,8 @@
     <Compile Include="Controllers\taxPercentByProductGroupController.cs" />
     <Compile Include="Controllers\taxPercentCarController.cs" />
     <Compile Include="Controllers\taxPercentDrinkController.cs" />
+    <Compile Include="Controllers\taxPercentOilController.cs" />
+    <Compile Include="Controllers\taxPercentSicaController.cs" />
     <Compile Include="Controllers\taxPercentSuraController.cs" />
     <Compile Include="Controllers\TaxProductCurYearbyYearController.cs" />
     <Compile Include="Controllers\TaxProductCurYearController.cs" />

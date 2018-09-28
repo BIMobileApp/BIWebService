@@ -15,18 +15,25 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable Sql1() {
+        public string Sql1() {
 
             DataTable dt = new DataTable();
             using (OleDbConnection thisConnection = new OleDbConnection(con.connection()))
             {
-                string sql = "select * from CD_TIME_DIM t WHERE rownum <= 100";
-                OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
-                thisConnection.Open();
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
-                adapter.Fill(dt);
-                thisConnection.Close();
-                return dt;
+                try
+                {
+                    string sql = "select * from CD_TIME_DIM t WHERE rownum <= 100";
+                    OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+                    thisConnection.Open();
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                    adapter.Fill(dt);
+                    thisConnection.Close();
+                    return "Success จ้า";
+                }
+                catch (Exception ex) {
+                     
+                     return ex.ToString();
+                }
             }
         }
 
