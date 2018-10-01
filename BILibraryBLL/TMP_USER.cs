@@ -31,8 +31,6 @@ namespace BILibraryBLL
             sql += " and t.u_password = '" + password + "' and rownum <= 1";
 
 
-
-
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);

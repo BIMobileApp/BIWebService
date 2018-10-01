@@ -464,21 +464,47 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-
-            string sql = @"select reg_name AS reg_name,SUM(TAX_NETTAX_AMT) AS tax,ROW_NUMBER() OVER (ORDER BY myrank ) AS sort 
-                            from mbl_top_product_10 
-                            where offcode = " + offcode + " and group_name = '" + group_id + "' ";
-            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            string sql = @"select * 
+                            from (select reg_name , rank() over(partition by group_name order by tax_nettax_amt desc)  as myrank  ,tax_nettax_amt
+                            from 
+                            (select d.budget_year
+                                            ,c.group_name
+                                            ,b.reg_name
+                                            ,sum(a.tax_nettax_amt) tax_nettax_amt
+                                            ,substr(c.group_id, 1, 4) group_id          
+                                      from ic_sum_allday_cube a
+                                          ,ic_register_dim    b
+                                          ,ic_product_grp_dim c
+                                          ,ic_time_dim        d
+                                          ,ic_office_dim      e
+                                      where a.reg_sk = b.reg_sk
+                                            and d.budget_year  = 2561
+                                            and tax_nettax_amt > 0
+                                            and a.time_id = d.time_id
+                                            and a.product_grp_cd = c.group_id
+                                            and a.offcode_own = e.offcode
+                                            and c.group_name = case when '" + group_id + "'= 'undefined' then c.group_name else '" + group_id + "' end "; 
+                              sql += @"     and e.region_name = case when '" + region + "' = 'undefined' then e.region_name else '" + region + "' end "; 
+                              sql += @"     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end "; 
+                              sql += @"     group by budget_year
+                                              ,c.group_name
+                                              ,b.reg_name
+                                              ,substr(c.group_id, 1, 4)))
+                                            where myrank <= nvl("+10+",myrank)";
+            //string sql = @"select reg_name AS reg_name,SUM(TAX_NETTAX_AMT) AS tax,ROW_NUMBER() OVER (ORDER BY myrank ) AS sort 
+            //                from mbl_top_product_10 
+            //                where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            //sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            //sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             //sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
-            sql += @" and myrank between '1' and '10' group by reg_name,myrank";
-            sql += @" union all select 'รวม' ,SUM(TAX_NETTAX_AMT) AS tax,null
-                        from mbl_top_product_10 
-                        where offcode = " + offcode + " and group_name = '" + group_id + "' ";
-            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            //sql += @" and myrank between '1' and '10' group by reg_name,myrank";
+            //sql += @" union all select 'รวม' ,SUM(TAX_NETTAX_AMT) AS tax,null
+            //            from mbl_top_product_10 
+            //            where offcode = " + offcode + " and group_name = '" + group_id + "' ";
+            //sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            //sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             //sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
-            sql += @"  and myrank between '1' and '10'";
+            //sql += @"  and myrank between '1' and '10'";
 
 
             /*string sql = @"select
