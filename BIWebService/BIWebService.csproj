@@ -312,6 +312,7 @@
     <Compile Include="Controllers\TaxBudgetYearController.cs" />
     <Compile Include="Controllers\TaxCurYearbyYearController.cs" />
     <Compile Include="Controllers\TaxCurYearController.cs" />
+    <Compile Include="Controllers\TaxOverallBranchController.cs" />
     <Compile Include="Controllers\taxPercentBeerController.cs" />
     <Compile Include="Controllers\taxPercentByAreaController.cs" />
     <Compile Include="Controllers\taxPercentByProductGroupController.cs" />

@@ -396,7 +396,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxProvinceCurYear(string area)
+        public DataTable TaxProvinceCurYear(string area,string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -408,7 +408,7 @@ namespace BILibraryBLL
                                      else -100
                                    end as PERCENT_TAX
                               from MBL_TAX_MONTH t
-                             where t.region_name = '" + area + "'";
+                             where t.region_name = '" + area + "' and t.offcode = " + offcode + "";
                   sql += @" group by t.province_name  order by t.province_name)
                            union all
                                 select 'รวม',sum(s.Tax) as Tax,sum(s.Last_Tax) as Last_Tax,sum(s.estimate) as estimate,
@@ -417,7 +417,7 @@ namespace BILibraryBLL
                                           round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) /
                                                 sum(s.estimate),2)
                                          else -100 end as PERCENT_TAX
-                                  from MBL_TAX_MONTH s where s.region_name = '" + area + "'";
+                                  from MBL_TAX_MONTH s where s.region_name = '" + area + "' and s.offcode= " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -795,6 +795,40 @@ namespace BILibraryBLL
             }
             thisConnection.Close();
             return result;
+        }
+
+        
+        public DataTable TaxOverallBranchAll(string region, string province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from  (select OFFDESC,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,ROW_NUMBER() OVER (ORDER BY OFFDESC) as sort,
+                            case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
+                            round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
+                            from MBL_01_OFFICE_REPORT 
+                            WHERE  ";
+                                        sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                                        sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+                                        sql += " group by OFFDESC ";
+
+                                        sql += @" union all
+ 
+                            select 'รวม' ,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,100000 AS sort,
+                            case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
+                            round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
+                            from MBL_01_OFFICE_REPORT t
+                            WHERE  ";
+            sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " ) t order by sort";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
         }
     }
 }

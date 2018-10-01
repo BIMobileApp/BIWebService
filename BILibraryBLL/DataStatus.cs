@@ -16,7 +16,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from MB_BI_DATA_STATUS t";
+            string sql = @"select SYSTEM_NAME AS GROP_NAME,LAST_UPD_DATE AS DATE_AS_OF from mbl_status_data";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

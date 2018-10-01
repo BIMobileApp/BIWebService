@@ -17,14 +17,14 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @" select DIM_DATA_DATE_ID, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
+            string sql = @" select GROUP_NAME, SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
                        SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,
                        SUM(STAMP_AMT) AS STAMP_AMT,
-                       SUM(EXCISE_AMT) AS EXCISE_AMT
-                     from mbl_cd_daily_report where officode = " + offcode + " ";
+                       SUM(EXCISE_AMT) AS EXCISE_AMT,ROW_NUMBER() OVER (ORDER BY sort asc) as sort
+                     from mbl_cd_daily_report_rt where officode = " + offcode + " ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
-            sql += @" group by DIM_DATA_DATE_ID order by DIM_DATA_DATE_ID, FZ_EXCISE_AMT,IN_EXCISE_AMT,IN_EXCISE_AMT,STAMP_AMT,EXCISE_AMT desc";
+            sql += @" group by GROUP_NAME,sort order by sort asc";
 
             /*string sql = @"SELECT TB.TIME_ID,
                            cast (nvl(SUM(TB.A_krom_tax),0) as decimal (15,2)) AS cd_income,
@@ -114,7 +114,7 @@ namespace BILibraryBLL
 
             string sql = @" select  sum(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,SUM(STAMP_AMT) AS STAMP_AMT
                             ,SUM(EXCISE_AMT) AS EXCISE_AMT
-                            from mbl_cd_daily_report where officode = " + offcode + " ";
+                            from mbl_cd_daily_report_rt where officode = " + offcode + " ";
                     sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
                     sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
 

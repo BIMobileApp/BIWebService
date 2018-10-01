@@ -184,7 +184,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_SURA_MONTH t where t.offcode = "+ offcode +" order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_SURA_MONTH t where t.offcode = "+ offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -291,7 +291,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_BEER_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_BEER_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -463,7 +463,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_CAR_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_CAR_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -561,7 +561,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_DRINK_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_DRINK_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -669,7 +669,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_OIL_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_OIL_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -684,7 +684,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_TOBACCO_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_TOBACCO_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
