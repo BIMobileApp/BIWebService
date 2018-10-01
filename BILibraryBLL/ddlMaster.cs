@@ -15,37 +15,23 @@ namespace BILibraryBLL
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-            //string sql = "";
-            //if (offcode.Equals("") || offcode.Equals("undefined") || offcode.Equals("000000"))
-            //{
-            //    sql = @"select  region_cd ,region_name_mobile AS region_name
-            //                 from ic_office_dim 
-            //                 where region_cd != 000000
-            //                 group by  region_cd ,region_name_mobile order by region_cd";
-            //}else {
-
-            //    sql = @"select  region_cd ,region_name_mobile AS region_name
-            //                 from ic_office_dim
-            //                 where offcode ='" + offcode + "' and region_cd != 000000" +
-            //                   "group by  region_cd ,region_name_mobile order by region_cd"; 
-            //}
-
             string sql = "";
             if (offcode.Equals("") || offcode.Equals("undefined") || offcode.Equals("000000"))
             {
-                sql = @"select  region_cd ,region_name AS region_name
+                sql = @"select  region_cd ,region_name_mobile AS region_name
                              from ic_office_dim 
                              where region_cd != 000000
-                             group by  region_cd ,region_name order by region_cd";
+                             group by  region_cd ,region_name_mobile order by region_cd";
             }
             else
             {
 
-                sql = @"select  region_cd ,region_name AS region_name
+                sql = @"select  region_cd ,region_name_mobile AS region_name
                              from ic_office_dim
                              where offcode ='" + offcode + "' and region_cd != 000000" +
-                               "group by  region_cd ,region_name order by region_cd";
+                               "group by  region_cd ,region_name_mobile order by region_cd";
             }
+            
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 
             thisConnection.Open();
