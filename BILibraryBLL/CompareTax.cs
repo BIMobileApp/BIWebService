@@ -184,7 +184,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_SURA_MONTH t where t.offcode = "+ offcode +" order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_SURA_MONTH t where t.offcode = "+ offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -291,7 +291,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_BEER_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_BEER_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -326,6 +326,81 @@ namespace BILibraryBLL
                                           sum(s.TOTAL_VOLUMN_CAPA),
                                           sum(s.LAST_TOTAL_VOLUMN_CAPA)
                                     from MBL_PRODUCT_CAR s where ";
+            sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
+            sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
+            sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+
+        public DataTable CompareTaxOil(string area, string Province, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            //string sql = @"select * from MBL_PRODUCT_CAR t order by t.total_tax_amt desc";
+            string sql = @" select * from (select t.i_type_desc
+                        ,sum(t.total_tax_amt) as total_tax_amt
+                        ,sum(t.last_total_tax_amt) as last_total_tax_amt
+                        ,sum(t.est_amt) as est_amt 
+                        ,sum(t.total_volumn_capa) as total_volumn_capa
+                        ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        from MBL_PRODUCT_OIL t  where 1=1  ";
+            sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
+            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
+            sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            sql += @" group by t.i_type_desc 
+                        order by t.i_type_desc) union all select 
+                                         'รวม',
+                                          sum(s.TOTAL_TAX_AMT),
+                                          sum(s.LAST_TOTAL_TAX_AMT),
+                                          sum(s.EST_AMT),
+                                          sum(s.TOTAL_VOLUMN_CAPA),
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                    from MBL_PRODUCT_OIL s where ";
+            sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
+            sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
+            sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable CompareTaxSica(string area, string Province, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            //string sql = @"select * from MBL_PRODUCT_CAR t order by t.total_tax_amt desc";
+            string sql = @" select * from (select t.i_type_desc
+                        ,sum(t.total_tax_amt) as total_tax_amt
+                        ,sum(t.last_total_tax_amt) as last_total_tax_amt
+                        ,sum(t.est_amt) as est_amt 
+                        ,sum(t.total_volumn_capa) as total_volumn_capa
+                        ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        from MBL_PRODUCT_TOBACCO t  where 1=1  ";
+            sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
+            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
+            sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            sql += @" group by t.i_type_desc 
+                        order by t.i_type_desc) union all select 
+                                         'รวม',
+                                          sum(s.TOTAL_TAX_AMT),
+                                          sum(s.LAST_TOTAL_TAX_AMT),
+                                          sum(s.EST_AMT),
+                                          sum(s.TOTAL_VOLUMN_CAPA),
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                    from MBL_PRODUCT_TOBACCO s where ";
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
             sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
@@ -388,7 +463,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_CAR_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_CAR_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -486,7 +561,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct(t.i_type_desc), t.i_type_code from MBL_PRODUCT_DRINK_MONTH t where t.offcode = " + offcode + " order by t.i_type_code";
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_DRINK_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -580,6 +655,126 @@ namespace BILibraryBLL
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable getTypeNameOilMonth(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_OIL_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable getTypeNameSicaMonth(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select distinct(t.i_type_desc) from MBL_PRODUCT_TOBACCO_MONTH t where t.offcode = " + offcode + " order by t.i_type_desc";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable CompareTaxOilMonth(string TYPE_DESC, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_OIL_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable CompareTaxSicaMonth(string TYPE_DESC, string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            //string sql = @"select distinct(t.budget_month_desc),TRANS_Short_month(t.budget_month_desc) as month, t.* from MBL_PRODUCT_CAR_MONTH t where t.i_type_code='" + code + "' and t.offcode='" + offcode + "'  order by t.time_id";
+            string sql = @"SELECT TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC) AS MONTH,
+                               SUM(T.TOTAL_TAX_AMT) AS TOTAL_TAX_AMT,
+                               SUM(T.LAST_TOTAL_TAX_AMT) AS LAST_TOTAL_TAX_AMT,
+                               SUM(T.EST_AMT) AS EST_AMT,
+                               SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
+                               SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
+                               T.TIME_ID
+                          FROM MBL_PRODUCT_TOBACCO_MONTH T
+                          WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable CompareTaxSicaMonthAll(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
+                            ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
+                            ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
+                            ,t.time_id
+                            from MBL_PRODUCT_TOBACCO_MONTH t 
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable CompareTaxOilMonthAll(string offcode)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
+                            ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
+                            ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
+                            ,t.time_id
+                            from MBL_PRODUCT_OIL_MONTH t 
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

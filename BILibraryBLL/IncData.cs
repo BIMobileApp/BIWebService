@@ -87,9 +87,10 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = "select MONTH_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
-                   sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-                   sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " ORDER BY TIME_ID asc";
+            string sql = @"select TRANS_Short_month(MONTH_DESC) AS MONTH_DESC,SUM(NUM_OF_LIC_SURA) AS NUM_OF_LIC_SURA,SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO,SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD
+                            , SUM(AMT_OF_LIC_SURA) AS AMT_OF_LIC_SURA,
+                             SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO, SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD, TIME_ID  ";              
+                   sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " group by MONTH_DESC,TIME_ID ORDER BY TIME_ID asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
