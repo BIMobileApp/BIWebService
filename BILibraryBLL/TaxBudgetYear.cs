@@ -465,7 +465,7 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
 
-            string sql = @"select reg_name AS reg_name,SUM(TAX_NETTAX_AMT) AS tax,ROW_NUMBER() OVER (ORDER BY myrank ) AS sort 
+            /*string sql = @"select reg_name AS reg_name,SUM(TAX_NETTAX_AMT) AS tax,ROW_NUMBER() OVER (ORDER BY myrank ) AS sort 
                             from mbl_top_product_10 
                             where offcode = " + offcode + " and group_name = '" + group_id + "' ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
@@ -478,30 +478,69 @@ namespace BILibraryBLL
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             //sql += " AND BUDGET_YEAR = case when '" + year + "' = 'undefined' then BUDGET_YEAR else '" + year + "' end";
-            sql += @"  and myrank between '1' and '10'";
+            sql += @"  and myrank between '1' and '10'";*/
+
+            string sql = @"select * 
+                            from (select reg_name , rank() over(partition by group_name order by tax_nettax_amt desc)  as SORT  ,tax_nettax_amt AS TAX
+                            from 
+                            (select d.budget_year
+                                            ,c.group_name
+                                            ,b.reg_name
+                                            ,sum(a.tax_nettax_amt) tax_nettax_amt
+                                            ,substr(c.group_id, 1, 4) group_id          
+                                      from ic_sum_allday_cube a
+                                          ,ic_register_dim    b
+                                          ,ic_product_grp_dim c
+                                          ,ic_time_dim        d
+                                          ,ic_office_dim      e
+                                      where a.reg_sk = b.reg_sk
+                                            and d.budget_year  = 2561
+                                            and tax_nettax_amt > 0
+                                            and a.time_id = d.time_id
+                                            and a.product_grp_cd = c.group_id
+                                            and a.offcode_own = e.offcode
+                                            and c.group_name = case when '" + group_id + "'= 'undefined' then c.group_name else '" + group_id + "' end ";
+            sql += @"     and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            sql += @"     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
+            sql += @"     group by budget_year
+                                              ,c.group_name
+                                              ,b.reg_name
+                                              ,substr(c.group_id, 1, 4)))
+                                            where SORT <= nvl(" + 10 + ",SORT) union all";
+
+                        sql += @" 
+
+            select 'รวม' as reg_name, null, sum(TAX)
+              from (select reg_name,
+                           rank() over(partition by group_name order by tax_nettax_amt desc) as SORT,
+                           tax_nettax_amt AS TAX
+                      from (select d.budget_year,
+                                   c.group_name,
+                                   b.reg_name,
+                                   sum(a.tax_nettax_amt) tax_nettax_amt,
+                                   substr(c.group_id, 1, 4) group_id
+                              from ic_sum_allday_cube a,
+                                   ic_register_dim    b,
+                                   ic_product_grp_dim c,
+                                   ic_time_dim        d,
+                                   ic_office_dim      e
+                             where a.reg_sk = b.reg_sk
+                               and d.budget_year = 2561
+                               and tax_nettax_amt > 0
+                               and a.time_id = d.time_id
+                               and a.product_grp_cd = c.group_id
+                               and a.offcode_own = e.offcode 
+                               and c.group_name = case when '" + group_id + "'= 'undefined' then c.group_name else '" + group_id + "' end ";
+                        sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+                        sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
+                        sql += @"                group by budget_year,
+                                      c.group_name,
+                                      b.reg_name,
+                                      substr(c.group_id, 1, 4)))
+             where SORT <= nvl(10, SORT)
+             group by 'รวม'";
 
 
-            /*string sql = @"select
-                            r1.reg_id
-                           ,r1.reg_name
-                           , ROW_NUMBER() OVER (ORDER BY  r1.reg_id) as sort
-                           ,sum(a.tax_nettax_amt) as tax
-                           ,sum(a.last_tax_nettax_amt) as tax_ly
-                           ,sum(a.estimate) as estimate       
-                      from ic_sum_allday_cube a
-                           ,ic_product_grp_dim b
-                           ,ic_office_dim c
-                           ,ic_time_dim d
-                           ,ic_time_dim d2
-                           ,ic_register_dim r1
-                     where a.product_grp_cd = b.group_id
-                       and a.offcode_own = c.offcode
-                       and a.time_id = d.time_id
-                       and d.budget_year = d2.budget_year
-                       and d2.time_id = to_number(to_char(sysdate, 'YYYYMMDD'))
-                       and a.reg_sk = r1.reg_sk and rownum <=10
-                     group by  r1.reg_id,r1.reg_name
-                     order by  r1.reg_id";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -813,6 +852,39 @@ namespace BILibraryBLL
                                         sql += " group by OFFDESC ";
 
                                         sql += @" union all
+ 
+                            select 'รวม' ,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,100000 AS sort,
+                            case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
+                            round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
+                            from MBL_01_OFFICE_REPORT t
+                            WHERE  ";
+            sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " ) t order by sort";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable TaxOverallRegion(string region, string province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from  (select Region_Name,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,ROW_NUMBER() OVER (ORDER BY Region_Name) as sort,
+                            case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
+                            round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
+                            from MBL_01_OFFICE_REPORT 
+                            WHERE  ";
+            sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " group by Region_Name ";
+
+            sql += @" union all
  
                             select 'รวม' ,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,100000 AS sort,
                             case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
