@@ -21,16 +21,15 @@ namespace ClassLib
               + "(CONNECT_DATA=(SERVICE_NAME=XE)));"
               + "User Id=ed_target;Password=ed_target;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";*/
 
+            //string conn = "Data Source=(DESCRIPTION="
+            //   + "(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.41.101)(PORT=1521))"
+            //   + "(CONNECT_DATA=(SERVICE_NAME=EDBI)));"
+            //   + "User Id=ed_target;Password=oracle;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";
 
             string conn = "Data Source=(DESCRIPTION="
-               + "(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.41.101)(PORT=1521))"
+               + "(ADDRESS=(PROTOCOL=TCP)(HOST=10.10.100.16)(PORT=1521))"
                + "(CONNECT_DATA=(SERVICE_NAME=EDBI)));"
-               + "User Id=ed_target;Password=oracle;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";
-
-            //string conn = "Data Source=(DESCRIPTION="
-            //   + "(ADDRESS=(PROTOCOL=TCP)(HOST=10.10.100.16)(PORT=1521))"
-            //   + "(CONNECT_DATA=(SERVICE_NAME=EDBI)));"
-            //   + "User Id=ed_target;Password=ed_target;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";
+               + "User Id=ed_target;Password=ed_target;Provider=OraOLEDB.Oracle;OLEDB.NET=True;";
 
             /*string conn = "Data Source=(DESCRIPTION="
              + "(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.10.250)(PORT=1521))"

@@ -216,6 +216,7 @@
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getAreaProvinceTaxCurYearController.cs" />
+    <Compile Include="Controllers\getDatadateController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\getTypeNameBeerMonthController.cs" />
     <Compile Include="Controllers\getTypeNameCarMonthController.cs" />

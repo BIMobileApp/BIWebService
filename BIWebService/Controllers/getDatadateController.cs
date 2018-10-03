@@ -9,13 +9,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class TMP_USERController : ApiController
+    public class getDatadateController : ApiController
     {
-        TMP_USER dt = new TMP_USER();
+        TMP_USER date = new TMP_USER();
 
-        public IHttpActionResult Get(string username, string password)
+        public IHttpActionResult Get(string menu_cd)
         {
-            var jsonString = JsonConvert.SerializeObject(dt.getUSER(username,password));
+            var jsonString = JsonConvert.SerializeObject(date.getData_date(menu_cd));
             return new RawJsonActionResult(jsonString);
         }
     }
