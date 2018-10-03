@@ -218,6 +218,7 @@
     <Compile Include="IncDataMarket.cs" />
     <Compile Include="IncMasterData.cs" />
     <Compile Include="LawMasterData.cs" />
+    <Compile Include="MapColor.cs" />
     <Compile Include="MBLRegister.cs" />
     <Compile Include="GuageOverviewRegion.cs" />
     <Compile Include="LawReport.cs" />

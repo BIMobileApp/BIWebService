@@ -242,6 +242,8 @@
     <Compile Include="Controllers\LawProductByMthAllController.cs" />
     <Compile Include="Controllers\LawProductByMthController.cs" />
     <Compile Include="Controllers\LawProductController.cs" />
+    <Compile Include="Controllers\MapColorRegionController.cs" />
+    <Compile Include="Controllers\MapColorThailandController.cs" />
     <Compile Include="Controllers\MasterAreaController.cs" />
     <Compile Include="Controllers\MasterBranchController.cs" />
     <Compile Include="Controllers\MasterProvinceController.cs" />
