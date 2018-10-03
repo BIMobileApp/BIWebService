@@ -243,6 +243,8 @@
     <Compile Include="Controllers\LawProductByMthAllController.cs" />
     <Compile Include="Controllers\LawProductByMthController.cs" />
     <Compile Include="Controllers\LawProductController.cs" />
+    <Compile Include="Controllers\MapColorRegionController.cs" />
+    <Compile Include="Controllers\MapColorThailandController.cs" />
     <Compile Include="Controllers\MasterAreaController.cs" />
     <Compile Include="Controllers\MasterBranchController.cs" />
     <Compile Include="Controllers\MasterProvinceController.cs" />
@@ -339,6 +341,7 @@
     <Compile Include="Controllers\TaxRealtimeRegionController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TMP_USERController.cs" />
+    <Compile Include="Controllers\Top10ProfileController.cs" />
     <Compile Include="Controllers\TopRegSegmentController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WebServiceController.cs" />

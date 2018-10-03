@@ -1,4 +1,5 @@
 ﻿using BILibraryBLL;
+using ClassLib;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class TMP_USERController : ApiController
+    public class MapColorThailandController : ApiController
     {
-        TMP_USER dt = new TMP_USER();
-        public IHttpActionResult Get(string username)
+        MapColor map = new MapColor();
+
+        public IHttpActionResult Get(string budget_year)
         {
-            var jsonString = JsonConvert.SerializeObject(dt.getUSER(username));
+            var jsonString = JsonConvert.SerializeObject(map.MapColorThailand(budget_year));
             return new RawJsonActionResult(jsonString);
         }
     }

@@ -9,12 +9,13 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class TMP_USERController : ApiController
+    public class MapColorRegionController : ApiController
     {
-        TMP_USER dt = new TMP_USER();
-        public IHttpActionResult Get(string username)
+        MapColor map = new MapColor();
+
+        public IHttpActionResult Get(string budget_year, string region)
         {
-            var jsonString = JsonConvert.SerializeObject(dt.getUSER(username));
+            var jsonString = JsonConvert.SerializeObject(map.MapColorRegion(budget_year, region));
             return new RawJsonActionResult(jsonString);
         }
     }

@@ -13,7 +13,7 @@ namespace BILibraryBLL
     public class TMP_USER
     {
         Conn con = new Conn();
-        public DataTable getUSER(string username, string password)
+        public DataTable getUSER(string username)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -28,7 +28,7 @@ namespace BILibraryBLL
                                  ,get_last_data_date_mobile() as last_update_date
                            from TMP_USER_ROLE t 
                            where t.u_username = '" + username + "'";
-            sql += " and t.u_password = '" + password + "' and rownum <= 1";
+            sql += " and rownum <= 1";
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
