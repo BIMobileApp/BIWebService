@@ -458,7 +458,7 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
-        public DataTable Top10Profile(string offcode, string group_id, string region, string province)
+        public DataTable Top10Profile(string offcode, string group_id, string region, string province, string month_from, string month_to)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -497,8 +497,12 @@ namespace BILibraryBLL
                                             and tax_nettax_amt > 0
                                             and a.time_id = d.time_id
                                             and a.product_grp_cd = c.group_id
-                                            and a.offcode_own = e.offcode
-                                            and c.group_name = case when '" + group_id + "'= 'undefined' then c.group_name else '" + group_id + "' end ";
+                                            and a.offcode_own = e.offcode";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and d.BUDGET_MONTH_CD between '" + month_from + "' and '" + month_to + "'";
+            }
+            sql += @"     and c.group_name = case when '" + group_id + "' = 'undefined' then c.group_name else '" + group_id + "' end ";
             sql += @"     and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
             sql += @"     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
             sql += @"     group by budget_year
@@ -528,8 +532,12 @@ namespace BILibraryBLL
                                and tax_nettax_amt > 0
                                and a.time_id = d.time_id
                                and a.product_grp_cd = c.group_id
-                               and a.offcode_own = e.offcode 
-                               and c.group_name = case when '" + group_id + "'= 'undefined' then c.group_name else '" + group_id + "' end ";
+                               and a.offcode_own = e.offcode ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+              sql += " and d.BUDGET_MONTH_CD between '" + month_from + "' and '" + month_to + "'";
+            }
+            sql += "  and c.group_name = case when '" + group_id + "' = 'undefined' then c.group_name else '" + group_id + "' end ";
             sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
             sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
             sql += @"                group by budget_year,
