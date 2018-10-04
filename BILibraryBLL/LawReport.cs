@@ -18,15 +18,16 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             // string sql = @"select * from MBL_LAW_REPORT_1 t where t.offcode ='"+ offcode+ "' order by region_desc";
-            string sql = @"select * from (select REGION_DESC,SUM(LAW_QTY) AS LAW_QTY,SUM(TARGET_AMT) AS TARGET_AMT,SUM(LAW_AMT) AS LAW_AMT,SUM(TARGET_QTY) AS TARGET_QTY,
-ROW_NUMBER() OVER(ORDER BY REGION_DESC asc) as row_num
-,SUM(TREASURY_MONEY) AS TREASURY_MONEY 
-from MBL_LAW_REPORT_1 t where t.offcode = "+ offcode + " ";
-             sql += @" group by REGION_DESC
-union all 
-select 'รวม',SUM(LAW_QTY) AS LAW_QTY,SUM(TARGET_AMT) AS TARGET_AMT,SUM(LAW_AMT) AS LAW_AMT,SUM(TARGET_QTY) AS TARGET_QTY,100000 AS row_num
-,SUM(TREASURY_MONEY) AS TREASURY_MONEY 
-from MBL_LAW_REPORT_1 t where t.offcode = "+ offcode + ") t order by t.row_num";
+            string sql = @"select * from (select REGION_DESC,SUM(LAW_QTY) AS LAW_QTY,SUM(TARGET_AMT) AS LAW_AMT
+                        ,SUM(LAW_AMT) AS TARGET_QTY ,SUM(TARGET_QTY) AS TARGET_AMT,
+                        ROW_NUMBER() OVER(ORDER BY REGION_DESC asc) as row_num
+                        ,SUM(TREASURY_MONEY) AS TREASURY_MONEY 
+                        from MBL_LAW_REPORT_1 t where t.offcode = " + offcode + " ";
+                                     sql += @" group by REGION_DESC
+                        union all 
+                        select 'รวม',SUM(LAW_QTY) AS LAW_QTY,SUM(TARGET_AMT) AS LAW_AMT,SUM(LAW_AMT) AS TARGET_AMT,SUM(TARGET_QTY) AS TARGET_QTY,100000 AS row_num
+                        ,SUM(TREASURY_MONEY) AS TREASURY_MONEY 
+                        from MBL_LAW_REPORT_1 t where t.offcode = " + offcode + ") t order by t.row_num";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -194,8 +195,6 @@ where offcode = "+ offcode + " ) t  order by t.time_id, t.row_num";
             sql += " WHERE offcode = " + offcode + " ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-
-
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
