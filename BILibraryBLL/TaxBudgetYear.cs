@@ -824,7 +824,7 @@ namespace BILibraryBLL
             string sql = @"select * from ( select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
             if(month_from != "undefined" && month_to != "undefined") {
-                sql += " and to_char(month_cd)  between = '" + month_from + "' and '" + month_to + "'";
+                sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
             sql += " and myrank between 1 and 10"; 
             sql += " group by reg_name";
@@ -834,7 +834,7 @@ namespace BILibraryBLL
             sql += @" where offcode = " + offcode + " ";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and to_char(month_cd)  between = '" + month_from + "' and '" + month_to + "'";
+                sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
             //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
             sql += @" and myrank between '1' and '10' ) t

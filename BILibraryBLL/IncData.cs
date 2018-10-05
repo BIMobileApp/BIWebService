@@ -33,7 +33,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByArea(string offcode, string region, string province, string group_desc, string month) {
+        public DataTable IncProductByArea(string offcode, string region, string province, string group_desc, string month_from, string month_to) {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -43,7 +43,12 @@ namespace BILibraryBLL
             sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end   ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-            sql += " AND budget_month_desc = case when '" + month + "' = 'undefined' then budget_month_desc else '" + month + "' end";
+
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+
             sql += " GROUP BY TYPE_DESC ";
             sql += " ORDER BY TYPE_DESC )";
             sql += " union all select 'รวม',sum(LICENSE_AMT),sum(LICENSE_COUNT) from mbl_lic_data_2_1 ";
@@ -51,7 +56,12 @@ namespace BILibraryBLL
             sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end ";
             sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end" ;
-            sql += " AND budget_month_desc = case when '" + month + "' = 'undefined' then budget_month_desc else '" + month + "' end";
+
+            //sql += " AND budget_month_desc = case when '" + month + "' = 'undefined' then budget_month_desc else '" + month + "' end";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+            }
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -152,7 +162,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByMth(string offcode, string region, string province, string month, string group_name)
+        public DataTable IncProductByMth(string offcode, string region, string province, string month_from, string month_to, string group_name)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -161,7 +171,10 @@ namespace BILibraryBLL
             sql += " WHERE offcode = " + offcode + " ";
             sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end   ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND BUDGET_MONTH_DESC = case when '" + month + "' = 'undefined' then BUDGET_MONTH_DESC else '" + month + "' end";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+            }
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             //sql += " AND PROVINCE_NAME = nvl('" + province + "',PROVINCE_NAME) and REGION_NAME = nvl('" + region + "',REGION_NAME) AND BUDGET_MONTH_DESC = nvl('" + mth + "',BUDGET_MONTH_DESC)";
             sql += " GROUP BY TYPE_DESC order by TYPE_DESC)";
@@ -169,7 +182,10 @@ namespace BILibraryBLL
             sql += " select 'รวม', SUM(LICENSE_AMT) AS amt, SUM(LICENSE_COUNT) count from mbl_lic_data_2_1 WHERE offcode = " + offcode + "";
             sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end   ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND BUDGET_MONTH_DESC = case when '" + month + "' = 'undefined' then BUDGET_MONTH_DESC else '" + month + "' end";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+            }
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
           
 
