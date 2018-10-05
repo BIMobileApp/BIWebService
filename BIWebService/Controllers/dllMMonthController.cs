@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace BIWebService.Controllers
 {
-    public class dllMBudgetMonthController : ApiController
+    public class dllMMonthController : ApiController
     {
         DDLMaster sql = new DDLMaster();
         public IHttpActionResult Get()
