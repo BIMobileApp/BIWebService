@@ -239,8 +239,10 @@
     <Compile Include="Controllers\IncSumDataByMonthController.cs" />
     <Compile Include="Controllers\IncSumDataMarketListController.cs" />
     <Compile Include="Controllers\IncSumProductByMthController.cs" />
+    <Compile Include="Controllers\LawProductAllMonthController.cs" />
     <Compile Include="Controllers\LawProductAreaAllController.cs" />
     <Compile Include="Controllers\LawProductAreaController.cs" />
+    <Compile Include="Controllers\LawProductAreaMonthController.cs" />
     <Compile Include="Controllers\LawProductByAreaAllController.cs" />
     <Compile Include="Controllers\LawProductByAreaController.cs" />
     <Compile Include="Controllers\LawProductByMthAllController.cs" />
