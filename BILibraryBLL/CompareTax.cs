@@ -133,6 +133,51 @@ namespace BILibraryBLL
             return dt;
         }
 
+        public DataTable CompareTaxProduct(string area, string Province, string offcode, string month_from, string month_to, string dbtable)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @" select * from (select t.i_type_desc
+                        ,sum(t.total_tax_amt) as total_tax_amt
+                        ,sum(t.last_total_tax_amt) as last_total_tax_amt
+                        ,sum(t.est_amt) as est_amt 
+                        ,sum(t.total_volumn_capa) as total_volumn_capa
+                        ,sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                        from "+ dbtable + " t  where 1=1  ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and t.MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
+            sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
+            sql += " and t.province_name like case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
+            sql += @" group by t.i_type_desc 
+                        order by t.i_type_desc) union all select 
+                                         'รวม',
+                                          sum(s.TOTAL_TAX_AMT),
+                                          sum(s.LAST_TOTAL_TAX_AMT),
+                                          sum(s.EST_AMT),
+                                          sum(s.TOTAL_VOLUMN_CAPA),
+                                          sum(s.LAST_TOTAL_VOLUMN_CAPA)
+                                    from " + dbtable + " s where ";
+            sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and s.MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
+            sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
         public DataTable CompareTaxSuraMonth(string TYPE_DESC, string offcode)
         {
             DataTable dt = new DataTable();
@@ -570,8 +615,33 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
+        public DataTable CompareTaxVolProduct(string offcode, string region, string province, string month_from, string month_to, string dbtable)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-        
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.time_id, 
+                            sum(t.total_tax_amt) as total_tax_amt,
+                            sum(t.last_total_tax_amt) as last_total_tax_amt,
+                            sum(t.total_volumn_capa) as total_volumn_capa,
+                            sum(t.last_total_volumn_capa) as last_total_volumn_capa
+                            from "+ dbtable + " t where t.offcode='" + offcode + "' ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and t.MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
         public DataTable CompareTaxVolSura(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();

@@ -43,6 +43,87 @@ namespace BILibraryBLL
             return dt;
         }
 
+        
+        public DataTable Top10Profile(string offcode, string group_id, string region, string province, string month_from, string month_to)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * 
+                            from (select reg_name , rank() over(partition by group_name order by tax_nettax_amt desc)  as SORT  ,tax_nettax_amt AS TAX
+                            from 
+                            (select d.budget_year
+                                            ,c.group_name
+                                            ,b.reg_name
+                                            ,sum(a.tax_nettax_amt) tax_nettax_amt
+                                            ,substr(c.group_id, 1, 4) group_id          
+                                      from ic_sum_allday_cube a
+                                          ,ic_register_dim    b
+                                          ,ic_product_grp_dim c
+                                          ,ic_time_dim        d
+                                          ,ic_office_dim      e
+                                      where a.reg_sk = b.reg_sk
+                                            and d.budget_year  = 2562
+                                            and tax_nettax_amt > 0
+                                            and a.time_id = d.time_id
+                                            and a.product_grp_cd = c.group_id
+                                            and a.offcode_own = e.offcode";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and d.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += @"     and c.group_name = case when '" + group_id + "' = 'undefined' then c.group_name else '" + group_id + "' end ";
+            sql += @"     and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            sql += @"     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
+            sql += @"     group by budget_year
+                                              ,c.group_name
+                                              ,b.reg_name
+                                              ,substr(c.group_id, 1, 4)))
+                                            where SORT <= nvl(" + 10 + ",SORT) union all";
+
+            sql += @" 
+
+            select 'รวม' as reg_name, null, sum(TAX)
+              from (select reg_name,
+                           rank() over(partition by group_name order by tax_nettax_amt desc) as SORT,
+                           tax_nettax_amt AS TAX
+                      from (select d.budget_year,
+                                   c.group_name,
+                                   b.reg_name,
+                                   sum(a.tax_nettax_amt) tax_nettax_amt,
+                                   substr(c.group_id, 1, 4) group_id
+                              from ic_sum_allday_cube a,
+                                   ic_register_dim    b,
+                                   ic_product_grp_dim c,
+                                   ic_time_dim        d,
+                                   ic_office_dim      e
+                             where a.reg_sk = b.reg_sk
+                               and d.budget_year = 2562
+                               and tax_nettax_amt > 0
+                               and a.time_id = d.time_id
+                               and a.product_grp_cd = c.group_id
+                               and a.offcode_own = e.offcode ";
+             if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and d.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += @"     and c.group_name = case when '" + group_id + "' = 'undefined' then c.group_name else '" + group_id + "' end ";
+            sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
+            sql += @"                group by budget_year,
+                                      c.group_name,
+                                      b.reg_name,
+                                      substr(c.group_id, 1, 4)))
+             where SORT <= nvl(10, SORT)
+             group by 'รวม'";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
         public DataTable TaxCurYearAll(string offcode)
         {
             DataTable dt = new DataTable();
