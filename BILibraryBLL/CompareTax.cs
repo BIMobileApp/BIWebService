@@ -147,7 +147,7 @@ namespace BILibraryBLL
                         from "+ dbtable + " t  where 1=1  ";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and t.MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and t.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " and t.offcode like case when '" + offcode + "' = 'undefined' then t.offcode else '" + offcode + "' end ";
             sql += " and t.Region_Name like case when '" + area + "' = 'undefined' then t.Region_Name else '" + area + "' end ";
@@ -164,7 +164,7 @@ namespace BILibraryBLL
             sql += " s.offcode like case when '" + offcode + "' = 'undefined' then s.offcode else '" + offcode + "' end";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and s.MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and s.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " and s.Region_Name like case when '" + area + "' = 'undefined' then s.Region_Name else '" + area + "' end ";
             sql += " and s.province_name like case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
@@ -191,10 +191,10 @@ namespace BILibraryBLL
                                SUM(T.EST_AMT) AS EST_AMT,
                                SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
                                SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
-                               T.TIME_ID
+                               T.BUDGET_MONTH_CD
                           FROM MBL_PRODUCT_SURA_MONTH T
                           WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
-                  sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+                  sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.BUDGET_MONTH_CD ORDER BY T.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -212,9 +212,9 @@ namespace BILibraryBLL
             string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
                             ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
                             ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
-                            ,t.time_id
+                            ,t.BUDGET_MONTH_CD
                             from MBL_PRODUCT_SURA_MONTH t 
-                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.BUDGET_MONTH_CD order by t.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -299,10 +299,10 @@ namespace BILibraryBLL
                                SUM(T.EST_AMT) AS EST_AMT,
                                SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
                                SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
-                               T.TIME_ID
+                               T.BUDGET_MONTH_CD
                           FROM MBL_PRODUCT_BEER_MONTH T
                           WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
-            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.BUDGET_MONTH_CD ORDER BY T.BUDGET_MONTH_CD";
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -319,9 +319,9 @@ namespace BILibraryBLL
             string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
                             ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
                             ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
-                            ,t.time_id
+                            ,t.BUDGET_MONTH_CD
                             from MBL_PRODUCT_BEER_MONTH t 
-                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.BUDGET_MONTH_CD order by t.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -470,10 +470,10 @@ namespace BILibraryBLL
                                SUM(T.EST_AMT) AS EST_AMT,
                                SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
                                SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
-                               T.TIME_ID
+                               T.BUDGET_MONTH_CD
                           FROM MBL_PRODUCT_CAR_MONTH T
                           WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
-            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.BUDGET_MONTH_CD ORDER BY T.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -491,9 +491,9 @@ namespace BILibraryBLL
             string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
                             ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
                             ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
-                            ,t.time_id
+                            ,t.BUDGET_MONTH_CD
                             from MBL_PRODUCT_CAR_MONTH t 
-                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.BUDGET_MONTH_CD order by t.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -568,10 +568,10 @@ namespace BILibraryBLL
                                SUM(T.EST_AMT) AS EST_AMT,
                                SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
                                SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
-                               T.TIME_ID
+                               T.BUDGET_MONTH_CD
                           FROM MBL_PRODUCT_DRINK_MONTH T
                           WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
-            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.BUDGET_MONTH_CD ORDER BY T.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -589,9 +589,9 @@ namespace BILibraryBLL
             string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
                             ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
                             ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
-                            ,t.time_id
+                            ,t.BUDGET_MONTH_CD
                             from MBL_PRODUCT_DRINK_MONTH t 
-                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.BUDGET_MONTH_CD order by t.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -620,19 +620,31 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.time_id, 
-                            sum(t.total_tax_amt) as total_tax_amt,
-                            sum(t.last_total_tax_amt) as last_total_tax_amt,
-                            sum(t.total_volumn_capa) as total_volumn_capa,
-                            sum(t.last_total_volumn_capa) as last_total_volumn_capa
-                            from "+ dbtable + " t where t.offcode='" + offcode + "' ";
+            string sql = @"select TRANS_Short_month(t.budget_month_desc) as month,t.budget_month_cd, ";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and t.MONTH_CD between " + month_from + " and " + month_to + "";
+                   sql += " sum(case when t.budget_month_cd  between "+ month_from + " and "+ month_to + " then t.total_tax_amt else 0 end) as total_tax_amt, ";
             }
-            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-            sql += " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+            else
+            {
+                   sql += " sum(t.total_tax_amt) as total_tax_amt, ";
+            }
+
+            sql += @" sum(t.last_total_tax_amt) as last_total_tax_amt, ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                   sql += " sum(case when t.budget_month_cd  between " + month_from + " and " + month_to + " then t.total_volumn_capa else 0 end) as total_volumn_capa, ";
+            }
+            else
+            {
+                   sql += "  sum(t.total_volumn_capa) as total_volumn_capa, ";
+            }
+                   sql += "  sum(t.last_total_volumn_capa) as last_total_volumn_capa ";
+                   sql += @" from " + dbtable + " t where t.offcode='" + offcode + "' ";
+                   sql += " and t.budget_month_cd between 1 and 12";
+                   sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+                   sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                   sql += " group by TRANS_Short_month(t.budget_month_desc),t.budget_month_cd order by t.budget_month_cd";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -776,10 +788,10 @@ namespace BILibraryBLL
                                SUM(T.EST_AMT) AS EST_AMT,
                                SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
                                SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
-                               T.TIME_ID
+                               T.BUDGET_MONTH_CD
                           FROM MBL_PRODUCT_OIL_MONTH T
                           WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
-            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.BUDGET_MONTH_CD ORDER BY T.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -801,10 +813,10 @@ namespace BILibraryBLL
                                SUM(T.EST_AMT) AS EST_AMT,
                                SUM(T.TOTAL_VOLUMN_CAPA) AS TOTAL_VOLUMN_CAPA,
                                SUM(T.LAST_TOTAL_VOLUMN_CAPA) AS LAST_TOTAL_VOLUMN_CAPA,
-                               T.TIME_ID
+                               T.BUDGET_MONTH_CD
                           FROM MBL_PRODUCT_TOBACCO_MONTH T
                           WHERE T.I_TYPE_DESC = '" + TYPE_DESC + "' AND T.OFFCODE = '" + offcode + "'";
-            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.TIME_ID ORDER BY T.TIME_ID";
+            sql += " GROUP BY TRANS_SHORT_MONTH(T.BUDGET_MONTH_DESC), T.BUDGET_MONTH_CD ORDER BY T.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -822,9 +834,9 @@ namespace BILibraryBLL
             string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
                             ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
                             ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
-                            ,t.time_id
+                            ,t.BUDGET_MONTH_CD
                             from MBL_PRODUCT_TOBACCO_MONTH t 
-                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.BUDGET_MONTH_CD order by t.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -842,9 +854,9 @@ namespace BILibraryBLL
             string sql = @"select TRANS_Short_month(t.budget_month_desc) as month
                             ,sum(t.total_tax_amt) as TOTAL_TAX_AMT
                             ,sum(t.last_total_tax_amt) as LAST_TOTAL_TAX_AMT
-                            ,t.time_id
+                            ,t.BUDGET_MONTH_CD
                             from MBL_PRODUCT_OIL_MONTH t 
-                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.time_id order by t.time_id";
+                            where t.offcode = " + offcode + " group by TRANS_Short_month(t.budget_month_desc),t.BUDGET_MONTH_CD order by t.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

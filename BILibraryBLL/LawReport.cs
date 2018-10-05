@@ -204,6 +204,48 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
+        public DataTable LawProductAllMonth(string offcode, string region, string province, string month_from, string month_to)
+        {
+
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select GROUP_DESC, 
+                                   SUM(LAW_QTY) AS TARGET_AMT, 
+                                   SUM(TARGET_QTY) AS TARGET_QTY,
+                                   SUM(LAW_AMT) AS LAW_AMT,
+                                   SUM(TARGET_AMT) AS LAW_QTY,
+                                   SUM(TREASURY_MONEY) AS TREASURY_MONEY 
+                            from MBL_LAW_REPORT_2_1 
+                            WHERE offcode = " + offcode + "";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += @"          AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += @"          AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += @"   group by GROUP_DESC
+                            union all select 'รวม', 
+                                   SUM(LAW_QTY) AS TARGET_AMT, 
+                                   SUM(TARGET_QTY) AS TARGET_QTY,
+                                   SUM(LAW_AMT) AS LAW_AMT,
+                                   SUM(TARGET_AMT) AS LAW_QTY,
+                                   SUM(TREASURY_MONEY) AS TREASURY_MONEY
+                            from MBL_LAW_REPORT_2_1  WHERE offcode = " + offcode + "";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += @"          AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += @"          AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
 
         public DataTable LawProductArea(string offcode, string region, string province) {
             DataTable dt = new DataTable();
@@ -217,6 +259,39 @@ namespace BILibraryBLL
             sql += @" union all select 'รวม', SUM(LAW_QTY) AS TARGET_AMT, SUM(TARGET_QTY) AS TARGET_QTY,SUM(LAW_AMT) AS LAW_AMT
                         , SUM(TARGET_AMT) AS LAW_QTY, SUM(TREASURY_MONEY) AS TREASURY_MONEY from MBL_LAW_REPORT_1_1";
             sql += " WHERE offcode = " + offcode + " ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable LawProductAreaMonth(string offcode, string region, string province, string month_from, string month_to)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select GROUP_DESC, SUM(LAW_QTY) AS TARGET_AMT, SUM(TARGET_QTY) AS TARGET_QTY,SUM(LAW_AMT) AS LAW_AMT
+                        , SUM(TARGET_AMT) AS LAW_QTY,SUM(TREASURY_MONEY) AS TREASURY_MONEY from MBL_LAW_REPORT_1_1 ";
+            sql += " WHERE offcode = " + offcode + " ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end group by GROUP_DESC";
+            sql += @" union all select 'รวม', SUM(LAW_QTY) AS TARGET_AMT, SUM(TARGET_QTY) AS TARGET_QTY,SUM(LAW_AMT) AS LAW_AMT
+                        , SUM(TARGET_AMT) AS LAW_QTY, SUM(TREASURY_MONEY) AS TREASURY_MONEY from MBL_LAW_REPORT_1_1";
+            sql += " WHERE offcode = " + offcode + " ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
 

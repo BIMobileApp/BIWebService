@@ -110,7 +110,7 @@ namespace BILibraryBLL
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-            string sql = @"SELECT DISTINCT(T.MONTH_CD), T.MONTH_DESC,T.BUDGET_MONTH_CD AS SORT FROM IC_TIME_DIM T ORDER BY T.BUDGET_MONTH_CD";
+            string sql = @"SELECT DISTINCT(T.MONTH_CD), T.MONTH_DESC,T.BUDGET_MONTH_CD FROM IC_TIME_DIM T ORDER BY T.BUDGET_MONTH_CD";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
