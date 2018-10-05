@@ -212,7 +212,7 @@
     <Compile Include="Controllers\ddlMProvinceController.cs" />
     <Compile Include="Controllers\ddlMRegionController.cs" />
     <Compile Include="Controllers\DimansionTime03Controller.cs" />
-    <Compile Include="Controllers\dllMBudgetMonthController.cs" />
+    <Compile Include="Controllers\dllMMonthController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeAllController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeController.cs" />
     <Compile Include="Controllers\FollowTaxController.cs" />

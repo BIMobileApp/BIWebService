@@ -14,7 +14,7 @@ namespace BIWebService.Controllers
         DDLMaster sql = new DDLMaster();
         public IHttpActionResult Get()
         {
-            var jsonString = JsonConvert.SerializeObject(sql.MBudgetMonth());
+            var jsonString = JsonConvert.SerializeObject(sql.MMonth());
             return new RawJsonActionResult(jsonString);
         }
     }
