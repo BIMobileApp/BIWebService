@@ -103,8 +103,21 @@ namespace BILibraryBLL
             adapter.Fill(dt);
             thisConnection.Close();
             return dt;
-        } 
-      
+        }
 
+        
+        public DataTable MBudgetMonth()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+            string sql = @"SELECT DISTINCT(T.BUDGET_MONTH_CD), T.BUDGET_MONTH_DESC FROM IC_TIME_DIM T ORDER BY T.BUDGET_MONTH_CD";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
     }
 }

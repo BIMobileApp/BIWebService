@@ -13,10 +13,10 @@ namespace BIWebService.Controllers
     {
         TMP_USER date = new TMP_USER();
 
-        public IHttpActionResult Get(string menu_cd)
-        {
-            var jsonString = JsonConvert.SerializeObject(date.getData_date(menu_cd));
-            return new RawJsonActionResult(jsonString);
-        }
+        //public IHttpActionResult Get(string menu_cd)
+        //{
+        //    var jsonString = JsonConvert.SerializeObject(date.getData_date(menu_cd));
+        //    return new RawJsonActionResult(jsonString);
+        //}
     }
 }
