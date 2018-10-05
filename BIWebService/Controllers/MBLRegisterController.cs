@@ -19,9 +19,9 @@ namespace BIWebService.Controllers
         }
 
         // GET: api/MBLRegister/5
-        public IHttpActionResult Get(string offcode,string region,string province)
+        public IHttpActionResult Get(string offcode,string region,string province, string month_from, string month_to)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxRegisterByOffcode(offcode, region, province));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxRegisterByOffcode(offcode, region, province, month_from, month_to));
             return new RawJsonActionResult(jsonString);
         }
 

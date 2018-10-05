@@ -816,29 +816,29 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegByMth(string offcode, string month)
+        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select * from ( select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
-            if(month != "undefined") {
-                sql += " and to_char(month_cd) = '" + month + "'";
+            if(month_from != "undefined" && month_to != "undefined") {
+                sql += " and to_char(month_cd)  between = '" + month_from + "' and '" + month_to + "'";
             }
-            sql += " and myrank between 1 and 10";
+            sql += " and myrank between 1 and 10"; 
             sql += " group by reg_name";
             //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
 
             sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT),null  from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
-            if (month != "undefined")
+            if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and to_char(month_cd) = '" + month + "'";
+                sql += " and to_char(month_cd)  between = '" + month_from + "' and '" + month_to + "'";
             }
             //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
             sql += @" and myrank between '1' and '10' ) t
-   order by t.sort";
+                      order by t.sort";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

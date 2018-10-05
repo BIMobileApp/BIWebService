@@ -12,32 +12,13 @@ namespace BIWebService.Controllers
     public class TaxBudgetRegByMthController : ApiController
     {
         TaxBudgetYear tax = new TaxBudgetYear();
-        // GET: api/TaxBudgetRegByMth
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
+ 
         // GET: api/TaxBudgetRegByMth/5
-        public IHttpActionResult Get(string offcode, string month)
+        public IHttpActionResult Get(string offcode, string month_from, string month_to)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetRegByMth(offcode, month));
+            var jsonString = JsonConvert.SerializeObject(tax.TaxBudgetRegByMth(offcode, month_from, month_to));
             return new RawJsonActionResult(jsonString);
         }
 
-        // POST: api/TaxBudgetRegByMth
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/TaxBudgetRegByMth/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/TaxBudgetRegByMth/5
-        public void Delete(int id)
-        {
-        }
     }
 }
