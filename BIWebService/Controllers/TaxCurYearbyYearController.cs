@@ -12,7 +12,7 @@ namespace BIWebService.Controllers
     public class TaxCurYearbyYearController : ApiController
     {
         TaxBudgetYear tax = new TaxBudgetYear();
-        
+
         public IHttpActionResult Get(string offcode, string year)
         {
             var jsonString = JsonConvert.SerializeObject(tax.TaxCurYearbyYear(offcode, year));

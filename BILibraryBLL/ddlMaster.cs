@@ -22,16 +22,13 @@ namespace BILibraryBLL
                              from ic_office_dim 
                              where region_cd != 000000
                              group by  region_cd ,region_name_mobile order by region_cd";
-            }
-            else
-            {
+            }else {
 
                 sql = @"select  region_cd ,region_name_mobile AS region_name
                              from ic_office_dim
                              where offcode ='" + offcode + "' and region_cd != 000000" +
-                               "group by  region_cd ,region_name_mobile order by region_cd";
+                               "group by  region_cd ,region_name_mobile order by region_cd"; 
             }
-            
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 
             thisConnection.Open();

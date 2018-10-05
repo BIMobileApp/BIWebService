@@ -196,6 +196,7 @@
     <Compile Include="Controllers\CompareTaxDrinkMonthController.cs" />
     <Compile Include="Controllers\CompareTaxOilController.cs" />
     <Compile Include="Controllers\CompareTaxOilMonthController.cs" />
+    <Compile Include="Controllers\CompareTaxProductController.cs" />
     <Compile Include="Controllers\CompareTaxSicaController.cs" />
     <Compile Include="Controllers\CompareTaxSicaMonthController.cs" />
     <Compile Include="Controllers\CompareTaxSuraController.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Controllers\CompareTaxVolBeerController.cs" />
     <Compile Include="Controllers\CompareTaxVolCarController.cs" />
     <Compile Include="Controllers\CompareTaxVolDrinkController.cs" />
+    <Compile Include="Controllers\CompareTaxVolProductController.cs" />
     <Compile Include="Controllers\CompareTaxVolSuraController.cs" />
     <Compile Include="Controllers\DataStatusController.cs" />
     <Compile Include="Controllers\ddlMBranchController.cs" />
@@ -216,7 +218,6 @@
     <Compile Include="Controllers\GaugeMthSectionTaxController.cs" />
     <Compile Include="Controllers\GaugeOverviewRegionController.cs" />
     <Compile Include="Controllers\getAreaProvinceTaxCurYearController.cs" />
-    <Compile Include="Controllers\getDatadateController.cs" />
     <Compile Include="Controllers\getProductController.cs" />
     <Compile Include="Controllers\getTypeNameBeerMonthController.cs" />
     <Compile Include="Controllers\getTypeNameCarMonthController.cs" />

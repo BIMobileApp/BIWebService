@@ -31,24 +31,7 @@ namespace BILibraryBLL
             sql += " and rownum <= 1";
 
 
-            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
-            thisConnection.Open();
-            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
-            adapter.Fill(dt);
-            thisConnection.Close();
-            return dt;
-        }
 
-        public DataTable getData_date(string menu_cd)
-        {
-            DataTable dt = new DataTable();
-            OleDbConnection thisConnection = new OleDbConnection(con.connection());
-
-            string sql = @"select get_MBL_data_date(t.TIME_ID) as TIME_ID,
-                                   t.MENU_CD as MENU_CD,
-                                   t.MENU_DESC as MENU_DESC,
-                                   t.budgetyear as budgetyear
-                            from MBL_DATA_DATE t where t.MENU_CD = '"+ menu_cd +"' ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -87,7 +70,7 @@ namespace BILibraryBLL
 
             return dt;
         }*/
-
+        
         public string AuthenticateUser(string username, string password)
         {
             string resvalue = "";
