@@ -24,7 +24,7 @@ namespace BILibraryBLL
             sql += " and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " group by GROUP_DESC,sort order by sort )";
 
@@ -35,7 +35,7 @@ namespace BILibraryBLL
             sql += " and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
             // sql += @"order by offdesc asc";

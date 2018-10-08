@@ -46,7 +46,7 @@ namespace BILibraryBLL
 
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
 
             sql += " GROUP BY TYPE_DESC ";
@@ -60,7 +60,7 @@ namespace BILibraryBLL
             //sql += " AND budget_month_desc = case when '" + month + "' = 'undefined' then budget_month_desc else '" + month + "' end";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -173,7 +173,7 @@ namespace BILibraryBLL
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             //sql += " AND PROVINCE_NAME = nvl('" + province + "',PROVINCE_NAME) and REGION_NAME = nvl('" + region + "',REGION_NAME) AND BUDGET_MONTH_DESC = nvl('" + mth + "',BUDGET_MONTH_DESC)";
@@ -184,7 +184,7 @@ namespace BILibraryBLL
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and MONTH_CD between " + month_from + " and " + month_to + "";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
           
