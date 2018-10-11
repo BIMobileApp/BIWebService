@@ -292,20 +292,20 @@ namespace BILibraryBLL
             String sql = @"select * from (select TRANS_Short_month(t.budget_month_desc) as budget_month_desc,t.time_id,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
                              case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                                       round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
-                                      else -100 end as PERCENT_TAX
-                              from MBL_TAX_MONTH t where t.offcode = '" + offcode + "'";
+                                      else 0 end as PERCENT_TAX
+                              from MBL_TAX_MONTH_MON t where t.offcode = '" + offcode + "'";
             sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end   ";
             sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
             sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
                             union all
                             select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
                                    case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
-                                   else -100 end as percent_tax 
-                            from MBL_TAX_MONTH s where s.offcode = '" + offcode + "'";
+                                   else 0 end as percent_tax 
+                            from MBL_TAX_MONTH_MON s where s.offcode = '" + offcode + "'";
             sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end   ";
             sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
 
-
+            //MBL_TAX_MONTH_MON
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -322,13 +322,13 @@ namespace BILibraryBLL
             String sql = @"select * from (select TRANS_Short_month(t.budget_month_desc) as budget_month_desc,t.time_id,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
                              case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                                       round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
-                                      else -100 end as PERCENT_TAX
+                                      else 0 end as PERCENT_TAX
                               from MBL_TAX_MONTH t where t.offcode = " + offcode+"";
                    sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
                              union all
                               select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
                                    case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
-                                   else -100 end as percent_tax 
+                                   else 0 end as percent_tax 
                             from MBL_TAX_MONTH s where s.offcode = " + offcode + "";
 
 
@@ -364,7 +364,7 @@ namespace BILibraryBLL
                            select t.group_name,t.sort, sum(t.tax) as TAX, sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
                                   case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                                   round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
-                                  else -100 end as PERCENT_TAX
+                                  else 0 end as PERCENT_TAX
                           from MBL_TAX_GOODS t where t.offcode = " + offcode + "";
             sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end ";
             sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
@@ -372,7 +372,7 @@ namespace BILibraryBLL
                      union all
                      select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
                             case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
-                            else -100 end as percent_tax 
+                            else 0 end as percent_tax 
                      from MBL_TAX_GOODS s where s.offcode =  " + offcode + "";
             sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end  ";
             sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
@@ -421,7 +421,7 @@ namespace BILibraryBLL
 
             string sql = @" select * from (select t.group_name,t.sort,sum(t.tax) as TAX,sum(t.last_tax) as LAST_TAX,sum(t.estimate) as ESTIMATE,
                            case when sum(t.tax) > 0 and sum(t.estimate) > 0 then round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
-                           sum(t.estimate),2) else -100 end as PERCENT_TAX
+                           sum(t.estimate),2) else 0 end as PERCENT_TAX
                            from MBL_TAX_GOODS t where t.offcode = " + offcode + " group by t.group_name, t.sort order by t.sort)";
                    sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from MBL_TAX_GOODS s where s.offcode = "+offcode+"";
 
@@ -486,7 +486,7 @@ namespace BILibraryBLL
                                    case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                                       round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
                                             sum(t.estimate),2)
-                                     else -100
+                                     else 0
                                    end as PERCENT_TAX
                               from MBL_TAX_MONTH t
                              where t.region_name = '" + area + "' and t.offcode = " + offcode + "";
@@ -497,7 +497,7 @@ namespace BILibraryBLL
                                          when sum(s.tax) > 0 and sum(s.estimate) > 0 then
                                           round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) /
                                                 sum(s.estimate),2)
-                                         else -100 end as PERCENT_TAX
+                                         else 0 end as PERCENT_TAX
                                   from MBL_TAX_MONTH s where s.region_name = '" + area + "' and s.offcode= " + offcode + "";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
@@ -927,9 +927,9 @@ namespace BILibraryBLL
                             case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
                             round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
                             from MBL_01_OFFICE_REPORT 
-                            WHERE  ";
-                                        sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-                                        sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+                            WHERE REGION_NAME = '" + region + "' AND PROVINCE_NAME = '" + province + "'";
+                                        //sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                                        //sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
                                         sql += " group by OFFDESC ";
 
                                         sql += @" union all
@@ -938,9 +938,9 @@ namespace BILibraryBLL
                             case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
                             round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
                             from MBL_01_OFFICE_REPORT t
-                            WHERE  ";
-            sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+                            WHERE REGION_NAME = '" + region + "' AND PROVINCE_NAME = '" + province + "' ";
+            //sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            //sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " ) t order by sort";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
@@ -983,5 +983,6 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
+
     }
 }

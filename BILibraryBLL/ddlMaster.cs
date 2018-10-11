@@ -73,6 +73,21 @@ namespace BILibraryBLL
         }
 
 
+        public DataTable ddlBranch(string area, string province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = "select province_name, offdesc from ic_office_dim WHERE region_name = '"+area+ "' and province_name = '" + province + "'";
+            
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
         public DataTable MBrach(string offcode, string area)
         {
             DataTable dt = new DataTable();

@@ -28,5 +28,7 @@ namespace BIWebService.Controllers
             var jsonString = JsonConvert.SerializeObject(tax.TaxCurYearOverviewAll(offcode));
             return new RawJsonActionResult(jsonString);
         }
+
+
     }
 }

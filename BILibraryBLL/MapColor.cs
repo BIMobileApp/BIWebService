@@ -16,10 +16,10 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select region_name,MAP_COLOR,SUM(tax) AS tax,SUM(estimate) AS estimate,SUM(last_tax) AS last_tax
+            string sql = @"select region_name,region_name_en,MAP_COLOR,SUM(tax) AS tax,SUM(estimate) AS estimate,SUM(last_tax) AS last_tax
                             ,SUM(PERCENT_TAX) AS PERCENT_TAX
-                            from m_rep01_map_thailand
-                            WHERE budget_year = '"+ budget_year + "' GROUP BY region_name,MAP_COLOR order by region_name";
+                            from vw_mbl_map
+                            WHERE budget_year = '" + budget_year + "' and dept_flag  = 0 GROUP BY region_name,MAP_COLOR,region_name_en order by region_name";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -34,9 +34,9 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select BUDGET_YEAR,REGION_NAME,PROVINCE_NAME,TAX,ESTIMATE,LAST_TAX,PERCENT_TAX,MAP_COLOR,DEPT_FLAG,AREA_FLAG 
-                            from M_REP01_MAP_REG t 
-                            where area_flag = '"+ region + "' and budget_year = '"+ budget_year + "'";
+            string sql = @"select BUDGET_YEAR,REGION_NAME,PROVINCE_NAME,TAX,ESTIMATE,LAST_TAX,PERCENT_TAX,MAP_COLOR,DEPT_FLAG,AREA_FLAG ,PROVINCE_NAME_EN
+                            from vw_mbl_region t 
+                            where area_flag = '" + region + "' and budget_year = '"+ budget_year + "'";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

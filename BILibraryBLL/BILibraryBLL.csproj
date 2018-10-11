@@ -242,6 +242,7 @@
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="SourceImcome.cs" />
+    <Compile Include="TaxBranch.cs" />
     <Compile Include="TaxBudgetYear.cs" />
     <Compile Include="TaxDaily.cs" />
     <Compile Include="TaxProduct.cs" />

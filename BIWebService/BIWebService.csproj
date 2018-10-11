@@ -208,6 +208,8 @@
     <Compile Include="Controllers\CompareTaxVolProductController.cs" />
     <Compile Include="Controllers\CompareTaxVolSuraController.cs" />
     <Compile Include="Controllers\DataStatusController.cs" />
+    <Compile Include="Controllers\DateTitleController.cs" />
+    <Compile Include="Controllers\ddlBranchController.cs" />
     <Compile Include="Controllers\ddlMBranchController.cs" />
     <Compile Include="Controllers\ddlMProvinceController.cs" />
     <Compile Include="Controllers\ddlMRegionController.cs" />
@@ -312,12 +314,15 @@
     <Compile Include="Controllers\SumIncomeListController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegController.cs" />
+    <Compile Include="Controllers\TaxBranchController.cs" />
     <Compile Include="Controllers\TaxBudgetProductController.cs" />
     <Compile Include="Controllers\TaxBudgetRegAllController.cs" />
     <Compile Include="Controllers\TaxBudgetRegByMthAllController.cs" />
     <Compile Include="Controllers\TaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\TaxBudgetRegController.cs" />
     <Compile Include="Controllers\TaxBudgetYearController.cs" />
+    <Compile Include="Controllers\TaxCurMonthOfBranchController.cs" />
+    <Compile Include="Controllers\TaxCurProductOfBranchController.cs" />
     <Compile Include="Controllers\TaxCurYearbyYearController.cs" />
     <Compile Include="Controllers\TaxCurYearController.cs" />
     <Compile Include="Controllers\TaxOverallBranchController.cs" />
