@@ -19,8 +19,8 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
            string sql = "select * from(select REGION_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
-                   sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-                   sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ";
+                  sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
+                  sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ";
                     if (month_from != "undefined" && month_to != "undefined")
                     {
                         sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";

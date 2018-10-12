@@ -826,6 +826,8 @@ namespace BILibraryBLL
             if(month_from != "undefined" && month_to != "undefined") {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
+            sql += " and region_name like case when '" + Region + "' = 'undefined' then region_name else '" + Region + "' end";
+            sql += " and province_name like case when '" + Province + "' = 'undefined' then province_name else '" + Province + "' end";
             sql += " and myrank between 1 and 10"; 
             sql += " group by reg_name";          
             sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT),null  from mbl_top10_register_mth ";
