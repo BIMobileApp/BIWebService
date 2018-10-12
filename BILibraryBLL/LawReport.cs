@@ -12,7 +12,7 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable LawReportArea(string offcode)
+        public DataTable LawReportArea(string offcode,string month_from, string month_to)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -25,8 +25,12 @@ namespace BILibraryBLL
                                SUM(TARGET_QTY) AS LAW_AMT,
                                ROW_NUMBER() OVER(ORDER BY REGION_DESC asc) as row_num,
                                SUM(TREASURY_MONEY) AS TREASURY_MONEY 
-                           from MBL_LAW_REPORT_1 t where t.offcode = " + offcode + "";
-                 sql += @" group by REGION_DESC
+                           from MBL_LAW_REPORT_1  where offcode = " + offcode + "";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += @" group by REGION_DESC
                            union all 
                            select 'รวม', 
                                 SUM(LAW_QTY) AS LAW_QTY,
@@ -34,7 +38,12 @@ namespace BILibraryBLL
                                 SUM(LAW_AMT) AS TARGET_AMT ,
                                 SUM(TARGET_QTY) AS LAW_AMT,100000 AS row_num,
                                 SUM(TREASURY_MONEY) AS TREASURY_MONEY 
-                           from MBL_LAW_REPORT_1 t where t.offcode = "+ offcode +") t order by t.row_num";
+                           from MBL_LAW_REPORT_1  where offcode = " + offcode + " ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + ") t";
+            }
+            sql += " order by t.row_num";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -88,7 +97,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable LawReportMth(string offcode)
+        public DataTable LawReportMth(string offcode, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -103,8 +112,11 @@ namespace BILibraryBLL
                             SUM(TARGET_AMT) AS LAW_QTY,
                             SUM(TREASURY_MONEY) AS TREASURY_MONEY,ROW_NUMBER() OVER(ORDER BY budget_month_desc asc) as row_num,time_id
                             from MBL_LAW_REPORT_2  
-                            where offcode = " + offcode + " group by budget_month_desc,time_id ";
-                                        sql += @" union all
+                            where offcode = " + offcode + " ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql = @" group by budget_month_desc,time_id ";
+            sql += @" union all
                             select 'รวม', 
                             SUM(LAW_QTY) AS TARGET_AMT, 
                             SUM(TARGET_QTY) AS TARGET_QTY,
@@ -112,7 +124,10 @@ namespace BILibraryBLL
                             SUM(TARGET_AMT) AS LAW_QTY,
                             SUM(TREASURY_MONEY) AS TREASURY_MONEY,100000 as row_num,null
                             from MBL_LAW_REPORT_2  
-                            where offcode = " + offcode + " ) t  order by t.time_id, t.row_num";
+                            where offcode = " + offcode + " ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += ") t  order by t.time_id, t.row_num";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();

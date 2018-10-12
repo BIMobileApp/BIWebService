@@ -19,9 +19,9 @@ namespace BIWebService.Controllers
         }
 
         // GET: api/LowArea/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode, string month_from, string month_to)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.IncDataByArea(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.IncDataByArea(offcode, month_from, month_to));
             return new RawJsonActionResult(jsonString);
         }
     
