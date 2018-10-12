@@ -816,7 +816,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to)
+        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to, string Region, string Province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -826,6 +826,8 @@ namespace BILibraryBLL
             if(month_from != "undefined" && month_to != "undefined") {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
+            sql += " and region_name like case when '" + Region + "' = 'undefined' then region_name else '" + Region + "' end";
+            sql += " and province_name like case when '" + Province + "' = 'undefined' then province_name else '" + Province + "' end";
             sql += " and myrank between 1 and 10"; 
             sql += " group by reg_name";
             //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
@@ -836,6 +838,8 @@ namespace BILibraryBLL
             {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
+            sql += " and region_name like case when '" + Region + "' = 'undefined' then region_name else '" + Region + "' end";
+            sql += " and province_name like case when '" + Province + "' = 'undefined' then province_name else '" + Province + "' end";
             //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
             sql += @" and myrank between '1' and '10' ) t
                       order by t.sort";
