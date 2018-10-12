@@ -12,14 +12,17 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable IncDataMarketList(string offcode)
+        public DataTable IncDataMarketList(string offcode,string province,string region)
         {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = "select REGION_DESC,COUNT_REG,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,TOTAL_LIC";
-            sql += " from mbl_lic_data_3 where offcode = " + offcode + " order by REGION_DESC";
+            sql += " from mbl_lic_data_3 where offcode = " + offcode + " ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " order by REGION_DESC";
 
             /*select REGION_DESC, COUNT_REG, NUM_OF_LIC_SURA, NUM_OF_LIC_TOBBACO, NUM_OF_LIC_CARD, TOTAL_LIC
 from mbl_lic_data_3 where offcode = 000000

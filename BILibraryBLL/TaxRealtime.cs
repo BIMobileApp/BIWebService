@@ -63,7 +63,7 @@ namespace BILibraryBLL
         }
 
 
-        public DataTable TaxRealtimeDaily(string offcode, string area, string province)
+        public DataTable TaxRealtimeDaily(string offcode, string area, string province, string month_from, string month_to)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -86,6 +86,10 @@ namespace BILibraryBLL
                             from mbl_cd_daily_report where officode = '" + offcode + "'";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
             sql += @" group by DIM_DATA_DATE_ID 
                             union all
                             select 'รวม', SUM(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,
@@ -94,7 +98,12 @@ namespace BILibraryBLL
                             SUM(EXCISE_AMT) AS EXCISE_AMT
                             from mbl_cd_daily_report where officode ='" + offcode + "' ";
             sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end) t order by DIM_DATA_DATE_ID";
+            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += " ) t order by DIM_DATA_DATE_ID";
            
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);

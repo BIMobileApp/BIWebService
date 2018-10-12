@@ -13,9 +13,9 @@ namespace BIWebService.Controllers
     {
         DimansionTime tax = new DimansionTime();
 
-        public IHttpActionResult Get(string offcode, string region, string province,string month)
+        public IHttpActionResult Get(string offcode, string region, string province,string month_from,string month_to)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.DimansionTime03(offcode, region, province, month));
+            var jsonString = JsonConvert.SerializeObject(tax.DimansionTime03(offcode, region, province, month_from, month_to));
             return new RawJsonActionResult(jsonString);
         }
     }

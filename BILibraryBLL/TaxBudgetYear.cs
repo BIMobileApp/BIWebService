@@ -816,12 +816,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to, string Region, string Province)
+        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to,string region,string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from ( select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
+            /*string sql = @"select * from ( select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
             if(month_from != "undefined" && month_to != "undefined") {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
@@ -829,22 +829,38 @@ namespace BILibraryBLL
             sql += " and region_name like case when '" + Region + "' = 'undefined' then region_name else '" + Region + "' end";
             sql += " and province_name like case when '" + Province + "' = 'undefined' then province_name else '" + Province + "' end";
             sql += " and myrank between 1 and 10"; 
-            sql += " group by reg_name";
-            //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end and myrank between 1 and 10 ";
-
+            sql += " group by reg_name";          
             sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT),null  from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
             if (month_from != "undefined" && month_to != "undefined")
             {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
-            sql += " and region_name like case when '" + Region + "' = 'undefined' then region_name else '" + Region + "' end";
-            sql += " and province_name like case when '" + Province + "' = 'undefined' then province_name else '" + Province + "' end";
-            //sql += @" and to_char(month_cd) = case when '" + month + "' = 'undefined' then '0' else to_char('" + month + "') end ";
             sql += @" and myrank between '1' and '10' ) t
-                      order by t.sort";
+                      order by t.sort";*/
 
-            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+
+            string sql = @"select rnk as sort, reg_name, tax_nettax_amt
+                            from(select b.reg_name as reg_name,
+                                        sum(a.tax_nettax_amt) as tax_nettax_amt,
+                                        rank() over(partition by d.budget_month_desc order by sum(a.tax_nettax_amt) desc) rnk
+                                    from ic_sum_allday_cube a, ic_register_dim b, ic_office_dim c, ic_time_dim d
+                                    where a.reg_sk = b.reg_sk
+                                    and a.offcode_own = c.offcode
+                                    and a.time_id = d.time_id
+                                    and a.time_id >= 20171001
+                                    and a.tax_nettax_amt > 0 ";
+
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and a.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += @"     and b.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            sql += @"     and b.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
+
+            sql += " group by b.reg_name, d.budget_month_desc) where rnk <= 10 order by rnk";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
             adapter.Fill(dt);

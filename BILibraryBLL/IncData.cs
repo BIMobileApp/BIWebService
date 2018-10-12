@@ -12,7 +12,7 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable IncDataByArea(string offcode)
+        public DataTable IncDataByArea(string offcode,string month_from, string month_to)
         {
 
             DataTable dt = new DataTable();
@@ -20,10 +20,19 @@ namespace BILibraryBLL
 
            string sql = "select * from(select REGION_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
                    sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-                   sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ORDER BY REGION_DESC) ";
+                   sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ";
+                    if (month_from != "undefined" && month_to != "undefined")
+                    {
+                        sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+                    }
+                   sql += " ORDER BY REGION_DESC) ";
                 sql += " union all select 'รวม',sum(NUM_OF_LIC_SURA),sum(NUM_OF_LIC_TOBBACO),sum(NUM_OF_LIC_CARD),sum(AMT_OF_LIC_SURA),sum(AMT_OF_LIC_TOBBACO),sum(AMT_OF_LIC_CARD)";
                 sql += " from MBL_LIC_DATA where offcode = "+ offcode + "";
-   
+                if (month_from != "undefined" && month_to != "undefined")
+                {
+                    sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+                }
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -92,15 +101,18 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncDataByMonth(string offcode)
+        public DataTable IncDataByMonth(string offcode,string province, string region)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select TRANS_Short_month(MONTH_DESC) AS MONTH_DESC,SUM(NUM_OF_LIC_SURA) AS NUM_OF_LIC_SURA,SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO,SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD
                             , SUM(AMT_OF_LIC_SURA) AS AMT_OF_LIC_SURA,
-                             SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO, SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD, TIME_ID  ";              
-                   sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " group by MONTH_DESC,TIME_ID ORDER BY TIME_ID asc";
+                             SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO, SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD, TIME_ID  ";
+            sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " ";
+            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            sql += " group by MONTH_DESC,TIME_ID ORDER BY TIME_ID asc";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
