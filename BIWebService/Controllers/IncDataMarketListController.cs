@@ -13,9 +13,9 @@ namespace BIWebService.Controllers
     {
         IncDataMarket tax = new IncDataMarket();
 
-        public IHttpActionResult Get(string offcode, string province, string region)
+        public IHttpActionResult Get(string offcode, string month_from, string month_to)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.IncDataMarketList(offcode, province, region));
+            var jsonString = JsonConvert.SerializeObject(tax.IncDataMarketList(offcode, month_from, month_to));
             return new RawJsonActionResult(jsonString);
         }
     }

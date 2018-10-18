@@ -26,7 +26,7 @@ namespace BILibraryBLL
                                ROW_NUMBER() OVER(ORDER BY REGION_DESC asc) as row_num,
                                SUM(TREASURY_MONEY) AS TREASURY_MONEY 
                            from MBL_LAW_REPORT_1  where offcode = " + offcode + "";
-            if (month_from != "undefined" && month_to != "undefined")
+            if (month_from != "undefined" && month_to != "undefined") 
             {
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
@@ -41,9 +41,9 @@ namespace BILibraryBLL
                            from MBL_LAW_REPORT_1  where offcode = " + offcode + " ";
             if (month_from != "undefined" && month_to != "undefined")
             {
-                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + ") t";
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
-            sql += " order by t.row_num";
+            sql += ") t order by t.row_num";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -115,7 +115,7 @@ namespace BILibraryBLL
                             where offcode = " + offcode + " ";
             sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql = @" group by budget_month_desc,time_id ";
+            sql += @" group by budget_month_desc,time_id ";
             sql += @" union all
                             select 'รวม', 
                             SUM(LAW_QTY) AS TARGET_AMT, 

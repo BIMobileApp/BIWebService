@@ -12,7 +12,7 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable IncDataMarketList(string offcode,string province,string region)
+        public DataTable IncDataMarketList(string offcode,string month_from, string month_to)
         {
 
             DataTable dt = new DataTable();
@@ -20,8 +20,10 @@ namespace BILibraryBLL
 
             string sql = "select REGION_DESC,COUNT_REG,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,TOTAL_LIC";
             sql += " from mbl_lic_data_3 where offcode = " + offcode + " ";
-            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
             sql += " order by REGION_DESC";
 
             /*select REGION_DESC, COUNT_REG, NUM_OF_LIC_SURA, NUM_OF_LIC_TOBBACO, NUM_OF_LIC_CARD, TOTAL_LIC
@@ -40,7 +42,7 @@ from mbl_lic_data_3 where offcode = 000000*/
             return dt;
         }
 
-        public DataTable IncSumDataMarketList(string offcode)
+        public DataTable IncSumDataMarketList(string offcode, string month_from, string month_to)
         {
 
             DataTable dt = new DataTable();
@@ -50,6 +52,10 @@ from mbl_lic_data_3 where offcode = 000000*/
                         , SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO, SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD
                         , SUM(TOTAL_LIC) AS TOTAL_LIC ";
             sql += " from mbl_lic_data_3 where offcode = " + offcode + " ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
