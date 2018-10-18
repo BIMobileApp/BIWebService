@@ -16,7 +16,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from (select t.province_name,sum(t.Tax) as Tax,sum(t.Last_Tax) as Last_Tax
+            string sql = @"select * from (select trans_province_shot_data(t.province_name) AS province_name,sum(t.Tax) as Tax,sum(t.Last_Tax) as Last_Tax
                             ,sum(t.estimate) as estimate,
                             case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                             round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /

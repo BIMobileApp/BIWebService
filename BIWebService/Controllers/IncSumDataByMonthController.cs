@@ -19,9 +19,9 @@ namespace BIWebService.Controllers
         }
 
         // GET: api/IncSumDataByMonth/5
-        public IHttpActionResult Get(string offcode)
+        public IHttpActionResult Get(string offcode,string province, string region)
         {
-            var jsonString = JsonConvert.SerializeObject(tax.IncSumDataByMonth(offcode));
+            var jsonString = JsonConvert.SerializeObject(tax.IncSumDataByMonth(offcode, province, region));
             return new RawJsonActionResult(jsonString);
         }
 

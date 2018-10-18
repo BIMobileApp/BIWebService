@@ -821,13 +821,13 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            /*string sql = @"select * from ( select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
+            string sql = @"select * from ( select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
             sql += @" where offcode = " + offcode + " ";
             if(month_from != "undefined" && month_to != "undefined") {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
-            sql += " and region_name like case when '" + Region + "' = 'undefined' then region_name else '" + Region + "' end";
-            sql += " and province_name like case when '" + Province + "' = 'undefined' then province_name else '" + Province + "' end";
+            sql += " and region_name like case when '" + region + "' = 'undefined' then region_name else '" + region + "' end";
+            sql += " and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
             sql += " and myrank between 1 and 10"; 
             sql += " group by reg_name";          
             sql += @" union all select 'รวม' , SUM(TAX_NETTAX_AMT),null  from mbl_top10_register_mth ";
@@ -836,11 +836,13 @@ namespace BILibraryBLL
             {
                 sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
             }
+            sql += " and region_name like case when '" + region + "' = 'undefined' then region_name else '" + region + "' end";
+            sql += " and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
             sql += @" and myrank between '1' and '10' ) t
-                      order by t.sort";*/
+                      order by t.sort";
 
 
-            string sql = @"select rnk as sort, reg_name, tax_nettax_amt
+            /*string sql = @"select rnk as sort, reg_name, tax_nettax_amt
                             from(select b.reg_name as reg_name,
                                         sum(a.tax_nettax_amt) as tax_nettax_amt,
                                         rank() over(partition by d.budget_month_desc order by sum(a.tax_nettax_amt) desc) rnk
@@ -858,7 +860,7 @@ namespace BILibraryBLL
             sql += @"     and b.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
             sql += @"     and b.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
 
-            sql += " group by b.reg_name, d.budget_month_desc) where rnk <= 10 order by rnk";
+            sql += " group by b.reg_name, d.budget_month_desc) where rnk <= 10 order by rnk";*/
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

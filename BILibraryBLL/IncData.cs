@@ -123,7 +123,7 @@ namespace BILibraryBLL
         }
 
 
-        public DataTable IncSumDataByMonth(string offcode)
+        public DataTable IncSumDataByMonth(string offcode, string province, string region)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
