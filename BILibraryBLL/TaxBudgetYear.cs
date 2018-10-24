@@ -43,7 +43,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        
+
         public DataTable Top10Profile(string offcode, string group_id, string region, string province, string month_from, string month_to)
         {
             DataTable dt = new DataTable();
@@ -73,7 +73,15 @@ namespace BILibraryBLL
                 sql += " and d.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += @"     and c.group_name = case when '" + group_id + "' = 'undefined' then c.group_name else '" + group_id + "' end ";
-            sql += @"     and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            if (region != "EEC")
+            {
+                sql += @"     and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+
             sql += @"     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
             sql += @"     group by budget_year
                                               ,c.group_name
@@ -103,12 +111,20 @@ namespace BILibraryBLL
                                and a.time_id = d.time_id
                                and a.product_grp_cd = c.group_id
                                and a.offcode_own = e.offcode ";
-             if (month_from != "undefined" && month_to != "undefined")
+            if (month_from != "undefined" && month_to != "undefined")
             {
                 sql += " and d.BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += @"     and c.group_name = case when '" + group_id + "' = 'undefined' then c.group_name else '" + group_id + "' end ";
-            sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            if (region != "EEC")
+            {
+                sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+
             sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
             sql += @"                group by budget_year,
                                       c.group_name,
@@ -162,7 +178,7 @@ namespace BILibraryBLL
                             min(a.map_color) as map_color1
                            from mbl_month_01 a
                            where a.offcode = '" + offcode + "'";
-                sql += @" group by a.budget_month_desc, a.time_id 
+            sql += @" group by a.budget_month_desc, a.time_id 
                           order by a.time_id asc )
                                     union all
                                     select 'รวม',
@@ -186,11 +202,11 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxCurYearbyYear(string offcode,string year)
+        public DataTable TaxCurYearbyYear(string offcode, string year)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-            
+
 
             String sql = @"select *
                               from (select TRANS_Short_month(a.budget_month_desc) as budget_month_desc,
@@ -201,7 +217,7 @@ namespace BILibraryBLL
                                            a.time_id,
                                            min(a.map_color) as map_color1
                                       from mbl_month_01 a
-                                     where a.offcode = '" + offcode + "' and a.budget_year = '"+ year + "'";
+                                     where a.offcode = '" + offcode + "' and a.budget_year = '" + year + "'";
             sql += @" group by a.budget_month_desc, a.time_id
                                     union all
                                     select 'รวม',
@@ -226,9 +242,9 @@ namespace BILibraryBLL
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-            
+
             String sql = @"select distinct(t.budget_year) from mbl_month_01 t";
-            
+
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -243,7 +259,7 @@ namespace BILibraryBLL
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             String sql = @"select distinct(t.region_name) as reg, case when t.region_name = 'N/A' then 'ไม่ระบุภาค' else t.region_name end AS region_name
-                            from MBL_TAX_MONTH t where t.offcode = " + offcode+" order by case when t.region_name = 'N/A' then 'ไม่ระบุภาค' else t.region_name end";
+                            from MBL_TAX_MONTH t where t.offcode = " + offcode + " order by case when t.region_name = 'N/A' then 'ไม่ระบุภาค' else t.region_name end";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
@@ -253,12 +269,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable getProvinceTaxCurYear(string offcode,string area)
+        public DataTable getProvinceTaxCurYear(string offcode, string area)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            String sql = @"select distinct(t.province_name) from MBL_TAX_MONTH t where t.offcode = " + offcode + " and t.region_name = trim('"+ area + "') order by t.province_name";
+            String sql = @"select distinct(t.province_name) from MBL_TAX_MONTH t where t.offcode = " + offcode + " and t.region_name = trim('" + area + "') order by t.province_name";
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
@@ -294,7 +310,15 @@ namespace BILibraryBLL
                                       round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
                                       else 0 end as PERCENT_TAX
                               from MBL_TAX_MONTH_MON t where t.offcode = '" + offcode + "'";
-            sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end   ";
+            if (area != "EEC")
+            {
+                sql += " and t.REGION_NAME like case when '" + area + "' = 'undefined' then t.REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and t.eec_flag = 'EEC'";
+            }
+            //sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end   ";
             sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
             sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
                             union all
@@ -302,7 +326,15 @@ namespace BILibraryBLL
                                    case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
                                    else 0 end as percent_tax 
                             from MBL_TAX_MONTH_MON s where s.offcode = '" + offcode + "'";
-            sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end   ";
+            if (area != "EEC")
+            {
+                sql += " and s.REGION_NAME like case when '" + area + "' = 'undefined' then s.REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and s.eec_flag = 'EEC'";
+            }
+            //sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end   ";
             sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
 
             //MBL_TAX_MONTH_MON
@@ -323,8 +355,8 @@ namespace BILibraryBLL
                              case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                                       round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
                                       else 0 end as PERCENT_TAX
-                              from MBL_TAX_MONTH t where t.offcode = " + offcode+"";
-                   sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
+                              from MBL_TAX_MONTH t where t.offcode = " + offcode + "";
+            sql += @" group by t.budget_month_desc, t.time_id order by t.time_id)
                              union all
                               select 'รวม',null,sum(s.tax),sum(s.last_tax),sum(s.estimate),
                                    case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
@@ -366,7 +398,14 @@ namespace BILibraryBLL
                                   round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /sum(t.estimate),2)
                                   else 0 end as PERCENT_TAX
                           from MBL_TAX_GOODS t where t.offcode = " + offcode + "";
-            sql += @" AND t.region_name = case when '" + area + "' = 'undefined' then t.region_name else '" + area + "' end ";
+            if (area != "EEC")
+            {
+                sql += " and t.REGION_NAME like case when '" + area + "' = 'undefined' then t.REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and t.eec_flag = 'EEC'";
+            }
             sql += @" AND t.province_name = case when '" + Province + "' = 'undefined' then t.province_name else '" + Province + "' end ";
             sql += @" group by t.group_name, t.sort order by t.sort)
                      union all
@@ -374,7 +413,14 @@ namespace BILibraryBLL
                             case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate),2)
                             else 0 end as percent_tax 
                      from MBL_TAX_GOODS s where s.offcode =  " + offcode + "";
-            sql += @" AND s.region_name = case when '" + area + "' = 'undefined' then s.region_name else '" + area + "' end  ";
+            if (area != "EEC")
+            {
+                sql += " and s.REGION_NAME like case when '" + area + "' = 'undefined' then s.REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and s.eec_flag = 'EEC'";
+            }
             sql += @" AND s.province_name = case when '" + Province + "' = 'undefined' then s.province_name else '" + Province + "' end ";
 
 
@@ -405,7 +451,7 @@ namespace BILibraryBLL
                                            null,
                                            null
                                       from MBL_TAX_GOODS s where s.offcode = '" + offcode + "'";
-            
+
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
@@ -423,7 +469,7 @@ namespace BILibraryBLL
                            case when sum(t.tax) > 0 and sum(t.estimate) > 0 then round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
                            sum(t.estimate),2) else 0 end as PERCENT_TAX
                            from MBL_TAX_GOODS t where t.offcode = " + offcode + " group by t.group_name, t.sort order by t.sort)";
-                   sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from MBL_TAX_GOODS s where s.offcode = "+offcode+"";
+            sql += @" union all select 'รวม', null,sum(s.tax),sum(s.last_tax),sum(s.estimate), case when sum(s.tax) > 0 and sum(s.estimate) > 0 then round(((nvl(sum(s.tax), 0) - nvl(sum(s.estimate), 0)) * 100) / sum(s.estimate), 2) else -100 end as percent_tax from MBL_TAX_GOODS s where s.offcode = " + offcode + "";
 
 
 
@@ -477,12 +523,12 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxProvinceCurYear(string area,string offcode)
+        public DataTable TaxProvinceCurYear(string area, string offcode)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from (select t.province_name,sum(t.Tax) as Tax,sum(t.Last_Tax) as Last_Tax,sum(t.estimate) as estimate,
+            string sql = @"select * from (select trans_province_shot_data(t.province_name) as province_name,sum(t.Tax) as Tax,sum(t.Last_Tax) as Last_Tax,sum(t.estimate) as estimate,
                                    case when sum(t.tax) > 0 and sum(t.estimate) > 0 then
                                       round(((nvl(sum(t.tax), 0) - nvl(sum(t.estimate), 0)) * 100) /
                                             sum(t.estimate),2)
@@ -490,7 +536,7 @@ namespace BILibraryBLL
                                    end as PERCENT_TAX
                               from MBL_TAX_MONTH t
                              where t.region_name = '" + area + "' and t.offcode = " + offcode + "";
-                  sql += @" group by t.province_name  order by t.province_name)
+            sql += @" group by t.province_name  order by t.province_name)
                            union all
                                 select 'รวม',sum(s.Tax) as Tax,sum(s.Last_Tax) as Last_Tax,sum(s.estimate) as estimate,
                                        case
@@ -540,7 +586,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegAll(string offcode, string group_id, string region,string province)
+        public DataTable TaxBudgetRegAll(string offcode, string group_id, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -589,7 +635,7 @@ namespace BILibraryBLL
                                               ,substr(c.group_id, 1, 4)))
                                             where SORT <= nvl(" + 10 + ",SORT) union all";
 
-                        sql += @" 
+            sql += @" 
 
             select 'รวม' as reg_name, null, sum(TAX)
               from (select reg_name,
@@ -612,9 +658,9 @@ namespace BILibraryBLL
                                and a.product_grp_cd = c.group_id
                                and a.offcode_own = e.offcode 
                                and c.group_name = case when '" + group_id + "'= 'undefined' then c.group_name else '" + group_id + "' end ";
-                        sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
-                        sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
-                        sql += @"                group by budget_year,
+            sql += "  and e.region_name_mobile = case when '" + region + "' = 'undefined' then e.region_name_mobile else '" + region + "' end ";
+            sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
+            sql += @"                group by budget_year,
                                       c.group_name,
                                       b.reg_name,
                                       substr(c.group_id, 1, 4)))
@@ -816,7 +862,7 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to,string region,string province)
+        public DataTable TaxBudgetRegByMth(string offcode, string month_from, string month_to, string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -827,27 +873,43 @@ namespace BILibraryBLL
                                     SUM(tax_nettax_amt) AS tax,
                                     ROW_NUMBER() OVER(ORDER BY SUM(tax_nettax_amt) desc) as sort
                                  from mbl_top10_register_mth
-                                 where offcode = "+ offcode + "";
-                    if (month_from != "undefined" && month_to != "undefined")
-                    {
-                        sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
-                    }
-                    sql += " and region_name like case when '" + region + "' = 'undefined' then region_name else '" + region + "' end";
-                    sql += " and province_name like case when '" + province+"' = 'undefined' then province_name else '"+province+"' end";
-                    sql += " group by reg_name ) where sort between '1' and '10'";
-                    sql += " union all select 'รวม', SUM(tax), null from ";
-                    sql += @"           (select reg_name AS reg_name,
+                                 where offcode = " + offcode + "";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
+            }
+            if (region != "EEC")
+            {
+                sql += " and region_name like case when '" + region + "' = 'undefined' then region_name else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+
+            sql += " and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
+            sql += " group by reg_name ) where sort between '1' and '10'";
+            sql += " union all select 'รวม', SUM(tax), null from ";
+            sql += @"           (select reg_name AS reg_name,
                                         SUM(tax_nettax_amt) AS tax,
                                         ROW_NUMBER() OVER(ORDER BY SUM(tax_nettax_amt) desc) as sort
                                  from mbl_top10_register_mth
-                                 where offcode = "+ offcode + "";
-                    if (month_from != "undefined" && month_to != "undefined")
-                    {
-                        sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
-                    }
-                    sql += "        and region_name like case when '" + region + "' = 'undefined' then region_name else '" + region + "' end";
-                    sql += "        and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
-                    sql += "     group by reg_name ) where sort between '1' and '10' ) t order by t.sort ";
+                                 where offcode = " + offcode + "";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and to_char(month_cd)  between '" + month_from + "' and '" + month_to + "'";
+            }
+            if (region != "EEC")
+            {
+                sql += " and region_name like case when '" + region + "' = 'undefined' then region_name else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+
+            sql += "        and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
+            sql += "     group by reg_name ) where sort between '1' and '10' ) t order by t.sort ";
 
             //string sql = @"select * from ( select * from (select reg_name AS reg_name, SUM(tax_nettax_amt) AS tax, ROW_NUMBER() OVER(ORDER BY reg_name asc) as sort from mbl_top10_register_mth ";
             //sql += @" where offcode = " + offcode + " ";
@@ -966,22 +1028,22 @@ namespace BILibraryBLL
             return result;
         }
 
-        
+
         public DataTable TaxOverallBranchAll(string region, string province)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select * from  (select OFFDESC,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,ROW_NUMBER() OVER (ORDER BY OFFDESC) as sort,
+            string sql = @"select * from  (select trans_province_shot_data(OFFDESC) as OFFDESC,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,ROW_NUMBER() OVER (ORDER BY OFFDESC) as sort,
                             case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
                             round(((nvl(sum(TAX), 0) - nvl(sum(LAST_TAX), 0)) * 100) /sum(LAST_TAX),2) else -100 end as PERCENT_TAX                              
                             from MBL_01_OFFICE_REPORT 
                             WHERE REGION_NAME = '" + region + "' AND PROVINCE_NAME = '" + province + "'";
-                                        //sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-                                        //sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-                                        sql += " group by OFFDESC ";
+            //sql += "  REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            //sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            sql += " group by OFFDESC ";
 
-                                        sql += @" union all
+            sql += @" union all
  
                             select 'รวม' ,SUM(TAX) AS TAX,SUM(LAST_TAX) AS LAST_TAX,100000 AS sort,
                             case when sum(TAX) > 0 and sum(LAST_TAX) > 0 then
@@ -1032,6 +1094,67 @@ namespace BILibraryBLL
             thisConnection.Close();
             return dt;
         }
+        public DataTable Tax3YearHeader()
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
+            string sql = @"select get_column_year(1) as year1 ,get_column_year(2) as year2 ,get_column_year(3) as year3 from  dual";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
+
+        public DataTable Tax3Year(string area, string province)
+        {
+            DataTable dt = new DataTable();
+            OleDbConnection thisConnection = new OleDbConnection(con.connection());
+
+            string sql = @"select * from (
+                                select a.group_name , 
+                                       sum(a.tax_year_1) as year1, 
+                                       sum(a.tax_year_2) as year2,
+                                       sum(a.tax_year_3) as year3,a.sort
+                                from mbl_3_year a  where ";
+            if (area != "EEC")
+            {
+                sql += "  a.REGION_NAME = case when '" + area + "' = 'undefined' then a.REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " eec_flag = 'EEC'";
+            }
+
+            sql += "       AND a.PROVINCE_NAME = case when '" + province + "'= 'undefined' then a.PROVINCE_NAME else '" + province + "' end ";
+            sql += @"     group by a.group_name,a.sort
+                                union all 
+                                select 'รวม', 
+                                       sum(b.tax_year_1) as year1, 
+                                       sum(b.tax_year_2) as year2,
+                                       sum(b.tax_year_3) as year3, 10000
+                                from mbl_3_year b where";
+            if (area != "EEC")
+            {
+                sql += " b.REGION_NAME = case when '" + area + "' = 'undefined' then b.REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " eec_flag = 'EEC'";
+            }
+
+            sql += "         AND b.PROVINCE_NAME = case when '" + province + "'= 'undefined' then b.PROVINCE_NAME else '" + province + "' end ";
+            sql += "         ) t order by t.sort ";
+
+            OleDbCommand cmd = new OleDbCommand(sql, thisConnection);  //EDIT : change table name for Oracle
+            thisConnection.Open();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(dt);
+            thisConnection.Close();
+            return dt;
+        }
     }
 }

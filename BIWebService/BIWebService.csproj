@@ -213,6 +213,7 @@
     <Compile Include="Controllers\ddlMBranchController.cs" />
     <Compile Include="Controllers\ddlMProvinceController.cs" />
     <Compile Include="Controllers\ddlMRegionController.cs" />
+    <Compile Include="Controllers\ddlRegisterController.cs" />
     <Compile Include="Controllers\DimansionTime03Controller.cs" />
     <Compile Include="Controllers\dllMMonthController.cs" />
     <Compile Include="Controllers\FollowPayTaxRealtimeAllController.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="Controllers\MBLRegisterController.cs" />
     <Compile Include="Controllers\LawReportAreaController.cs" />
     <Compile Include="Controllers\LawReportMthController.cs" />
+    <Compile Include="Controllers\MBLSumRegisterController.cs" />
     <Compile Include="Controllers\newReportLineFollowProdController.cs" />
     <Compile Include="Controllers\OldBarAllTaxController.cs" />
     <Compile Include="Controllers\OldREPORT_BI_1_10_4_1ALLController.cs" />
@@ -314,6 +316,7 @@
     <Compile Include="Controllers\SumIncomeListController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegByMthController.cs" />
     <Compile Include="Controllers\SumTaxBudgetRegController.cs" />
+    <Compile Include="Controllers\Tax3YearController.cs" />
     <Compile Include="Controllers\TaxBranchController.cs" />
     <Compile Include="Controllers\TaxBudgetProductController.cs" />
     <Compile Include="Controllers\TaxBudgetRegAllController.cs" />

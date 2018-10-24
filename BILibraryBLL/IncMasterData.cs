@@ -16,8 +16,24 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct region_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by region_name asc";
+            //string sql = @"select distinct region_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by region_name asc";
             // string sql = @"select * from MBL_LAW_REPORT_1 t where t.offcode ='"+ offcode+"'";
+            string sql = "";
+            if (offcode.Equals("") || offcode.Equals("undefined") || offcode.Equals("000000"))
+            {
+                sql = @"select  region_cd ,region_name_mobile AS region_name
+                             from IC_OFFICE_DIM_MBL 
+                             where region_cd != 000000
+                             group by  region_cd ,region_name_mobile order by region_cd";
+            }
+            else
+            {
+
+                sql = @"select  region_cd ,region_name_mobile AS region_name
+                             from IC_OFFICE_DIM_MBL
+                             where offcode ='" + offcode + "' and region_cd != 000000" +
+                               "group by  region_cd ,region_name_mobile order by region_cd";
+            }
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection); 
             thisConnection.Open();
@@ -97,7 +113,23 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct region_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by region_name asc";
+            //string sql = @"select distinct region_name from mbl_lic_data_2_1 where offcode ='" + offcode + "' order by region_name asc";
+            string sql = "";
+            if (offcode.Equals("") || offcode.Equals("undefined") || offcode.Equals("000000"))
+            {
+                sql = @"select  region_cd ,region_name_mobile AS region_name
+                             from IC_OFFICE_DIM_MBL 
+                             where region_cd != 000000
+                             group by  region_cd ,region_name_mobile order by region_cd";
+            }
+            else
+            {
+
+                sql = @"select  region_cd ,region_name_mobile AS region_name
+                             from IC_OFFICE_DIM_MBL
+                             where offcode ='" + offcode + "' and region_cd != 000000" +
+                               "group by  region_cd ,region_name_mobile order by region_cd";
+            }
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -112,9 +144,29 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select distinct province_name from mbl_lic_data_2_1 ";
-                   sql += " where offcode ='" + offcode + "' and REGION_NAME = '"+ region + "' order by province_name asc";
- 
+            //string sql = @"select distinct province_name from mbl_lic_data_2_1 ";
+            //       sql += " where offcode ='" + offcode + "' and REGION_NAME = '"+ region + "' order by province_name asc";
+            string sql = "";
+            region = region == null ? "" : region;
+            if ((offcode.Equals("") || offcode.Equals("000000") || offcode.Equals("undefined")) && (region.Equals("") || region.Equals("undefined")))
+            {
+                sql = @"  select  distinct province_cd,province_name
+                             from IC_OFFICE_DIM_MBL
+                             where  province_name not like 'ภาค%' and province_cd != 000000 
+                             group by province_cd,province_name
+                             order by province_cd";
+            }
+            else
+            {
+
+                sql = @"select distinct province_cd,province_name
+                             from IC_OFFICE_DIM_MBL
+                             where  province_name not like 'ภาค%'  
+                             and region_name_mobile ='" + region + "' " +
+                             "group by province_cd,province_name " +
+                             "order by province_name";
+            }
+
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
             OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);

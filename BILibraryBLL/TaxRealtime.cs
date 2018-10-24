@@ -22,7 +22,14 @@ namespace BILibraryBLL
                        SUM(STAMP_AMT) AS STAMP_AMT,
                        SUM(EXCISE_AMT) AS EXCISE_AMT,ROW_NUMBER() OVER (ORDER BY sort asc) as sort
                      from mbl_cd_daily_report_rt where officode = " + offcode + " ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                    if (region != "EEC")
+                    {
+                        sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                    }
+                    else
+                    {
+                        sql += " and eec_flag = 'EEC'";
+                    }
             sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
             sql += @" group by GROUP_NAME,sort order by sort asc";
 
@@ -84,8 +91,16 @@ namespace BILibraryBLL
                             SUM(STAMP_AMT) AS STAMP_AMT,
                             SUM(EXCISE_AMT) AS EXCISE_AMT
                             from mbl_cd_daily_report where officode = '" + offcode + "'";
+            if (area != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end";
+           
             if (month_from != "undefined" && month_to != "undefined")
             {
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
@@ -97,8 +112,16 @@ namespace BILibraryBLL
                             SUM(STAMP_AMT) AS STAMP_AMT,
                             SUM(EXCISE_AMT) AS EXCISE_AMT
                             from mbl_cd_daily_report where officode ='" + offcode + "' ";
+            if (area != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end ";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
             sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + area + "' = 'undefined' then REGION_NAME else '" + area + "' end ";
+            
             if (month_from != "undefined" && month_to != "undefined")
             {
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
@@ -124,8 +147,15 @@ namespace BILibraryBLL
             string sql = @" select  sum(FZ_EXCISE_AMT) AS FZ_EXCISE_AMT,SUM(IN_EXCISE_AMT) AS IN_EXCISE_AMT,SUM(STAMP_AMT) AS STAMP_AMT
                             ,SUM(EXCISE_AMT) AS EXCISE_AMT
                             from mbl_cd_daily_report_rt where officode = " + offcode + " ";
-                    sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-                    sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
+                            if (region != "EEC")
+                            {
+                                sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+                            }
+                            else
+                            {
+                                sql += " and eec_flag = 'EEC'";
+                            }
+            sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

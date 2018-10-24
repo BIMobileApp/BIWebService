@@ -19,13 +19,13 @@ namespace BILibraryBLL
             if (offcode.Equals("") || offcode.Equals("undefined") || offcode.Equals("000000"))
             {
                 sql = @"select  region_cd ,region_name_mobile AS region_name
-                             from ic_office_dim 
+                             from IC_OFFICE_DIM_MBL 
                              where region_cd != 000000
                              group by  region_cd ,region_name_mobile order by region_cd";
             }else {
 
                 sql = @"select  region_cd ,region_name_mobile AS region_name
-                             from ic_office_dim
+                             from IC_OFFICE_DIM_MBL
                              where offcode ='" + offcode + "' and region_cd != 000000" +
                                "group by  region_cd ,region_name_mobile order by region_cd"; 
             }
@@ -47,7 +47,7 @@ namespace BILibraryBLL
             if ((offcode.Equals("") || offcode.Equals("000000") || offcode.Equals("undefined")) &&  (area.Equals("")  || area.Equals("undefined")))
             {
                 sql  = @"  select  distinct province_cd,province_name
-                             from ic_office_dim
+                             from IC_OFFICE_DIM_MBL
                              where  province_name not like 'ภาค%' and province_cd != 000000 
                              group by province_cd,province_name
                              order by province_cd";
@@ -56,7 +56,7 @@ namespace BILibraryBLL
             {
 
                 sql = @"select distinct province_cd,province_name
-                             from ic_office_dim
+                             from IC_OFFICE_DIM_MBL
                              where  province_name not like 'ภาค%'  
                              and region_name_mobile ='" + area + "' " +
                              "group by province_cd,province_name "+
@@ -78,7 +78,7 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = "select province_name, offdesc from ic_office_dim WHERE region_name = '"+area+ "' and province_name = '" + province + "'";
+            string sql = "select province_name, offdesc from IC_OFFICE_DIM_MBL WHERE region_name = '" + area+ "' and province_name = '" + province + "'";
             
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -96,7 +96,7 @@ namespace BILibraryBLL
             if ((offcode.Equals("") || offcode.Equals("000000") || offcode.Equals("undefined")) && (area.Equals("") || area.Equals("undefined")))
             {
                         sql = @"select offcode,offdesc
-                                     from ic_office_dim 
+                                     from IC_OFFICE_DIM_MBL 
                                      where offdesc not like 'ภาค%' 
                                      group by offcode,offdesc
                                      order by length(offdesc),offcode";
@@ -105,9 +105,9 @@ namespace BILibraryBLL
             {
 
                 sql = @"select offcode,offdesc
-                                     from ic_office_dim 
+                                     from IC_OFFICE_DIM_MBL 
                                      where offdesc not like 'ภาค%'
-                                     and  region_cd='"+ offcode + "' and province_cd='"+ area + "' "+
+                                     and  region_cd='" + offcode + "' and province_cd='"+ area + "' "+
                                      "group by offcode,offdesc "+
                                     " order by length(offdesc),offcode";
             }

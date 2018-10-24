@@ -20,7 +20,14 @@ namespace BILibraryBLL
             string sql = @" select * from (select ROW_NUMBER() OVER(ORDER BY sort asc) as row_num, sort,GROUP_NAME,SUM(IN_TAX_AMT) AS IN_TAX_AMT,SUM(IMPORT_TAX_AMT) AS IMPORT_TAX_AMT,SUM(TAX) AS TAX,ROW_NUMBER() OVER(ORDER BY sort asc) as sort_by
                             from MBL_IN_OUT_MONTH_01 WHERE OFFCODE = " + offcode + " ";
             //sql += " and BUDGET_MONTH_DESC like case when '" + month + "' = 'undefined' then BUDGET_MONTH_DESC else '" + month + "' end";
-            sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
             sql += " and PROVINCE_NAME like case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
             if (month_from != "undefined" && month_to != "undefined")
             {
@@ -34,7 +41,15 @@ namespace BILibraryBLL
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             //sql += " and BUDGET_MONTH_DESC like case when '" + month + "' = 'undefined' then BUDGET_MONTH_DESC else '" + month + "' end";
-            sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            //sql += " and REGION_NAME like case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
             sql += " and PROVINCE_NAME like case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end  ) t order by sort_by";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);

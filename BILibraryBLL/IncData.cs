@@ -12,26 +12,26 @@ namespace BILibraryBLL
     {
         Conn con = new Conn();
 
-        public DataTable IncDataByArea(string offcode,string month_from, string month_to)
+        public DataTable IncDataByArea(string offcode, string month_from, string month_to)
         {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-           string sql = "select * from(select REGION_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
-                  sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
-                  sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ";
-                    if (month_from != "undefined" && month_to != "undefined")
-                    {
-                        sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
-                    }
-                   sql += " ORDER BY REGION_DESC) ";
-                sql += " union all select 'รวม',sum(NUM_OF_LIC_SURA),sum(NUM_OF_LIC_TOBBACO),sum(NUM_OF_LIC_CARD),sum(AMT_OF_LIC_SURA),sum(AMT_OF_LIC_TOBBACO),sum(AMT_OF_LIC_CARD)";
-                sql += " from MBL_LIC_DATA where offcode = "+ offcode + "";
-                if (month_from != "undefined" && month_to != "undefined")
-                {
-                    sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
-                }
+            string sql = "select * from(select REGION_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
+            sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
+            sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
+            sql += " ORDER BY REGION_DESC) ";
+            sql += " union all select 'รวม',sum(NUM_OF_LIC_SURA),sum(NUM_OF_LIC_TOBBACO),sum(NUM_OF_LIC_CARD),sum(AMT_OF_LIC_SURA),sum(AMT_OF_LIC_TOBBACO),sum(AMT_OF_LIC_CARD)";
+            sql += " from MBL_LIC_DATA where offcode = " + offcode + "";
+            if (month_from != "undefined" && month_to != "undefined")
+            {
+                sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
+            }
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -42,7 +42,8 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByArea(string offcode, string region, string province, string group_desc, string month_from, string month_to) {
+        public DataTable IncProductByArea(string offcode, string region, string province, string group_desc, string month_from, string month_to)
+        {
 
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
@@ -51,7 +52,14 @@ namespace BILibraryBLL
             sql += " WHERE offcode = " + offcode + " ";
             sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end   ";
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
 
             if (month_from != "undefined" && month_to != "undefined")
             {
@@ -64,7 +72,14 @@ namespace BILibraryBLL
             sql += " WHERE offcode = " + offcode + " ";
             sql += " AND GROUP_DESC = case when '" + group_desc + "' = 'undefined' then GROUP_DESC else '" + group_desc + "' end ";
             sql += " AND PROVINCE_NAME = case when '" + province + "' = 'undefined' then PROVINCE_NAME else '" + province + "' end";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end" ;
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
 
             //sql += " AND budget_month_desc = case when '" + month + "' = 'undefined' then budget_month_desc else '" + month + "' end";
             if (month_from != "undefined" && month_to != "undefined")
@@ -91,7 +106,7 @@ namespace BILibraryBLL
             sql += " GROUP BY TYPE_DESC ";
             sql += " union all select 'รวม',sum(LICENSE_AMT),sum(LICENSE_COUNT) from mbl_lic_data_2_1 ";
             sql += " WHERE offcode = " + offcode + " ";
-            sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end ) ";    
+            sql += " AND GROUP_DESC = case when '" + group_name + "' = 'undefined' then GROUP_DESC else '" + group_name + "' end ) ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -101,18 +116,49 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncDataByMonth(string offcode,string province, string region)
+        public DataTable IncDataByMonth(string offcode, string province, string region)
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = @"select TRANS_Short_month(MONTH_DESC) AS MONTH_DESC,SUM(NUM_OF_LIC_SURA) AS NUM_OF_LIC_SURA,SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO,SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD
-                            , SUM(AMT_OF_LIC_SURA) AS AMT_OF_LIC_SURA,
-                             SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO, SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD, TIME_ID  ";
-            sql += " from MBL_LIC_DATA_2 where  offcode = " + offcode + " ";
-            sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-            sql += " group by MONTH_DESC,TIME_ID ORDER BY TIME_ID asc";
+            string sql = @"select * from (select TRANS_Short_month(MONTH_DESC) AS MONTH_DESC,
+                                   SUM(NUM_OF_LIC_SURA) AS NUM_OF_LIC_SURA,
+                                   SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO,
+                                   SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD, 
+                                   SUM(AMT_OF_LIC_SURA) AS AMT_OF_LIC_SURA,
+                                   SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO, 
+                                   SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD, TIME_ID  ";
+            sql += @" from MBL_LIC_DATA_2 where  offcode = " + offcode + "";
+            sql += @" AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
+            if (region != "EEC")
+            {
+                sql += @" AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            sql += @" group by MONTH_DESC,TIME_ID union all 
+                              select 'รวม',
+                                   SUM(NUM_OF_LIC_SURA) AS NUM_OF_LIC_SURA,
+                                   SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO,
+                                   SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD, 
+                                   SUM(AMT_OF_LIC_SURA) AS AMT_OF_LIC_SURA,
+                                   SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO, 
+                                   SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD, null";
+            sql += @"  from MBL_LIC_DATA_2 where  offcode = " + offcode + "";
+            sql += @"  AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end";
+            if (region != "EEC")
+            {
+                sql += @"  AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end ";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            sql += " ) t ORDER BY t.TIME_ID asc";
+
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -142,7 +188,8 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncDataByAreaDetail(string offcode) {
+        public DataTable IncDataByAreaDetail(string offcode)
+        {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
@@ -158,12 +205,13 @@ namespace BILibraryBLL
             return dt;
         }
 
-        public DataTable IncProductByMthAll(string offcode,string group_name) {
+        public DataTable IncProductByMthAll(string offcode, string group_name)
+        {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
             string sql = @"select BUDGET_MONTH_DESC,TIME_ID,SUM(LICENSE_AMT) AS AMT,SUM(LICENSE_COUNT) AS COUNT from mbl_lic_data_2_1 ";
-            sql += " WHERE offcode = " + offcode + " and GROUP_DESC = '"+ group_name + "'";
+            sql += " WHERE offcode = " + offcode + " and GROUP_DESC = '" + group_name + "'";
             sql += " GROUP BY BUDGET_MONTH_DESC,TIME_ID ORDER BY TIME_ID ";
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
@@ -187,7 +235,15 @@ namespace BILibraryBLL
             {
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            
             //sql += " AND PROVINCE_NAME = nvl('" + province + "',PROVINCE_NAME) and REGION_NAME = nvl('" + region + "',REGION_NAME) AND BUDGET_MONTH_DESC = nvl('" + mth + "',BUDGET_MONTH_DESC)";
             sql += " GROUP BY TYPE_DESC order by TYPE_DESC)";
             sql += " union all";
@@ -198,8 +254,16 @@ namespace BILibraryBLL
             {
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
-          
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            
+
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();

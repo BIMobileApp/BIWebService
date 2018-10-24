@@ -113,7 +113,15 @@ namespace BILibraryBLL
                             SUM(TREASURY_MONEY) AS TREASURY_MONEY,ROW_NUMBER() OVER(ORDER BY budget_month_desc asc) as row_num,time_id
                             from MBL_LAW_REPORT_2  
                             where offcode = " + offcode + " ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += @" group by budget_month_desc,time_id ";
             sql += @" union all
@@ -125,7 +133,15 @@ namespace BILibraryBLL
                             SUM(TREASURY_MONEY) AS TREASURY_MONEY,100000 as row_num,null
                             from MBL_LAW_REPORT_2  
                             where offcode = " + offcode + " ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
             sql += ") t  order by t.time_id, t.row_num";
 
@@ -238,7 +254,15 @@ namespace BILibraryBLL
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += @"          AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += @"          AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += @"   AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            
             sql += @"   group by GROUP_DESC
                             union all select 'รวม', 
                                    SUM(LAW_QTY) AS TARGET_AMT, 
@@ -252,7 +276,15 @@ namespace BILibraryBLL
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += @"          AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += @"          AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += @"  AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+           
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);
             thisConnection.Open();
@@ -299,7 +331,15 @@ namespace BILibraryBLL
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end group by GROUP_DESC";
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            sql += "  group by GROUP_DESC";
             sql += @" union all select 'รวม', SUM(LAW_QTY) AS TARGET_AMT, SUM(TARGET_QTY) AS TARGET_QTY,SUM(LAW_AMT) AS LAW_AMT
                         , SUM(TARGET_AMT) AS LAW_QTY, SUM(TREASURY_MONEY) AS TREASURY_MONEY from MBL_LAW_REPORT_1_1";
             sql += " WHERE offcode = " + offcode + " ";
@@ -308,7 +348,15 @@ namespace BILibraryBLL
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
             sql += " AND PROVINCE_NAME = case when '" + province + "'= 'undefined' then PROVINCE_NAME else '" + province + "' end ";
-            sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            if (region != "EEC")
+            {
+                sql += " AND REGION_NAME = case when '" + region + "' = 'undefined' then REGION_NAME else '" + region + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
+            
 
 
             OleDbCommand cmd = new OleDbCommand(sql, thisConnection);

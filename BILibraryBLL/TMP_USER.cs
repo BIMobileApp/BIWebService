@@ -17,7 +17,7 @@ namespace BILibraryBLL
         {
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
-
+            var us = username.ToLower();
             string sql = @"select t.u_username as username
                                  ,t.u_password as password
                                  ,t.offdesc as offdesc
@@ -27,7 +27,7 @@ namespace BILibraryBLL
                                  ,trans_region_short(substr(to_char(t.offcode),0, 2)) AS region_shot
                                  ,get_last_data_date_mobile() as last_update_date
                            from TMP_USER_ROLE t 
-                           where t.u_username = '" + username + "'";
+                           where LOWER(t.u_username) = '" + us + "'";
             sql += " and rownum <= 1";
 
 
@@ -87,9 +87,10 @@ namespace BILibraryBLL
 
                         
                         retval.Direction = ParameterDirection.ReturnValue;
-
-                        cmd.Parameters.Add(new OleDbParameter("Username", username));
-                        cmd.Parameters.Add(new OleDbParameter("password", password));
+                        var us = username.ToLower();
+                        var ps = password.ToLower();
+                        cmd.Parameters.Add(new OleDbParameter("Username", us));
+                        cmd.Parameters.Add(new OleDbParameter("password", ps));
                         cmd.Parameters.Add(retval);
 
                         //cmd.Parameters.AddWithValue("Username", "password");

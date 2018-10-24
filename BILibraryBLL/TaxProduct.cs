@@ -385,8 +385,16 @@ namespace BILibraryBLL
             string sql = " select * from (select group_name,sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,";
             sql += " ROW_NUMBER() OVER(ORDER BY sort) as sort";
             sql += " from mbl_month_inc WHERE offcode = "+ offcode + "";
+            if (area != "EEC")
+            {
+                sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
             sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
-            sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
+            
             if (monthFrom != "undefined" && monthTo != "undefined")
             {
                 sql += " and MONTH_CD between " + monthFrom + " and " + monthTo + "";
@@ -396,7 +404,14 @@ namespace BILibraryBLL
             sql += " union all select 'รวม',sum(tax) AS tax,sum(last_tax) AS last_tax,sum(estimate) AS estimate,null from mbl_month_inc";
             sql += " WHERE offcode = "+ offcode + "";
             sql += " AND province_name = case when '" + province + "'= 'undefined' then province_name else '" + province + "' end ";
-            sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
+            if (area != "EEC")
+            {
+                sql += " AND region_name = case when '" + area + "' = 'undefined' then region_name else '" + area + "' end";
+            }
+            else
+            {
+                sql += " and eec_flag = 'EEC'";
+            }
 
             if (monthFrom != "undefined" && monthTo != "undefined")
             {
