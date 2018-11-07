@@ -49,27 +49,81 @@ namespace BILibraryBLL
             {
                 sql += " and isic_desc = '" + type + "'";
             }
-            sql += @" group by GROUP_DESC, sort order by sort )
-                     union all
-                        select 'รวม', SUM(IMP_REGISTER) AS IMP_REGISTER,
-                           SUM(IN_REGISTER) AS IN_REGISTER, SUM(TOTAL_REGISTER) AS TOTAL_REGISTER, 10000
-                            from mbl_register_1";
-            sql += @"    where offcode = " + offcode + "";
+            sql += @" group by GROUP_DESC, sort order by sort)
+                        union all 
+                        select 'รวม' group_desc,
+                               count(distinct case when a.status_desc = 'นำเข้า' then a.newreg_id else null end) imp_register,
+                               count(distinct case when a.status_desc != 'นำเข้า' then a.newreg_id else null end) in_register,
+                               count(distinct a.newreg_id) total_register,
+                               100000
+                        from FCT_REGISTER  a,
+                             ic_office_dim_mbl v
+                        where a.offcode = v.offcode ";
             if (region != "EEC")
-            {
-                sql += @"    and Region_Name like case when '" + region + "' = 'undefined' then Region_Name else '" + region + "' end";
-            }
-            else
-            {
-                sql += " and eec_flag = 'EEC'";
-            }
-
-            sql += @"    and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
-            //sql += @" and isic_desc like case when '" + type + "' = 'undefined' then isic_desc else '" + type + "' end";
+           {
+                sql += " and v.region_name like case when '" + region + "' = 'undefined' then v.region_name else '" + region + "' end";
+           }
+           else
+           {
+                sql += " and a.eec_flag = 'EEC'";
+           }
+          
+            sql += @"         and v.province_name like case when '" + province + "' = 'undefined' then v.province_name else '" + province + "' end";
             if (type != "undefined")
             {
-                sql += " and isic_desc = '" + type + "'";
+                sql += " and a.isic_desc = '" + type + "'";
             }
+
+
+
+            /*select 'รวม' group_desc
+                       ,count(distinct case
+                            when a.status_desc = 'นำเข้า' then a.newreg_id
+                   else null end) imp_register,count(distinct case
+              when a.status_desc != 'นำเข้า' then
+               a.newreg_id
+                          else
+                           null
+                        end) in_register,100000
+                 ,count(distinct a.newreg_id) total_register
+           from FCT_REGISTER  a
+               ,ic_office_dim v
+           where a.offcode = v.offcode ";
+
+           if (region != "EEC")
+           {
+               sql += @"    and v.Region_Name like case when '" + region + "' = 'undefined' then v.Region_Name else '" + region + "' end";
+           }
+           else
+           {
+               sql += " and a.eec_flag = 'EEC'";
+           }
+
+           sql += @"  and v.province_name like case when '" + province + "' = 'undefined' then v.province_name else '" + province + "' end";
+           sql += @" )order by sort asc";*/
+
+
+
+
+
+            /*select 'รวม', SUM(IMP_REGISTER) AS IMP_REGISTER,
+                                       SUM(IN_REGISTER) AS IN_REGISTER, SUM(TOTAL_REGISTER) AS TOTAL_REGISTER, 10000
+                                        from mbl_register_1";
+                        sql += @"    where offcode = " + offcode + "";
+                        if (region != "EEC")
+                        {
+                            sql += @"    and Region_Name like case when '" + region + "' = 'undefined' then Region_Name else '" + region + "' end";
+                        }
+                        else
+                        {
+                            sql += " and eec_flag = 'EEC'";
+                        }
+
+                        sql += @"    and province_name like case when '" + province + "' = 'undefined' then province_name else '" + province + "' end";
+                        if (type != "undefined")
+                        {
+                            sql += " and isic_desc = '" + type + "'";
+                        }*/
 
 
             /*sql += @" UNION ALL  select 'รวม' , SUM(IMP_REGISTER) AS IMP_REGISTER,

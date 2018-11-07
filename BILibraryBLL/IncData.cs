@@ -18,14 +18,14 @@ namespace BILibraryBLL
             DataTable dt = new DataTable();
             OleDbConnection thisConnection = new OleDbConnection(con.connection());
 
-            string sql = "select * from(select REGION_DESC,NUM_OF_LIC_SURA,NUM_OF_LIC_TOBBACO,NUM_OF_LIC_CARD,AMT_OF_LIC_SURA, ";
-            sql += " AMT_OF_LIC_TOBBACO,AMT_OF_LIC_CARD ";
+            string sql = "select * from(select REGION_DESC,SUM(NUM_OF_LIC_SURA) AS NUM_OF_LIC_SURA,SUM(NUM_OF_LIC_TOBBACO) AS NUM_OF_LIC_TOBBACO,SUM(NUM_OF_LIC_CARD) AS NUM_OF_LIC_CARD,SUM(AMT_OF_LIC_SURA) AS AMT_OF_LIC_SURA, ";
+            sql += " SUM(AMT_OF_LIC_TOBBACO) AS AMT_OF_LIC_TOBBACO,SUM(AMT_OF_LIC_CARD) AS AMT_OF_LIC_CARD ";
             sql += " from MBL_LIC_DATA where  offcode = " + offcode + " ";
             if (month_from != "undefined" && month_to != "undefined")
             {
                 sql += " and BUDGET_MONTH_CD between " + month_from + " and " + month_to + "";
             }
-            sql += " ORDER BY REGION_DESC) ";
+            sql += " group by REGION_DESC ORDER BY REGION_DESC) ";
             sql += " union all select 'รวม',sum(NUM_OF_LIC_SURA),sum(NUM_OF_LIC_TOBBACO),sum(NUM_OF_LIC_CARD),sum(AMT_OF_LIC_SURA),sum(AMT_OF_LIC_TOBBACO),sum(AMT_OF_LIC_CARD)";
             sql += " from MBL_LIC_DATA where offcode = " + offcode + "";
             if (month_from != "undefined" && month_to != "undefined")

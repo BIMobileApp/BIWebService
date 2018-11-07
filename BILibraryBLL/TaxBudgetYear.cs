@@ -79,7 +79,14 @@ namespace BILibraryBLL
             }
             else
             {
-                sql += " and eec_flag = 'EEC'";
+                sql += @" and a.OFFCODE_OWN in   ('020100',
+                      '021000',
+                      '020301',
+                      '020302',
+                      '020300',
+                      '020700',
+                      '021100')";
+                //sql += " and a.eec_flag = 'EEC'";
             }
 
             sql += @"     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
@@ -122,7 +129,13 @@ namespace BILibraryBLL
             }
             else
             {
-                sql += " and eec_flag = 'EEC'";
+                sql += @" and a.OFFCODE_OWN in   ('020100',
+                      '021000',
+                      '020301',
+                      '020302',
+                      '020300',
+                      '020700',
+                      '021100')";
             }
 
             sql += "     and e.province_name = case when '" + province + "' = 'undefined' then e.province_name else '" + province + "' end ";
